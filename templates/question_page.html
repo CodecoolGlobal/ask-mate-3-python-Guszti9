@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Question Page</title>
+    </head>
+    <body>
+        <h1>{{ question_data['title'] }}</h1><br>
+        <p>{{ question_data['message'] }}</p><br><br>
+        {% for answer in answers %}
+            <p>{{ answer }}</p>
+    </body>
+</html>
