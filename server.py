@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
@@ -15,11 +15,20 @@ def list_questions():
     return render_template("list.html", data=list_of_data)
 
 
+@app.route("/add-question", methods=['GET', 'POST'])
+def add_question():
+    if request.method == 'POST':
+        return redirect('/list')
+    return render_template("add-question.html")
+
+
+"""
 @app.route("question/<question_id>")
 def display_question(question_id):
     question_data = {}
     answers = []
     return render_template("question_page.html", question_data=question_data, answers=answers)
+
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
@@ -34,6 +43,7 @@ def post_answer(question_id):
         answer['image'] = ''
 
     return render_template("post-answer.html", question= , answers= )
+"""
 
 
 if __name__ == "__main__":
