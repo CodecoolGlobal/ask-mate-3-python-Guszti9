@@ -14,17 +14,15 @@ def read_from_file(filename):
 
 
 def read_from_dict_file(filename):
-    with open(filename, 'r', newline='') as csvfile:
-        list_of_data = []
-        data = csv.DictReader(csvfile)
-        for row in data:
-            list_of_data.append(row)
-    return list_of_data
+    with open(filename, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        data_dict = list(reader)
+        return data_dict
 
 
 def write_to_file(filename, data_to_write):
     with open(filename, 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile)
+        writer = csv.writer(csvfile)
         writer.writerow(data_to_write)
 
 
