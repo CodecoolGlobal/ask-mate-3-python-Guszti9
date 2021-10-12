@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import data_manager
 import connection
 import time
@@ -44,7 +44,7 @@ def post_answer(question_id):
         answer['message'] = request.form['message']
         answer['image'] = ''
         connection.append_to_dict_file('sample_data/answer.csv', answer, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
-        return redirect('/question/<question_id>')
+        return redirect(url_for('display_question', question_id=question_id))
     return render_template("post-answer.html", question=question, answers=answers_to_the_question )
 
 
