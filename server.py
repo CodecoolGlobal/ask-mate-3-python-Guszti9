@@ -21,7 +21,13 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
+        all_question = connection.read_from_dict_file("sample_data/question.csv")
+        max_id = max(item['id'] for item in all_question)
         new_question = {
+            'id': int(max_id) + 1,
+            'submission_time': int(time.time()),
+            'view_number': 0,
+            'vote_number': 0,
             'title': request.form['title'],
             'message': request.form['message']
         }
