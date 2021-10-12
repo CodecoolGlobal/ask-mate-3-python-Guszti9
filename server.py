@@ -14,10 +14,22 @@ def hello():
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    #if request.method == 'GET':
-       # print('meafao')
-        #if request.form[]
-            #print('keke')
+    if request.method == 'GET':
+        if 'sort_by_id' in request.args:
+            sorted_by_id = sorted(list_of_data, key=lambda i: int(i['id']))
+            return render_template("list.html", data=sorted_by_id)
+        elif 'sort_by_time' in request.args:
+            sorted_by_time = sorted(list_of_data, key=lambda i: int(i['submission_time']))
+            return render_template("list.html", data=sorted_by_time)
+        elif 'sort_by_message' in request.args:
+            sorted_by_message = sorted(list_of_data, key=lambda i: i['message'])
+            return render_template("list.html", data=sorted_by_message)
+        elif 'sort_by_views' in request.args:
+            sorted_by_views = sorted(list_of_data, key=lambda i: int(i['view_number']), reverse=True)
+            return render_template("list.html", data=sorted_by_views)
+        elif 'sort_by_votes' in request.args:
+            sorted_by_votes = sorted(list_of_data, key=lambda i: int(i['vote_number']), reverse=True)
+            return render_template("list.html", data=sorted_by_votes)
     return render_template("list.html", data=list_of_data)
 
 
