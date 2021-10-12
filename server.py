@@ -111,26 +111,22 @@ def delete_answer(answer_id):
 @app.route("/answer/<answer_id>/vote_up")
 def vote_up_answer(answer_id):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    for answer in all_answers:
-        if answer['id'] == answer_id:
-            increased_vote_number = int(answer['vote_number']) + 1
-            answer['vote_number'] = increased_vote_number
-            question_id = answer['question_id']
-            break
+    data_manager.change_answers_vote_number('up',answer_id, all_answers)
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+
+    answer_to_upvote = data_manager.find_answer_by_answer_id(answer_id)
+    question_id = answer_to_upvote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
 
 @app.route("/answer/<answer_id>/vote_down")
 def vote_down_answer(answer_id):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    for answer in all_answers:
-        if answer['id'] == answer_id:
-            decreased_vote_number = int(answer['vote_number']) - 1
-            answer['vote_number'] = decreased_vote_number
-            question_id = answer['question_id']
-            break
+    data_manager.change_answers_vote_number('down',answer_id, all_answers)
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+
+    answer_to_downvote = data_manager.find_answer_by_answer_id(answer_id)
+    question_id = answer_to_downvote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
 
