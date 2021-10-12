@@ -7,8 +7,13 @@ def filter_answers_by_question_id(question_id):
     return filtered
 
 
-def filter_question_by_question_id(question_id):
-    return connection.read_from_dict_file('sample_data/question.csv')[int(question_id)-1]
+def find_question_by_question_id(question_id):
+    all_question = connection.read_from_dict_file('sample_data/question.csv')
+    for question in all_question:
+        if question['id'] == question_id:
+            question_by_id = question
+            break
+    return question_by_id
 
 
 def filter_answer_by_answer_id(answer_id):
