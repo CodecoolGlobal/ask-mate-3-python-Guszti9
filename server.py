@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+import connection
 
 app = Flask(__name__)
 
@@ -18,6 +19,11 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
+        new_question = {
+            'title': request.form['title'],
+            'message': request.form['message']
+        }
+        connection.append_to_dict_file("sample_data/question.csv", new_question, connection.QUESTION_HEADER)
         return redirect('/list')
     return render_template("add-question.html")
 
