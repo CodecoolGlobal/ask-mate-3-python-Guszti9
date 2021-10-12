@@ -15,7 +15,9 @@
                 <td>{{ data[i]['vote_number'] }}</td>
                 <td>{{ data[i]['title'] }}</td>
                 <td>{{ data[i]['message'] }}</td>
-                <td><img src="{{ data[i]['image'] }}"></td>
+                {% if data[i]['image'] %}
+                    <td><img src="{{ data[i]['image'] }}" alt="image broke" width="200"></td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
