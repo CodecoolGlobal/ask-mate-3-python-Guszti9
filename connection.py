@@ -30,7 +30,8 @@ def write_to_dict_file(filename, data_to_write, fieldnames):
     with open(filename, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerow(data_to_write)
+        for row in data_to_write:
+            writer.writerow(row)
 
 
 def append_to_file(filename, data_to_write):

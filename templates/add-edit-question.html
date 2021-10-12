@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{"Edit question" if question_data else "Add Questions"}}</title>
+</head>
+<body>
+    <h1>{{"Edit question" if question_data else "Add Questions"}}</h1><br>
+    <form method="post">
+        <label for="title">Title:</label><br>
+        <input type="text" name="title" id="title" value="{{question_data["title"] if question_data}}" required><br>
+        <br>
+        <label for="message">Message:</label> <br>
+        <textarea id="message" name="message" required rows="6" cols="50">{{question_data["message"] if question_data}}</textarea> <br>
+        <br>
+        <button type="submit">{{"Edit question" if question_data else "Add Questions"}}</button>
+    </form>
+</body>
+</html>

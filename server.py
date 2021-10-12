@@ -33,7 +33,20 @@ def add_question():
         }
         connection.append_to_dict_file("sample_data/question.csv", new_question, connection.QUESTION_HEADER)
         return redirect('/list')
-    return render_template("add-question.html")
+    return render_template("add-edit-question.html")
+
+
+@app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
+def edit_question(question_id):
+    questions = connection.read_from_dict_file('sample_data/question.csv')
+    question_index = int(question_id) - 1
+    if request.method == 'POST':
+        questions[question_index]['title'] = request.form['title']
+        questions[question_index]['message'] = request.form['message']
+        connection.write_to_dict_file("sample_data/question.csv", questions, connection.QUESTION_HEADER)
+        return redirect(f"/question/{question_id}")
+
+    return render_template("add-edit-question.html", question_data=questions[question_index])
 
 
 @app.route("/question/<question_id>")
