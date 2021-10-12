@@ -5,13 +5,15 @@
     <title>Post Answer</title>
 </head>
 <body>
-    <h1>Question</h1>
-    <p>Answer1</p>
-    <p>Answer2</p>
-    <p>Answer3</p>
+    <h1>{{ question['title'] }}</h1>
+    <p> {{ question['message'] }} </p>
+    <h2>Answers</h2>
+    {% for answer in answers %}
+    <p> {{ answer['message'] }} </p>
+    {% endfor %}
     <form method="post">
         <label for="post-answer">Your Answer:</label> <br>
-        <textarea id="post-answer" name="post-answer" required rows="6" cols="50"></textarea> <br>
+        <textarea id="post-answer" name="message" required rows="6" cols="50"></textarea> <br>
         <br>
         <button type="submit">Post Answer</button>
     </form>
