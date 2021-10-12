@@ -6,6 +6,19 @@
 </head>
 <body>
     <h1>Questions</h1><br>
-    <p>{{ data[0]['id'] }}</p>
+    <table border="1">
+        {% for i in range(data|length) %}
+            <tr>
+                <td>{{ data[i]['id'] }}</td>
+                <td>{{ data[i]['submission_time'] }}</td>
+                <td>{{ data[i]['view_number'] }}</td>
+                <td>{{ data[i]['vote_number'] }}</td>
+                <td>{{ data[i]['title'] }}</td>
+                <td>{{ data[i]['message'] }}</td>
+                <td><img src="{{ data[i]['image'] }}"></td>
+                <td>Kek</td>
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
