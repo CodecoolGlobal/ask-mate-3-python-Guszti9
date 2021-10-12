@@ -10,7 +10,7 @@
         <p>{{ question_data['message'] }}</p><br><br>
         <h2>Answers:</h2>
         {% for answer in answers %}
-            <p>{{ answer }}</p><br>
+            <p>{{ answer['message'] }}</p><br>
         {% endfor %}
     </body>
 </html>
