@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import data_manager
 import connection
-import time
 
 app = Flask(__name__)
 
@@ -38,12 +37,13 @@ def post_answer(question_id):
         answer = {}
         max_id = max(item['id'] for item in all_answers)
         answer['id'] = str(int(max_id) + 1)
-        answer['submission_time'] = time.time()
+        answer['submission_time'] = int(time.time())
         answer['vote_number'] = 0
         answer['question_id'] = question_id
         answer['message'] = request.form['message']
         answer['image'] = ''
-        connection.append_to_dict_file('sample_data/answers.csv', answer, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
+        connection.append_to_dict_file('sample_data/answer.csv', answer, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
+        return redirect('/question/<question_id>')
     return render_template("post-answer.html", question=question, answers=answers_to_the_question )
 
 
