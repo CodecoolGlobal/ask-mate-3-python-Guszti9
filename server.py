@@ -20,12 +20,8 @@ def list_questions():
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    question_data = connection.read_from_dict_file('sample_data/question.csv')[int(question_id)-1]
-    answers = []
-    all_answer_data = connection.read_from_dict_file('sample_data/answer.csv')
-    for data in all_answer_data:
-        if data['question_id'] == question_id:
-            answers.append(data['message'])
+    question_data = data_manager.find_question_by_question_id(question_id)
+    answers = data_manager.filter_answers_by_question_id(question_id)
     return render_template("question_page.html", question_data=question_data, answers=answers)
 
 
@@ -33,7 +29,7 @@ def display_question(question_id):
 def post_answer(question_id):
     all_answers = connection.read_from_dict_file('sample_data/answer.csv')
     answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
-    question = data_manager.filter_question_by_question_id(question_id)
+    question = data_manager.find_question_by_question_id(question_id)
     if request.method == 'POST':
         answer = {}
         max_id = max(item['id'] for item in all_answers)
