@@ -79,6 +79,17 @@ def post_answer(question_id):
     return render_template("post-answer.html", question=question, answers=answers_to_the_question )
 
 
+@app.route("/answer/<answer_id>/delete")
+def delete_answer(answer_id):
+    all_answers = connection.read_from_dict_file('sample_data/answer.csv')
+    answer_to_delete = data_manager.filter_answer_by_answer_id(answer_id)
+    all_answers.remove(answer_to_delete)
+    connection.write_to_dict_file('sample_data/answer.csv', all_answers, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
+
+    question_id = answer_to_delete['question_id']
+    return redirect(url_for('display_question', question_id=question_id))
+
+
 if __name__ == "__main__":
     app.run()
 
