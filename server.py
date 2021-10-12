@@ -9,12 +9,8 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_EXTENSIONS
-
-
-def upload_file(image):
-    if image and allowed_file(image):
+def upload_image(image):
+    if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_EXTENSIONS:
         filename = secure_filename(image.filename)
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
@@ -61,7 +57,7 @@ def add_question():
             'image': request.files['image'].filename
         }
         connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
-        upload_file(request.files['image'])
+        upload_image(request.files['image'])
         return redirect('/list')
     return render_template("add-edit-question.html")
 
@@ -73,7 +69,9 @@ def edit_question(question_id):
     if request.method == 'POST':
         questions[question_index]['title'] = request.form['title']
         questions[question_index]['message'] = request.form['message']
+        questions[question_index]['image'] = request.files['image'].filename
         connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
+        upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=questions[question_index])
@@ -99,9 +97,10 @@ def post_answer(question_id):
             'vote_number': 0,
             'question_id': question_id,
             'message': request.form['message'],
-            'image': ''
+            'image': request.files['image'].filename
         }
         connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
+        upload_image(request.files['image'])
         return redirect(url_for('display_question', question_id=question_id))
 
     return render_template("post-answer.html", question=question, answers=answers_to_the_question)

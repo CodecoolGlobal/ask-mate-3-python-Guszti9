@@ -5,7 +5,7 @@ ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message
 QUESTIONS_FILE_PATH = 'sample_data/question.csv'
 ANSWERS_FILE_PATH = 'sample_data/answer.csv'
 
-UPLOAD_FOLDER = '/uploads'
+UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
