@@ -18,6 +18,24 @@ def list_questions():
     return render_template("list.html", data=list_of_data)
 
 
+@app.route("/add-question", methods=['GET', 'POST'])
+def add_question():
+    if request.method == 'POST':
+        all_question = connection.read_from_dict_file("sample_data/question.csv")
+        max_id = max(item['id'] for item in all_question)
+        new_question = {
+            'id': int(max_id) + 1,
+            'submission_time': int(time.time()),
+            'view_number': 0,
+            'vote_number': 0,
+            'title': request.form['title'],
+            'message': request.form['message']
+        }
+        connection.append_to_dict_file("sample_data/question.csv", new_question, connection.QUESTION_HEADER)
+        return redirect('/list')
+    return render_template("add-question.html")
+
+
 @app.route("/question/<question_id>")
 def display_question(question_id):
     question_data = data_manager.find_question_by_question_id(question_id)
@@ -39,6 +57,7 @@ def post_answer(question_id):
         answer['question_id'] = question_id
         answer['message'] = request.form['message']
         answer['image'] = ''
+
         connection.append_to_dict_file('sample_data/answer.csv', answer, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
         return redirect(url_for('display_question', question_id=question_id))
     return render_template("post-answer.html", question=question, answers=answers_to_the_question )
@@ -46,3 +65,4 @@ def post_answer(question_id):
 
 if __name__ == "__main__":
     app.run()
+
