@@ -11,10 +11,13 @@ def hello():
     return 'Hello World!'
 
 
-@app.route("/list")
+@app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     list_of_data = connection.read_from_dict_file("sample_data/question.csv")
-    print(list_of_data)
+    if request.method == 'GET':
+        print('meafao')
+        if request.form == 'sort_by_id':
+            print('keke')
     return render_template("list.html", data=list_of_data)
 
 

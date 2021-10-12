@@ -19,5 +19,12 @@
             </tr>
         {% endfor %}
     </table>
+        <form action="/list" method="GET">
+            <button name="sort_by_id" type="submit" value="sort_by_id">Sort by ID</button>
+            <button name="sort_by_time" type="submit" value="sort_by_time">Sort by Time</button>
+            <button name="sort_by_message" type="submit" value="sort_by_message">Sort by Message</button>
+            <button name="sort_by_views" type="submit" value="sort_by_views">Sort by Views</button>
+            <button name="sort_by_votes" type="submit" value="sort_by_votes">Sort by Votes</button>
+        </form>
 </body>
 </html>
