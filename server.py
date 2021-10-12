@@ -6,6 +6,12 @@ import time
 app = Flask(__name__)
 
 
+def sorting(sorted_by, boolvar):
+    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    sortedlist = sorted(list_of_data, key=lambda i: int(i[sorted_by]), reverse=boolvar)
+    return sortedlist
+
+
 @app.route("/")
 def hello():
     return 'Hello World!'
@@ -16,20 +22,20 @@ def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'GET':
         if 'sort_by_id' in request.args:
-            sorted_by_id = sorted(list_of_data, key=lambda i: int(i['id']))
-            return render_template("list.html", data=sorted_by_id)
+            sortedlist = sorting('id', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_time' in request.args:
-            sorted_by_time = sorted(list_of_data, key=lambda i: int(i['submission_time']))
-            return render_template("list.html", data=sorted_by_time)
+            sortedlist = sorting('submission_time', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_message' in request.args:
-            sorted_by_message = sorted(list_of_data, key=lambda i: i['message'])
+            sorted_by_message = sorted(list_of_data, key=lambda i: str(i['message'].capitalize()))
             return render_template("list.html", data=sorted_by_message)
         elif 'sort_by_views' in request.args:
-            sorted_by_views = sorted(list_of_data, key=lambda i: int(i['view_number']), reverse=True)
-            return render_template("list.html", data=sorted_by_views)
+            sortedlist = sorting('view_number', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_votes' in request.args:
-            sorted_by_votes = sorted(list_of_data, key=lambda i: int(i['vote_number']), reverse=True)
-            return render_template("list.html", data=sorted_by_votes)
+            sortedlist = sorting('vote_number', False)
+            return render_template("list.html", data=sortedlist)
     return render_template("list.html", data=list_of_data)
 
 
