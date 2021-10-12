@@ -15,6 +15,12 @@ def upload_image(image):
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
+def sorting(sorted_by, boolvar):
+    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    sortedlist = sorted(list_of_data, key=lambda i: int(i[sorted_by]), reverse=boolvar)
+    return sortedlist
+
+
 @app.route("/")
 def hello():
     return 'Hello World!'
@@ -25,20 +31,20 @@ def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'GET':
         if 'sort_by_id' in request.args:
-            sorted_by_id = sorted(list_of_data, key=lambda i: int(i['id']))
-            return render_template("list.html", data=sorted_by_id)
+            sortedlist = sorting('id', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_time' in request.args:
-            sorted_by_time = sorted(list_of_data, key=lambda i: int(i['submission_time']))
-            return render_template("list.html", data=sorted_by_time)
+            sortedlist = sorting('submission_time', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_message' in request.args:
-            sorted_by_message = sorted(list_of_data, key=lambda i: i['message'])
+            sorted_by_message = sorted(list_of_data, key=lambda i: str(i['message'].capitalize()))
             return render_template("list.html", data=sorted_by_message)
         elif 'sort_by_views' in request.args:
-            sorted_by_views = sorted(list_of_data, key=lambda i: int(i['view_number']), reverse=True)
-            return render_template("list.html", data=sorted_by_views)
+            sortedlist = sorting('view_number', False)
+            return render_template("list.html", data=sortedlist)
         elif 'sort_by_votes' in request.args:
-            sorted_by_votes = sorted(list_of_data, key=lambda i: int(i['vote_number']), reverse=True)
-            return render_template("list.html", data=sorted_by_votes)
+            sortedlist = sorting('vote_number', False)
+            return render_template("list.html", data=sortedlist)
     return render_template("list.html", data=list_of_data)
 
 
@@ -114,6 +120,30 @@ def delete_answer(answer_id):
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/vote_up")
+def vote_up_answer(answer_id):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    data_manager.change_answers_vote_number('up',answer_id, all_answers)
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+
+    answer_to_upvote = data_manager.find_answer_by_answer_id(answer_id)
+    question_id = answer_to_upvote['question_id']
+    return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/vote_down")
+def vote_down_answer(answer_id):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    data_manager.change_answers_vote_number('down',answer_id, all_answers)
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+
+    answer_to_downvote = data_manager.find_answer_by_answer_id(answer_id)
+    question_id = answer_to_downvote['question_id']
+    return redirect(url_for('display_question', question_id=question_id))
+
+
 
 
 if __name__ == "__main__":
