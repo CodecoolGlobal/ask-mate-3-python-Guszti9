@@ -2,6 +2,8 @@ import csv
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
+QUESTIONS_FILE_PATH = 'sample_data/question.csv'
+ANSWERS_FILE_PATH = 'sample_data/answer.csv'
 
 
 def read_from_dict_file(filename):

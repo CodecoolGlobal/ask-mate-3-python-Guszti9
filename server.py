@@ -13,7 +13,7 @@ def hello():
 
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
-    list_of_data = connection.read_from_dict_file("sample_data/question.csv")
+    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'GET':
         print('meafao')
         if request.form[]
@@ -24,7 +24,7 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
-        all_question = connection.read_from_dict_file("sample_data/question.csv")
+        all_question = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
         max_id = max(item['id'] for item in all_question)
         new_question = {
             'id': int(max_id) + 1,
@@ -34,19 +34,19 @@ def add_question():
             'title': request.form['title'],
             'message': request.form['message']
         }
-        connection.append_to_dict_file("sample_data/question.csv", new_question, connection.QUESTION_HEADER)
+        connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
         return redirect('/list')
     return render_template("add-edit-question.html")
 
 
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
-    questions = connection.read_from_dict_file('sample_data/question.csv')
+    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     question_index = int(question_id) - 1
     if request.method == 'POST':
         questions[question_index]['title'] = request.form['title']
         questions[question_index]['message'] = request.form['message']
-        connection.write_to_dict_file("sample_data/question.csv", questions, connection.QUESTION_HEADER)
+        connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=questions[question_index])
@@ -61,31 +61,31 @@ def display_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    all_answers = connection.read_from_dict_file('sample_data/answer.csv')
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
     question = data_manager.find_question_by_question_id(question_id)
     if request.method == 'POST':
-        answer = {}
         max_id = max(item['id'] for item in all_answers)
-        answer['id'] = str(int(max_id) + 1)
-        answer['submission_time'] = int(time.time())
-        answer['vote_number'] = 0
-        answer['question_id'] = question_id
-        answer['message'] = request.form['message']
-        answer['image'] = ''
-
-        connection.append_to_dict_file('sample_data/answer.csv', answer, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
+        answer = {
+            'id': str(int(max_id) + 1),
+            'submission_time': int(time.time()),
+            'vote_number': 0,
+            'question_id': question_id,
+            'message': request.form['message'],
+            'image': ''
+        }
+        connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("post-answer.html", question=question, answers=answers_to_the_question )
+
+    return render_template("post-answer.html", question=question, answers=answers_to_the_question)
 
 
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
-    all_answers = connection.read_from_dict_file('sample_data/answer.csv')
-    answer_to_delete = data_manager.filter_answer_by_answer_id(answer_id)
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    answer_to_delete = data_manager.find_answer_by_answer_id(answer_id)
     all_answers.remove(answer_to_delete)
-    connection.write_to_dict_file('sample_data/answer.csv', all_answers, ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image'])
-
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
