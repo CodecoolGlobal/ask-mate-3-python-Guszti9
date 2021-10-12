@@ -14,10 +14,10 @@ def hello():
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    if request.method == 'GET':
-        print('meafao')
-        if request.form[]
-            print('keke')
+    #if request.method == 'GET':
+       # print('meafao')
+        #if request.form[]
+            #print('keke')
     return render_template("list.html", data=list_of_data)
 
 
@@ -88,6 +88,34 @@ def delete_answer(answer_id):
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/vote_up")
+def vote_up_answer(answer_id):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    for answer in all_answers:
+        if answer['id'] == answer_id:
+            increased_vote_number = int(answer['vote_number']) + 1
+            answer['vote_number'] = increased_vote_number
+            question_id = answer['question_id']
+            break
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+    return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route("/answer/<answer_id>/vote_down")
+def vote_down_answer(answer_id):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    for answer in all_answers:
+        if answer['id'] == answer_id:
+            decreased_vote_number = int(answer['vote_number']) - 1
+            answer['vote_number'] = decreased_vote_number
+            question_id = answer['question_id']
+            break
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+    return redirect(url_for('display_question', question_id=question_id))
+
+
 
 
 if __name__ == "__main__":
