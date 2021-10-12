@@ -1,9 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import os
 import data_manager
 import connection
 import time
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_EXTENSIONS
+
+
+def upload_file(image):
+    if image and allowed_file(image):
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
 @app.route("/")
@@ -29,9 +42,11 @@ def add_question():
             'view_number': 0,
             'vote_number': 0,
             'title': request.form['title'],
-            'message': request.form['message']
+            'message': request.form['message'],
+            'image': request.files['image'].filename
         }
         connection.append_to_dict_file("sample_data/question.csv", new_question, connection.QUESTION_HEADER)
+        upload_file(request.files['image'])
         return redirect('/list')
     return render_template("add-question.html")
 

@@ -6,12 +6,15 @@
 </head>
 <body>
     <h1>Add Questions</h1><br>
-    <form method="post">
+    <form method="post" enctype=multipart/form-data>
         <label for="title">Title:</label><br>
         <input type="text" name="title" id="title" required><br>
         <br>
         <label for="message">Message:</label> <br>
         <textarea id="message" name="message" required rows="6" cols="50"></textarea> <br>
+        <br>
+        <label for="image">Upload image:</label>
+        <input type="file" id="image" name="image" accept="image/*"> <br>
         <br>
         <button type="submit">Add question</button>
     </form>
