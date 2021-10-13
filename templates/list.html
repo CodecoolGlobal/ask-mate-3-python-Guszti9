@@ -16,7 +16,7 @@
                 <td>{{ data[i]['title'] }}</td>
                 <td>{{ data[i]['message'] }}</td>
                 {% if data[i]['image'] %}
-                    <td><img src="{{ data[i]['image'] }}" alt="image broke" width="200"></td>
+                    <td><img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200"></td>
                 {% endif %}
             </tr>
         {% endfor %}
