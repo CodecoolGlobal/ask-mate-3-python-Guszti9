@@ -22,15 +22,16 @@
         {% endfor %}
     </table>
         <form action="/list" method="GET">
+             <label for="sortby">Sorting order:</label>
+                <select id="sortby" name="sorting_order">
+                    <option value="ascending" name="ascending">Ascending</option>
+                    <option value="descending" name="descending">Descending</option>
+                </select><br>
             <input name="sort_by_id" type="submit" value="Sort by ID">
             <input name="sort_by_time" type="submit" value="Sort by Time">
             <input name="sort_by_message" type="submit" value="Sort by Message">
             <input name="sort_by_views" type="submit" value="Sort by Views">
             <input name="sort_by_votes" type="submit" value="Sort by Votes">
-        </form>
-        <form action="/list" method="GET">
-            <input name="ascending" type="submit" value="Ascending sort">
-            <input name="descending" type="submit" value="Descending sort">
         </form>
 </body>
 </html>

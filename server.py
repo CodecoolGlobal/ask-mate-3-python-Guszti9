@@ -30,21 +30,42 @@ def hello():
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'GET':
+        print(list_of_data)
         if 'sort_by_id' in request.args:
-            sortedlist = sorting('id', False)
-            return render_template("list.html", data=sortedlist)
+            if request.args.get('sorting_order') == 'ascending':
+                sortedlist = sorting('id', False)
+                return render_template("list.html", data=sortedlist)
+            elif request.args.get('sorting_order') == 'descending':
+                sortedlist = sorting('id', True)
+                return render_template("list.html", data=sortedlist)
         elif 'sort_by_time' in request.args:
-            sortedlist = sorting('submission_time', False)
-            return render_template("list.html", data=sortedlist)
+            if request.args.get('sorting_order') == 'ascending':
+                sortedlist = sorting('submission_time', False)
+                return render_template("list.html", data=sortedlist)
+            elif request.args.get('sorting_order') == 'descending':
+                sortedlist = sorting('submission_time', True)
+                return render_template("list.html", data=sortedlist)
         elif 'sort_by_message' in request.args:
-            sorted_by_message = sorted(list_of_data, key=lambda i: str(i['message'].capitalize()))
-            return render_template("list.html", data=sorted_by_message)
+            if request.args.get('sorting_order') == 'ascending':
+                sorted_by_message = sorted(list_of_data, key=lambda i: str(i['message'].capitalize()))
+                return render_template("list.html", data=sorted_by_message)
+            elif request.args.get('sorting_order') == 'descending':
+                sorted_by_message = sorted(list_of_data, key=lambda i: str(i['message'].capitalize()), reverse=True)
+                return render_template("list.html", data=sorted_by_message)
         elif 'sort_by_views' in request.args:
-            sortedlist = sorting('view_number', False)
-            return render_template("list.html", data=sortedlist)
+            if request.args.get('sorting_order') == 'ascending':
+                sortedlist = sorting('view_number', False)
+                return render_template("list.html", data=sortedlist)
+            elif request.args.get('sorting_order') == 'descending':
+                sortedlist = sorting('view_number', True)
+                return render_template("list.html", data=sortedlist)
         elif 'sort_by_votes' in request.args:
-            sortedlist = sorting('vote_number', False)
-            return render_template("list.html", data=sortedlist)
+            if request.args.get('sorting_order') == 'ascending':
+                sortedlist = sorting('vote_number', False)
+                return render_template("list.html", data=sortedlist)
+            elif request.args.get('sorting_order') == 'descending':
+                sortedlist = sorting('vote_number', True)
+                return render_template("list.html", data=sortedlist)
     return render_template("list.html", data=list_of_data)
 
 
