@@ -33,7 +33,7 @@
             </tr>
         {% endfor %}
     </table>
-        <form action="/list" method="GET">
+        <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sortby">Sorting order:</label>
                 <select id="sortby" name="sorting_order">
                     <option value="ascending" name="ascending">Ascending</option>
@@ -41,6 +41,7 @@
                 </select><br>
             <input name="sort_by_id" type="submit" value="Sort by ID">
             <input name="sort_by_time" type="submit" value="Sort by Time">
+            <input name="sort_by_title" type="submit" value="Sort by Title">
             <input name="sort_by_message" type="submit" value="Sort by Message">
             <input name="sort_by_views" type="submit" value="Sort by Views">
             <input name="sort_by_votes" type="submit" value="Sort by Votes">
