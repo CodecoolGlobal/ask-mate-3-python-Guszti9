@@ -22,8 +22,8 @@
             <p>
                 <form>
                     <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
-                    <button formaction="{{ url_for('vote_up_answer', answer_id=answer['id'])}}">Vote Up</button>
-                    <button formaction="{{ url_for('vote_down_answer', answer_id=answer['id'])}}">Vote Down</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='up')}}">Vote Up</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='down')}}">Vote Down</button>
                 </form>
             </p><br>
         {% endfor %}
