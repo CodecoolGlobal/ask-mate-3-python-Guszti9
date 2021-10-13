@@ -3,7 +3,6 @@ from werkzeug.utils import secure_filename
 import os
 import data_manager
 import connection
-import time
 from datetime import datetime
 
 app = Flask(__name__)
@@ -13,7 +12,7 @@ app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 def upload_image(image):
     if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_EXTENSIONS:
         filename = secure_filename(image.filename)
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        image.save(os.path.join(connection.UPLOAD_FOLDER, filename))
 
 
 @app.template_filter('datetime')
@@ -39,17 +38,7 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
-        all_question = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-        max_id = max(item['id'] for item in all_question)
-        new_question = {
-            'id': int(max_id) + 1,
-            'submission_time': int(time.time()),
-            'view_number': 0,
-            'vote_number': 0,
-            'title': request.form['title'],
-            'message': request.form['message'],
-            'image': request.files['image'].filename
-        }
+        new_question = data_manager.initialize_question(request.form['title'], request.form['message'], request.files['image'].filename)
         connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
         upload_image(request.files['image'])
         return redirect('/list')
@@ -94,23 +83,13 @@ def display_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
     question = data_manager.find_question_by_question_id(question_id)
     if request.method == 'POST':
-        max_id = max(item['id'] for item in all_answers)
-        answer = {
-            'id': str(int(max_id) + 1),
-            'submission_time': int(time.time()),
-            'vote_number': 0,
-            'question_id': question_id,
-            'message': request.form['message'],
-            'image': request.files['image'].filename
-        }
+        answer = data_manager.initialize_answer(question_id, request.form['message'], request.files['image'].filename)
         connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
         upload_image(request.files['image'])
         return redirect(url_for('display_question', question_id=question_id))
-
     return render_template("post-answer.html", question=question, answers=answers_to_the_question)
 
 

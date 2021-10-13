@@ -1,4 +1,5 @@
 import connection
+import time
 
 
 def filter_answers_by_question_id(question_id):
@@ -60,3 +61,32 @@ def sort_by(list_of_data, request_args):
             return sortedlist
         header_index += 1
     return list_of_data
+
+
+def initialize_question(title, message, image=''):
+    all_question = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    max_id = max(item['id'] for item in all_question)
+    new_question = {
+        'id': int(max_id) + 1,
+        'submission_time': int(time.time()),
+        'view_number': 0,
+        'vote_number': 0,
+        'title': title,
+        'message': message,
+        'image': image
+    }
+    return new_question
+
+
+def initialize_answer(question_id, message, image=''):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
+    max_id = max(item['id'] for item in all_answers)
+    new_answer = {
+        'id': str(int(max_id) + 1),
+        'submission_time': int(time.time()),
+        'vote_number': 0,
+        'question_id': question_id,
+        'message': message,
+        'image': image
+    }
+    return new_answer
