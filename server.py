@@ -4,6 +4,7 @@ import os
 import data_manager
 import connection
 import time
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
@@ -21,6 +22,11 @@ def sorting(sorted_by, boolvar):
     return sortedlist
 
 
+@app.template_filter('datetime')
+def datetime_format(unix_timestamp):
+    return datetime.utcfromtimestamp(int(unix_timestamp)).strftime('%Y-%m-%d %H:%M')
+
+
 @app.route("/")
 def hello():
     return redirect('/list')
@@ -30,7 +36,6 @@ def hello():
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'GET':
-        print(list_of_data)
         if 'sort_by_id' in request.args:
             if request.args.get('sorting_order') == 'ascending':
                 sortedlist = sorting('id', False)
