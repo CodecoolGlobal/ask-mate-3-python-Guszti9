@@ -9,7 +9,16 @@
     <table border="1">
         {% for i in range(data|length) %}
             <tr>
-                <td>{{ data[i]['id'] }}</td>
+                <th>ID</th>
+                <th>Submission time</th>
+                <th>View number</th>
+                <th>Vote number</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Image</th>
+            </tr>
+            <tr>
+                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['id'] }}</a></td>
                 <td>{{ data[i]['submission_time'] }}</td>
                 <td>{{ data[i]['view_number'] }}</td>
                 <td>{{ data[i]['vote_number'] }}</td>
