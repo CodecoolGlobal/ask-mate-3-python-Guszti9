@@ -46,3 +46,17 @@ def increase_view_number(question_id):
             question['vote_number'] = increased_view_number
             break
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, all_questions, connection.QUESTION_HEADER)
+
+
+def sort_by(list_of_data, request_args):
+    header_index = 1
+    for category in ['sort_by_time', 'sort_by_views', 'sort_by_votes', 'sort_by_title', 'sort_by_message']:
+        if category in request_args:
+            is_descending = request_args.get('sorting_order') == 'descending'
+            if category == 'sort_by_message' or category == 'sort_by_title':
+                sortedlist = sorted(list_of_data, key=lambda i: str(i[connection.QUESTION_HEADER[header_index]].capitalize()), reverse=is_descending)
+            else:
+                sortedlist = sorted(list_of_data, key=lambda i: int(i[connection.QUESTION_HEADER[header_index]]), reverse=is_descending)
+            return sortedlist
+        header_index += 1
+    return list_of_data

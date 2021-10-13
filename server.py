@@ -16,12 +16,6 @@ def upload_image(image):
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
-def sorting(sorted_by, boolvar):
-    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    sortedlist = sorted(list_of_data, key=lambda i: int(i[sorted_by]), reverse=boolvar)
-    return sortedlist
-
-
 @app.template_filter('datetime')
 def datetime_format(unix_timestamp):
     return datetime.utcfromtimestamp(int(unix_timestamp)).strftime('%Y-%m-%d %H:%M')
@@ -35,19 +29,11 @@ def hello():
 @app.route("/list", methods=['GET', 'POST'])
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    sortedlist = sorted(list_of_data, key=lambda i: int(i['submission_time']), reverse=True)
     if request.method == 'GET':
-        print(list_of_data)
-        header_index = 0
-        for category in ['sort_by_id', 'sort_by_time', 'sort_by_views', 'sort_by_votes', 'sort_by_title', 'sort_by_message']:
-            if category in request.args:
-                descending = request.args.get('sorting_order') == 'descending'
-                if category == 'sort_by_message' or category == 'sort_by_title':
-                    sortedlist = sorted(list_of_data, key=lambda i: str(i[connection.QUESTION_HEADER[header_index]].capitalize()), reverse=descending)
-                else:
-                    sortedlist = sorting(connection.QUESTION_HEADER[header_index], descending)
-                return render_template("list.html", data=sortedlist)
-            header_index += 1
-    return render_template("list.html", data=list_of_data)
+        sortedlist = data_manager.sort_by(sortedlist, request.args)
+        return render_template("list.html", data=sortedlist)
+    return render_template("list.html", data=sortedlist)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
