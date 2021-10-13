@@ -24,7 +24,8 @@ def find_answer_by_answer_id(answer_id):
     return filtered_answer
 
 
-def change_answers_vote_number(up_or_downvote, answer_id, all_answers):
+def change_answers_vote_number(up_or_downvote, answer_id):
+    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     for answer in all_answers:
         if answer['id'] == answer_id:
             if up_or_downvote == 'vote_up':
@@ -34,3 +35,14 @@ def change_answers_vote_number(up_or_downvote, answer_id, all_answers):
                 changed_vote_number = int(answer['vote_number']) - 1
             answer['vote_number'] = changed_vote_number
             break
+    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+
+
+def increase_view_number(question_id):
+    all_questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    for question in all_questions:
+        if question['id'] == question_id:
+            increased_view_number = int(question['vote_number']) + 1
+            question['vote_number'] = increased_view_number
+            break
+    connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, all_questions, connection.QUESTION_HEADER)
