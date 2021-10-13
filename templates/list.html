@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Questions</h1><br>
+    <form>
+        <button formaction="{{ url_for('add_question')}}">Add new question</button>
+    </form>
     <table border="1">
         <tr>
             <th>ID</th>
@@ -18,11 +21,11 @@
         </tr>
         {% for i in range(data|length) %}
             <tr>
-                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['id'] }}</a></td>
+                <td>{{ data[i]['id'] }}</td>
                 <td>{{ data[i]['submission_time'] }}</td>
                 <td>{{ data[i]['view_number'] }}</td>
                 <td>{{ data[i]['vote_number'] }}</td>
-                <td>{{ data[i]['title'] }}</td>
+                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
                 <td>{{ data[i]['message'] }}</td>
                 {% if data[i]['image'] %}
                     <td><img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200"></td>

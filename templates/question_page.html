@@ -11,6 +11,9 @@
         {% if question_data['image'] %}
             <td><img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200"></td>
         {% endif %}
+        <form>
+            <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
+        </form>
         <br><br>
         <h2>Answers:</h2>
         {% for answer in answers %}
@@ -22,8 +25,8 @@
             <p>
                 <form>
                     <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
-                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='up')}}">Vote Up</button>
-                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='down')}}">Vote Down</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
                 </form>
             </p><br>
         {% endfor %}

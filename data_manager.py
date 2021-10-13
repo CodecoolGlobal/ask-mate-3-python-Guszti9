@@ -27,10 +27,10 @@ def find_answer_by_answer_id(answer_id):
 def change_answers_vote_number(up_or_downvote, answer_id, all_answers):
     for answer in all_answers:
         if answer['id'] == answer_id:
-            if up_or_downvote == 'up':
+            if up_or_downvote == 'vote_up':
                 changed_vote_number = int(answer['vote_number']) + 1
                 answer['vote_number'] = changed_vote_number
-            elif up_or_downvote == 'down':
+            elif up_or_downvote == 'vote_down':
                 changed_vote_number = int(answer['vote_number']) - 1
             answer['vote_number'] = changed_vote_number
             break
