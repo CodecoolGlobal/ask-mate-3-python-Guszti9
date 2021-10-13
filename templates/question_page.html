@@ -7,10 +7,17 @@
     <body>
         <h2>Question:</h2>
         <h3>{{ question_data['title'] }}</h3>
-        <p>{{ question_data['message'] }}</p><br><br>
+        <p>{{ question_data['message'] }}</p>
+        {% if question_data['image'] %}
+            <td><img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200"></td>
+        {% endif %}
+        <br><br>
         <h2>Answers:</h2>
         {% for answer in answers %}
             <p>{{ answer['message'] }} </p>
+            {% if answer['image'] %}
+                    <td><img src="{{ url_for('static', filename=answer['image']) }}" alt="image broke" width="200"></td>
+            {% endif %}
             <p>Vote number: {{ answer['vote_number'] }} </p>
             <p>
                 <a href="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</a>

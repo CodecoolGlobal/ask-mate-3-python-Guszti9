@@ -60,7 +60,7 @@ def add_question():
             'vote_number': 0,
             'title': request.form['title'],
             'message': request.form['message'],
-            'image': f"{connection.UPLOAD_FOLDER}/{request.files['image'].filename}"
+            'image': request.files['image'].filename
         }
         connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
         upload_image(request.files['image'])
@@ -75,7 +75,7 @@ def edit_question(question_id):
     if request.method == 'POST':
         questions[question_index]['title'] = request.form['title']
         questions[question_index]['message'] = request.form['message']
-        questions[question_index]['image'] = f"{connection.UPLOAD_FOLDER}/{request.files['image'].filename}"
+        questions[question_index]['image'] = request.files['image'].filename
         connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
         upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
@@ -103,7 +103,7 @@ def post_answer(question_id):
             'vote_number': 0,
             'question_id': question_id,
             'message': request.form['message'],
-            'image': f"{connection.UPLOAD_FOLDER}/{request.files['image'].filename}"
+            'image': request.files['image'].filename
         }
         connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
         upload_image(request.files['image'])
