@@ -13,10 +13,13 @@
             <p>{{ answer['message'] }} </p>
             <p>Vote number: {{ answer['vote_number'] }} </p>
             <p>
-                <a href="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</a>
-                <a href="{{ url_for('vote_up_answer', answer_id=answer['id'])}}">Vote Up</a>
-                <a href="{{ url_for('vote_down_answer', answer_id=answer['id'])}}">Vote Down</a>
+                <form>
+                    <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                    <button formaction="{{ url_for('vote_up_answer', answer_id=answer['id'])}}">Vote Up</button>
+                    <button formaction="{{ url_for('vote_down_answer', answer_id=answer['id'])}}">Vote Down</button>
+                </form>
             </p><br>
         {% endfor %}
+        <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
     </body>
 </html>
