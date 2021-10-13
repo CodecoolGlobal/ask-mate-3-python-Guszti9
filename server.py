@@ -71,16 +71,28 @@ def add_question():
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
     questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    question_index = int(question_id) - 1
     if request.method == 'POST':
-        questions[question_index]['title'] = request.form['title']
-        questions[question_index]['message'] = request.form['message']
-        questions[question_index]['image'] = f"{connection.UPLOAD_FOLDER}/{request.files['image'].filename}"
+        for question in questions:
+            if question['id'] == question_id:
+                question['title'] = request.form['title']
+                question['message'] = request.form['message']
+                question['image'] = f"{connection.UPLOAD_FOLDER}/{request.files['image'].filename}"
         connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
         upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
-    return render_template("add-edit-question.html", question_data=questions[question_index])
+    return render_template("add-edit-question.html", question_data=data_manager.find_question_by_question_id(question_id))
+
+
+@app.route("/question/<question_id>/delete")
+def delete_question(question_id):
+    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    data = []
+    for question in questions:
+        if question['id'] != question_id:
+            data.append(question)
+    connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, data, connection.QUESTION_HEADER)
+    return redirect('/list')
 
 
 @app.route("/question/<question_id>")
