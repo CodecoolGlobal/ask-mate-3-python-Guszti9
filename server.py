@@ -91,6 +91,8 @@ def delete_question(question_id):
     for question in questions:
         if question['id'] != question_id:
             data.append(question)
+        if question['id'] == question_id and question['image']:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], question['image']))
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, data, connection.QUESTION_HEADER)
     return redirect('/list')
 
@@ -128,6 +130,8 @@ def post_answer(question_id):
 def delete_answer(answer_id):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     answer_to_delete = data_manager.find_answer_by_answer_id(answer_id)
+    if answer_to_delete['image']:
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], answer_to_delete['image']))
     all_answers.remove(answer_to_delete)
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
     question_id = answer_to_delete['question_id']
@@ -139,7 +143,6 @@ def vote_answer(answer_id, vote):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     data_manager.change_answers_vote_number(vote, answer_id, all_answers)
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
-
     answer_to_vote = data_manager.find_answer_by_answer_id(answer_id)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
