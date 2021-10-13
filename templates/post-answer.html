@@ -7,12 +7,12 @@
 <body>
     <h1>{{ question['title'] }}</h1>
     <p> {{ question['message'] }} </p>
-    <h2>Answers</h2>
-    {% for answer in answers %}
-    <p> {{ answer['message'] }} </p>
-    {% endfor %}
+    {% if question['image'] %}
+        <img src="{{ url_for('static', filename=question['image']) }}" alt="image broke" width="200">
+    {% endif %}
+    <br>
     <form method="post" enctype=multipart/form-data>
-        <label for="post-answer">Your Answer:</label> <br>
+        <label for="post-answer"><h3>Your Answer:</h3></label>
         <textarea id="post-answer" name="message" required rows="6" cols="50"></textarea> <br>
         <br>
         <label for="image">Upload image:</label>
