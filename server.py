@@ -140,9 +140,7 @@ def delete_answer(answer_id):
 
 @app.route("/answer/<answer_id>/<vote>")
 def vote_answer(answer_id, vote):
-    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    data_manager.change_answers_vote_number(vote, answer_id, all_answers)
-    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+    data_manager.change_answers_vote_number(vote, answer_id)
     answer_to_vote = data_manager.find_answer_by_answer_id(answer_id)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
