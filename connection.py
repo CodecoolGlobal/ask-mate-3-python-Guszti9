@@ -1,4 +1,6 @@
 import csv
+import os
+from werkzeug.utils import secure_filename
 
 QUESTION_HEADER = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
 ANSWER_HEADER = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
@@ -28,3 +30,13 @@ def append_to_dict_file(filename, data_to_write, fieldnames):
     with open(filename, 'a', newline='') as csv_file:
         appender = csv.DictWriter(csv_file, fieldnames=fieldnames)
         appender.writerow(data_to_write)
+
+
+def upload_image(image):
+    if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
+        filename = secure_filename(image.filename)
+        image.save(os.path.join(UPLOAD_FOLDER, filename))
+
+
+def delete_image(image_name):
+    os.remove(os.path.join(UPLOAD_FOLDER, image_name))

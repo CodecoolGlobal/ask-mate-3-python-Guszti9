@@ -1,18 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.utils import secure_filename
-import os
 import data_manager
 import connection
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
-
-
-def upload_image(image):
-    if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_EXTENSIONS:
-        filename = secure_filename(image.filename)
-        image.save(os.path.join(connection.UPLOAD_FOLDER, filename))
 
 
 @app.template_filter('datetime')
@@ -27,13 +19,12 @@ def hello():
 
 @app.route("/list")
 def list_questions():
-    def list_questions():
-        is_descending = request.args.get('sorting_order') == 'descending'
-        if request.args.get('order_by') is not None:
-            return render_template("list.html", data=data_manager.sorting(is_descending, request.args.get('order_by')))
-        else:
-            is_descending = True
-            return render_template("list.html", data=data_manager.sorting(is_descending))
+    is_descending = request.args.get('sorting_order') == 'descending'
+    if request.args.get('order_by') is not None:
+        return render_template("list.html", data=data_manager.sorting(is_descending, request.args.get('order_by')))
+    else:
+        is_descending = True
+        return render_template("list.html", data=data_manager.sorting(is_descending))
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -41,7 +32,7 @@ def add_question():
     if request.method == 'POST':
         new_question = data_manager.initialize_question(request.form['title'], request.form['message'], request.files['image'].filename)
         connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
-        upload_image(request.files['image'])
+        connection.upload_image(request.files['image'])
         return redirect('/list')
     return render_template("add-edit-question.html")
 
@@ -56,7 +47,7 @@ def edit_question(question_id):
                 question['message'] = request.form['message']
                 question['image'] = request.files['image'].filename
         connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
-        upload_image(request.files['image'])
+        connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))
@@ -70,7 +61,7 @@ def delete_question(question_id):
         if question['id'] != question_id:
             data.append(question)
         if question['id'] == question_id and question['image']:
-            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], question['image']))
+            connection.delete_image(question['image'])
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, data, connection.QUESTION_HEADER)
     return redirect('/list')
 
@@ -96,7 +87,7 @@ def post_answer(question_id):
     if request.method == 'POST':
         answer = data_manager.initialize_answer(question_id, request.form['message'], request.files['image'].filename)
         connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
-        upload_image(request.files['image'])
+        connection.upload_image(request.files['image'])
         return redirect(url_for('display_question', question_id=question_id))
     return render_template("post-answer.html", question=question, answers=answers_to_the_question)
 
@@ -106,7 +97,7 @@ def delete_answer(answer_id):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
     answer_to_delete = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
     if answer_to_delete['image']:
-        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], answer_to_delete['image']))
+        connection.delete_image(answer_to_delete['image'])
     all_answers.remove(answer_to_delete)
     connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
     question_id = answer_to_delete['question_id']
