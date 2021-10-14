@@ -18,5 +18,7 @@
         <br>
         <button type="submit">{{"Edit question" if question_data else "Add Questions"}}</button>
     </form>
+    <br>
+    <form><button  formaction="{{ url_for('list_questions') }}">Go back</button></form>
 </body>
 </html>

@@ -29,6 +29,9 @@
                 <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
             </form><br>
         {% endfor %}
+        <br>
         <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+        <br>
+        <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
     </body>
 </html>

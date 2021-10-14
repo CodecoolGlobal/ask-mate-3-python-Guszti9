@@ -20,6 +20,8 @@
         <br>
         <button type="submit">Post Answer</button>
     </form>
+    <br>
+    <form><button  formaction="{{ url_for('display_question', question_id=question['id']) }}">Go back</button></form>
 
 </body>
 </html>
