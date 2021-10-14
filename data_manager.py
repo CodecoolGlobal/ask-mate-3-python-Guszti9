@@ -24,18 +24,16 @@ def find_answer_by_answer_id(answer_id):
     return filtered_answer
 
 
-def change_answers_vote_number(up_or_downvote, answer_id):
-    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    for answer in all_answers:
-        if answer['id'] == answer_id:
+def change_vote_number(up_or_downvote, id, data_path, data_header):
+    all_data = connection.read_from_dict_file(data_path)
+    for data in all_data:
+        if data['id'] == id:
             if up_or_downvote == 'vote_up':
-                changed_vote_number = int(answer['vote_number']) + 1
-                answer['vote_number'] = changed_vote_number
+                data['vote_number'] = int(data['vote_number']) + 1
             elif up_or_downvote == 'vote_down':
-                changed_vote_number = int(answer['vote_number']) - 1
-            answer['vote_number'] = changed_vote_number
+                data['vote_number'] = int(data['vote_number']) - 1
             break
-    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+    connection.write_to_dict_file(data_path, all_data, data_header)
 
 
 def increase_view_number(question_id):
@@ -46,3 +44,4 @@ def increase_view_number(question_id):
             question['vote_number'] = increased_view_number
             break
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, all_questions, connection.QUESTION_HEADER)
+
