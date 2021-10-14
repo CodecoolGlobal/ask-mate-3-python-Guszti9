@@ -27,10 +27,13 @@ def hello():
 
 @app.route("/list")
 def list_questions():
-    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    sortedlist = sorted(list_of_data, key=lambda i: int(i['submission_time']), reverse=True)
-    sortedlist = data_manager.sort_by(sortedlist, request.args)
-    return render_template("list.html", data=sortedlist)
+    def list_questions():
+        is_descending = request.args.get('sorting_order') == 'descending'
+        if request.args.get('order_by') is not None:
+            return render_template("list.html", data=data_manager.sorting(is_descending, request.args.get('order_by')))
+        else:
+            is_descending = True
+            return render_template("list.html", data=data_manager.sorting(is_descending))
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
