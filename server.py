@@ -80,9 +80,8 @@ def vote_question(question_id, vote):
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    question_data = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     data_manager.increase_view_number(question_id)
-    question_data = data_manager.find_question_by_question_id(question_id)
+    question_data = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     answers = data_manager.filter_answers_by_question_id(question_id)
     return render_template("question_page.html", question_data=question_data, answers=answers)
 
