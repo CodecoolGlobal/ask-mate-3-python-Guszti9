@@ -43,8 +43,7 @@ def increase_view_number(question_id):
     all_questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     for question in all_questions:
         if question['id'] == question_id:
-            increased_view_number = int(question['vote_number']) + 1
-            question['vote_number'] = increased_view_number
+            question['view_number'] = int(question['view_number']) + 1
             break
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, all_questions, connection.QUESTION_HEADER)
 

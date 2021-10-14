@@ -25,13 +25,11 @@ def hello():
     return redirect('/list')
 
 
-@app.route("/list", methods=['GET', 'POST'])
+@app.route("/list")
 def list_questions():
     list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     sortedlist = sorted(list_of_data, key=lambda i: int(i['submission_time']), reverse=True)
-    if request.method == 'GET':
-        sortedlist = data_manager.sort_by(sortedlist, request.args)
-        return render_template("list.html", data=sortedlist)
+    sortedlist = data_manager.sort_by(sortedlist, request.args)
     return render_template("list.html", data=sortedlist)
 
 
@@ -89,6 +87,7 @@ def vote_question(question_id, vote):
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
+    data_manager.increase_view_number(question_id)
     question_data = data_manager.find_question_by_question_id(question_id)
     answers = data_manager.filter_answers_by_question_id(question_id)
     return render_template("question_page.html", question_data=question_data, answers=answers)

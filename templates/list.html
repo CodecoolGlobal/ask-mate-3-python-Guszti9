@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Question List</title>
+    <title>List of Questions</title>
 </head>
-<body>
-    <h1>Question List</h1>
+<body style="background-color:lightgrey;">
+    <h1 style="text-align:center">List of Questions</h1>
     <form>
         <button formaction="{{ url_for('add_question')}}">Add new question</button>
     </form>
     <br>
-    <table border="1">
+    <table border="1" style="background-color:lightgoldenrodyellow;">
         <tr>
             <th>Submission time</th>
             <th>Title</th>
