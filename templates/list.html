@@ -2,45 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Questions</title>
+    <title>Question List</title>
 </head>
 <body>
-    <h1>Questions</h1><br>
+    <h1>Question List</h1>
     <form>
         <button formaction="{{ url_for('add_question')}}">Add new question</button>
     </form>
+    <br>
     <table border="1">
         <tr>
-            <th>ID</th>
             <th>Submission time</th>
-            <th>View number</th>
-            <th>Vote number</th>
             <th>Title</th>
             <th>Message</th>
             <th>Image</th>
+            <th>Vote number</th>
+            <th>View number</th>
         </tr>
         {% for i in range(data|length) %}
             <tr>
-                <td>{{ data[i]['id'] }}</td>
-                <td>{{ data[i]['submission_time']|datetime  }}</td>
-                <td>{{ data[i]['view_number'] }}</td>
-                <td>{{ data[i]['vote_number'] }}</td>
-                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
-                <td>{{ data[i]['message'] }}</td>
-                {% if data[i]['image'] %}
-                    <td><img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200"></td>
-                {% endif %}
+                <td><p style="text-align:center">{{ data[i]['submission_time']|datetime  }}</p></td>
+                <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
+                <td><p>{{ data[i]['message'] }}</p></td>
+                <td>
+                    {% if data[i]['image'] %}
+                    <img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200">
+                    {% endif %}
+                </td>
+                <td>
+                    <p style="text-align:center">{{ data[i]['vote_number'] }}</p>
+                    <form>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
+                    </form>
+                </td>
+                <td><p style="text-align:center">{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
     </table>
-        <form action="/list" method="GET">
+        <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sortby">Sorting order:</label>
                 <select id="sortby" name="sorting_order">
                     <option value="ascending" name="ascending">Ascending</option>
                     <option value="descending" name="descending">Descending</option>
                 </select><br>
-            <input name="sort_by_id" type="submit" value="Sort by ID">
             <input name="sort_by_time" type="submit" value="Sort by Time">
+            <input name="sort_by_title" type="submit" value="Sort by Title">
             <input name="sort_by_message" type="submit" value="Sort by Message">
             <input name="sort_by_views" type="submit" value="Sort by Views">
             <input name="sort_by_votes" type="submit" value="Sort by Votes">
