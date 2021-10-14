@@ -58,7 +58,7 @@ def edit_question(question_id):
         upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
-    return render_template("add-edit-question.html", question_data=data_manager.find_question_by_question_id(question_id))
+    return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))
 
 
 @app.route("/question/<question_id>/delete")
@@ -82,7 +82,7 @@ def vote_question(question_id, vote):
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    question_data = data_manager.find_question_by_question_id(question_id)
+    question_data = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     answers = data_manager.filter_answers_by_question_id(question_id)
     return render_template("question_page.html", question_data=question_data, answers=answers)
 
@@ -90,7 +90,7 @@ def display_question(question_id):
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
     answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
-    question = data_manager.find_question_by_question_id(question_id)
+    question = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     if request.method == 'POST':
         answer = data_manager.initialize_answer(question_id, request.form['message'], request.files['image'].filename)
         connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
@@ -102,7 +102,7 @@ def post_answer(question_id):
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
     all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    answer_to_delete = data_manager.find_answer_by_answer_id(answer_id)
+    answer_to_delete = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
     if answer_to_delete['image']:
         os.remove(os.path.join(app.config['UPLOAD_FOLDER'], answer_to_delete['image']))
     all_answers.remove(answer_to_delete)
@@ -114,7 +114,7 @@ def delete_answer(answer_id):
 @app.route("/answer/<answer_id>/<vote>")
 def vote_answer(answer_id, vote):
     data_manager.change_vote_number(vote, answer_id, connection.ANSWERS_FILE_PATH, connection.ANSWER_HEADER)
-    answer_to_vote = data_manager.find_answer_by_answer_id(answer_id)
+    answer_to_vote = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
