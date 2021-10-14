@@ -120,4 +120,3 @@ def vote_answer(answer_id, vote):
 
 if __name__ == "__main__":
     app.run()
-

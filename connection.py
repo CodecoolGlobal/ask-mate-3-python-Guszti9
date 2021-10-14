@@ -10,21 +10,21 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
 def read_from_dict_file(filename):
-    with open(filename, 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
+    with open(filename, 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
         data_dict = list(reader)
         return data_dict
 
 
 def write_to_dict_file(filename, data_to_write, fieldnames):
-    with open(filename, 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    with open(filename, 'w', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
         for row in data_to_write:
             writer.writerow(row)
 
 
 def append_to_dict_file(filename, data_to_write, fieldnames):
-    with open(filename, 'a', newline='') as csvfile:
-        appender = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    with open(filename, 'a', newline='') as csv_file:
+        appender = csv.DictWriter(csv_file, fieldnames=fieldnames)
         appender.writerow(data_to_write)

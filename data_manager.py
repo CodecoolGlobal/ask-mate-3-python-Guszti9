@@ -8,20 +8,20 @@ def filter_answers_by_question_id(question_id):
     return filtered
 
 
-def find_data_by_id(id, data_path):
+def find_data_by_id(data_id, data_path):
     all_data = connection.read_from_dict_file(data_path)
     for data in all_data:
-        if data['id'] == id:
+        if data['id'] == data_id:
             return data
 
 
-def change_vote_number(up_or_downvote, id, data_path, data_header):
+def change_vote_number(vote, data_id, data_path, data_header):
     all_data = connection.read_from_dict_file(data_path)
     for data in all_data:
-        if data['id'] == id:
-            if up_or_downvote == 'vote_up':
+        if data['id'] == data_id:
+            if vote == 'vote_up':
                 data['vote_number'] = int(data['vote_number']) + 1
-            elif up_or_downvote == 'vote_down':
+            elif vote == 'vote_down':
                 data['vote_number'] = int(data['vote_number']) - 1
             break
     connection.write_to_dict_file(data_path, all_data, data_header)
