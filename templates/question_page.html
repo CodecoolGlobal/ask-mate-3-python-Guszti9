@@ -9,8 +9,9 @@
         <h3>{{ question_data['title'] }}</h3>
         <p>{{ question_data['message'] }}</p>
         {% if question_data['image'] %}
-            <td><img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200"></td>
+            <img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200">
         {% endif %}
+        <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
         <form>
             <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
         </form>
@@ -19,16 +20,14 @@
         {% for answer in answers %}
             <p>{{ answer['message'] }} </p>
             {% if answer['image'] %}
-                    <td><img src="{{ url_for('static', filename=answer['image']) }}" alt="image broke" width="200"></td>
+                    <img src="{{ url_for('static', filename=answer['image']) }}" alt="image broke" width="200">
             {% endif %}
-            <p>Vote number: {{ answer['vote_number'] }} </p>
-            <p>
-                <form>
-                    <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
-                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
-                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
-                </form>
-            </p><br>
+            <p>Votes: {{ answer['vote_number'] }}</p>
+            <form>
+                <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
+                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
+            </form><br>
         {% endfor %}
         <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
     </body>

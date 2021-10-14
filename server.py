@@ -75,7 +75,7 @@ def delete_question(question_id):
 
 
 @app.route("/question/<question_id>/<vote>")
-def vote_down_question(question_id, vote):
+def vote_question(question_id, vote):
     questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     for question in questions:
         if question['id'] == question_id:

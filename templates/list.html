@@ -29,7 +29,13 @@
                     <img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200">
                     {% endif %}
                 </td>
-                <td><p style="text-align:center">{{ data[i]['vote_number'] }}</p></td>
+                <td>
+                    <p style="text-align:center">{{ data[i]['vote_number'] }}</p>
+                    <form>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
+                    </form>
+                </td>
                 <td><p style="text-align:center">{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
