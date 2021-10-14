@@ -123,6 +123,19 @@ def delete_question(question_id):
     return redirect('/list')
 
 
+@app.route("/question/<question_id>/<vote>")
+def vote_down_question(question_id, vote):
+    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
+    for question in questions:
+        if question['id'] == question_id:
+            if vote == 'vote_up':
+                question['vote_number'] = int(question['vote_number']) + 1
+            if vote == 'vote_down':
+                question['vote_number'] = int(question['vote_number']) - 1
+    connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
+    return redirect('/list')
+
+
 @app.route("/question/<question_id>")
 def display_question(question_id):
     question_data = data_manager.find_question_by_question_id(question_id)
