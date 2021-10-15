@@ -45,9 +45,10 @@ def edit_question(question_id):
             if question['id'] == question_id:
                 question['title'] = request.form['title']
                 question['message'] = request.form['message']
-                question['image'] = request.files['image'].filename
+                if request.files['image']:
+                    question['image'] = request.files['image'].filename
+                    connection.upload_image(request.files['image'])
         connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
-        connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))
