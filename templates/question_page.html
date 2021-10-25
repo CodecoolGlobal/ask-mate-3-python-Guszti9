@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Question Page</title>
+    </head>
+    <body style="background-color:lightgrey;">
+        <header style="background-color:skyblue;">
+            <h1 style="text-align:center">KérdezzKomám</h1>
+        </header>
+        <h2>Question:</h2>
+        <h3>{{ question_data['title'] }}</h3>
+        <p>{{ question_data['message'] }}</p>
+        {% if question_data['image'] %}
+            <img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200">
+        {% endif %}
+        <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
+        <form>
+            <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
+            <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
+        </form>
+        <br><br>
+        <h2>Answers:</h2>
+        {% for answer in answers %}
+            <p>{{ answer['message'] }} </p>
+            {% if answer['image'] %}
+                    <img src="{{ url_for('static', filename=answer['image']) }}" alt="image broke" width="200">
+            {% endif %}
+            <p>Votes: {{ answer['vote_number'] }}</p>
+            <form>
+                <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
+                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
+            </form><br>
+        {% endfor %}
+        <br>
+        <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+        <br>
+        <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
+    </body>
+</html>

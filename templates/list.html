@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Questions</title>
+    <style>
+        table, th, td {
+            border: 2px solid black;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body style="background-color:lightgray;">
+    <header style="background-color:skyblue;">
+        <h1 style="text-align:center">KérdezzKomám</h1>
+    </header>
+    <h2 style="text-align:center">List of Questions</h2>
+    <form>
+        <button formaction="{{ url_for('add_question')}}">Add new question</button>
+    </form>
+    <br>
+    <form action="{{ url_for('list_questions') }}" method="GET">
+             <label for="sort_by">Sorting order:</label>
+                <select id="sort_by" name="sorting_order">
+                    <option value="ascending" name="ascending">Ascending</option>
+                    <option value="descending" name="descending">Descending</option>
+                </select><br>
+            <button name="order_by" value="submission_time" type="submit">Sort by Time</button>
+            <button name="order_by" value="view_number" type="submit">Sort by Views</button>
+            <button name="order_by" value="vote_number" type="submit">Sort by Votes</button>
+            <button name="order_by" value="title" type="submit">Sort by Title</button>
+            <button name="order_by" value="message" type="submit">Sort by Message</button>
+    </form>
+    <br>
+    <table>
+        <tr>
+            <th>Submission time</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Image</th>
+            <th>Vote number</th>
+            <th>View number</th>
+        </tr>
+        {% for i in range(data|length) %}
+            <tr>
+                <td><p style="text-align:center">{{ data[i]['submission_time']|datetime  }}</p></td>
+                <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
+                <td><p>{{ data[i]['message'] }}</p></td>
+                <td>
+                    {% if data[i]['image'] %}
+                    <img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200">
+                    {% endif %}
+                </td>
+                <td>
+                    <p style="text-align:center">{{ data[i]['vote_number'] }}</p>
+                    <form>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
+                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
+                    </form>
+                </td>
+                <td><p style="text-align:center">{{ data[i]['view_number'] }}</p></td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

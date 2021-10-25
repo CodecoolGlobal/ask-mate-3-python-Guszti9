@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{"Edit question" if question_data else "Add Questions"}}</title>
+</head>
+<body style="background-color:lightgrey;">
+    <header style="background-color:skyblue;">
+        <h1 style="text-align:center">KérdezzKomám</h1>
+    </header>
+    <h1>{{"Edit question" if question_data else "Add Questions"}}</h1><br>
+    <form method="post" enctype=multipart/form-data>
+        <label for="title">Title:</label><br>
+        <input type="text" name="title" id="title" value="{{question_data["title"] if question_data}}" required><br>
+        <br>
+        <label for="message">Message:</label> <br>
+        <textarea id="message" name="message" required rows="6" cols="50">{{question_data["message"] if question_data}}</textarea> <br>
+        <br>
+        <label for="image">Upload image:</label>
+        <input type="file" id="image" name="image" accept="image/*"> <br>
+        <br>
+        <button type="submit">{{"Edit question" if question_data else "Add Questions"}}</button>
+    </form>
+    <br>
+    <form><button  formaction="{{ url_for('list_questions') }}">Go back</button></form>
+</body>
+</html>
