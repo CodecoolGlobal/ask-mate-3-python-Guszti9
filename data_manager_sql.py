@@ -87,6 +87,14 @@ def get_answers(cursor, question_id):
 
 
 @connection_sql.connection_handler
+def add_new_answer(cursor, question_id, message, image=''):
+    query = f"""
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+        VALUES (CURRENT_TIMESTAMP, 0, '{question_id}', '{message}', '{image}')"""
+    cursor.execute(query)
+
+
+@connection_sql.connection_handler
 def change_answers_vote_number(cursor, vote, answer_id):
     if vote == 'vote_up':
         query = f"""
