@@ -5,6 +5,8 @@ import data_manager_sql
 from datetime import datetime
 
 
+import data_manager_sql
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
@@ -44,19 +46,12 @@ def edit_question(question_id):
             connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
-    return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))
+    return render_template("add-edit-question.html", question_data=data_manager_sql.get_question_by_id(question_id))
 
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    data = []
-    for question in questions:
-        if question['id'] != question_id:
-            data.append(question)
-        if question['id'] == question_id and question['image']:
-            connection.delete_image(question['image'])
-    connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, data, connection.QUESTION_HEADER)
+    data_manager_sql.delete_question(question_id)
     return redirect('/list')
 
 
@@ -68,22 +63,17 @@ def vote_question(question_id, vote):
 
 @app.route("/question/<question_id>")
 def display_question(question_id):
-    data_manager.increase_view_number(question_id)
-    question_data = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
-    answers = data_manager.filter_answers_by_question_id(question_id)
-    return render_template("question_page.html", question_data=question_data, answers=answers)
+    data_manager_sql.increase_view_number(question_id)
+    return render_template("question_page.html", question_data=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
 
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
-    question = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     if request.method == 'POST':
-        answer = data_manager.initialize_answer(question_id, request.form['message'], request.files['image'].filename)
-        connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
         connection.upload_image(request.files['image'])
+        data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("post-answer.html", question=question, answers=answers_to_the_question)
+    return render_template("post-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
 
 
 @app.route("/answer/<answer_id>/delete")
@@ -100,8 +90,8 @@ def delete_answer(answer_id):
 
 @app.route("/answer/<answer_id>/<vote>")
 def vote_answer(answer_id, vote):
-    data_manager.change_vote_number(vote, answer_id, connection.ANSWERS_FILE_PATH, connection.ANSWER_HEADER)
-    answer_to_vote = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
+    answer_to_vote = data_manager_sql.get_answer_by_id(answer_id)
+    data_manager_sql.change_answers_vote_number(vote, answer_id)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
