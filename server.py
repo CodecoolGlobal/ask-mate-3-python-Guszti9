@@ -4,6 +4,8 @@ import connection
 import data_manager_sql
 from datetime import datetime
 
+import data_manager_sql
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
@@ -20,12 +22,10 @@ def hello():
 
 @app.route("/list")
 def list_questions():
-    is_descending = request.args.get('sorting_order') == 'descending'
-    if request.args.get('order_by') is not None:
-        return render_template("list.html", data=data_manager.sorting(is_descending, request.args.get('order_by')))
-    else:
-        is_descending = True
-        return render_template("list.html", data=data_manager.sorting(is_descending))
+    data = data_manager_sql.get_questions()
+    if request.args.get('order_by'):
+        return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
+    return render_template("list.html", data=data)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -39,16 +39,10 @@ def add_question():
 
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
-    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'POST':
-        for question in questions:
-            if question['id'] == question_id:
-                question['title'] = request.form['title']
-                question['message'] = request.form['message']
-                if request.files['image']:
-                    question['image'] = request.files['image'].filename
-                    connection.upload_image(request.files['image'])
-        connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
+        data_manager_sql.edit_question(question_id, request.form['title'], request.form['message'], request.files['image'].filename)
+        if request.files['image']:
+            connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))

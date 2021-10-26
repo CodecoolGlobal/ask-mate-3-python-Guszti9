@@ -13,8 +13,8 @@
     <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sort_by">Sorting order:</label>
                 <select id="sort_by" name="sorting_order">
-                    <option value="ascending" name="ascending">Ascending</option>
-                    <option value="descending" name="descending">Descending</option>
+                    <option value="asc" name="asc_desc">Ascending</option>
+                    <option value="desc" name="asc_desc">Descending</option>
                 </select><br>
             <button name="order_by" value="submission_time" type="submit">Sort by Time</button>
             <button name="order_by" value="view_number" type="submit">Sort by Views</button>
@@ -34,7 +34,7 @@
         </tr>
         {% for i in range(data|length) %}
             <tr>
-                <td><p>{{ data[i]['submission_time']|datetime  }}</p></td>
+                <td><p>{{ data[i]['submission_time']  }}</p></td>
                 <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
                 <td><p>{{ data[i]['message'] }}</p></td>
                 <td>
