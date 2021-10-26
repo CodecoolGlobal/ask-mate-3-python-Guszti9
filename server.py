@@ -57,7 +57,7 @@ def delete_question(question_id):
 
 @app.route("/question/<question_id>/<vote>")
 def vote_question(question_id, vote):
-    data_manager.change_vote_number(vote, question_id, connection.QUESTIONS_FILE_PATH, connection.QUESTION_HEADER)
+    data_manager_sql.change_question_vote_number(question_id, vote)
     return redirect('/list')
 
 
