@@ -29,6 +29,16 @@ def edit_question(cursor, question_id, title, message, image):
 
 
 @connection_sql.connection_handler
+def get_question_by_id(cursor, question_id):
+    query = f"""
+        SELECT *
+        FROM question
+        WHERE id = {question_id}"""
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@connection_sql.connection_handler
 def get_questions(cursor, order_by='submission_time', order='desc'):
     query = f"""
         SELECT *
