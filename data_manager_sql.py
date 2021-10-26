@@ -26,3 +26,13 @@ def edit_question(cursor, question_id, title, message, image):
             SET title = '{title}', message = '{message}'
             WHERE id = {question_id}"""
     cursor.execute(query)
+
+
+@connection_sql.connection_handler
+def get_questions(cursor, order_by='submission_time', order='desc'):
+    query = f"""
+        SELECT *
+        FROM question
+        ORDER BY {order_by} {order}"""
+    cursor.execute(query)
+    return cursor.fetchall()
