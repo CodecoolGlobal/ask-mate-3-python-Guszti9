@@ -1,17 +1,56 @@
 body {
     background-color: lightgray;
+    font-family: Arial, serif;
+    margin: 5%;
+
 }
 
 header {
+    display: flex;
     background-color: skyblue;
-    text-align: center;
+    border: solid black;
+    align-items: center;
+    box-shadow: 5px 5px 5px grey;
 }
 
-table, th, td {
+section {
+    background-color: skyblue;
+    margin-top: 50px;
+    border: solid black;
+    padding: 20px;
+    box-shadow: 5px 5px 5px grey;
+}
+
+header > h1 {
+    text-shadow: 5px 5px 5px white;
+    font-weight: bold;
+    font-size: 4em;
+    margin-left: 50px;
+}
+
+th {
+    background-color: darkblue;
+    color: white;
+}
+
+table {
+    background-color: darkblue;
+}
+
+td {
+    background-color: skyblue;
+}
+
+table, td {
             border: 2px solid black;
             border-radius: 10px;
         }
 
-p.centered {
+td:nth-child(5), td:nth-child(6) {
     text-align: center;
+    white-space: nowrap;
+}
+
+button {
+    margin: 5px;
 }
