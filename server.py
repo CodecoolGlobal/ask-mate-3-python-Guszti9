@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
 import connection
+import data_manager_sql
 from datetime import datetime
 
 app = Flask(__name__)
@@ -30,9 +31,8 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
-        new_question = data_manager.initialize_question(request.form['title'], request.form['message'], request.files['image'].filename)
-        connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
         connection.upload_image(request.files['image'])
+        data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)
         return redirect('/list')
     return render_template("add-edit-question.html")
 
