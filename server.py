@@ -4,7 +4,6 @@ import connection
 import data_manager_sql
 from datetime import datetime
 
-import data_manager_sql
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
@@ -107,4 +106,4 @@ def vote_answer(answer_id, vote):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
