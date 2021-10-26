@@ -1,20 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>List of Questions</title>
-    <style>
-        table, th, td {
-            border: 2px solid black;
-            border-radius: 10px;
-        }
-    </style>
-</head>
-<body style="background-color:lightgray;">
-    <header style="background-color:skyblue;">
-        <h1 style="text-align:center">KérdezzKomám</h1>
-    </header>
-    <h2 style="text-align:center">List of Questions</h2>
+{% extends "layout.html" %}
+
+{% block page_title %}
+    List of questions
+{% endblock %}
+
+{% block content %}
+
     <form>
         <button formaction="{{ url_for('add_question')}}">Add new question</button>
     </form>
@@ -43,7 +34,7 @@
         </tr>
         {% for i in range(data|length) %}
             <tr>
-                <td><p style="text-align:center">{{ data[i]['submission_time']|datetime  }}</p></td>
+                <td><p>{{ data[i]['submission_time']|datetime  }}</p></td>
                 <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
                 <td><p>{{ data[i]['message'] }}</p></td>
                 <td>
@@ -52,15 +43,15 @@
                     {% endif %}
                 </td>
                 <td>
-                    <p style="text-align:center">{{ data[i]['vote_number'] }}</p>
+                    <p>{{ data[i]['vote_number'] }}</p>
                     <form>
-                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
-                        <p style="text-align:center"><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
+                        <p><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
+                        <p><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
                     </form>
                 </td>
-                <td><p style="text-align:center">{{ data[i]['view_number'] }}</p></td>
+                <td><p>{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
     </table>
-</body>
-</html>
+
+{% endblock %}

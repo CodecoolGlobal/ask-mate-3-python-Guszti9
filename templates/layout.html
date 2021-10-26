@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block page_title %}Main page{% endblock %} - AteMask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="content-wrapper">
+        <header style="background-color:skyblue;">
+            <h1 style="text-align:center">AteMask</h1>
+        </header>
+        <section>
+            <h2 class="title text-center">{{ self.page_title() }}</h2>
+
+            {% block content %}{% endblock %}
+        </section>
+    </div>
+</body>
+</html>
+
+
+
