@@ -4,7 +4,7 @@ import connection
 import data_manager_sql
 from datetime import datetime
 
-import data_manager_temp_sql
+import data_manager_sql
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
@@ -22,9 +22,9 @@ def hello():
 
 @app.route("/list")
 def list_questions():
-    data = data_manager_temp_sql.get_questions()
+    data = data_manager_sql.get_questions()
     if request.args.get('order_by'):
-        return render_template("list.html", data=data_manager_temp_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
+        return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
     return render_template("list.html", data=data)
 
 
