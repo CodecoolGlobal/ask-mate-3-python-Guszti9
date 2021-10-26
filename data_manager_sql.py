@@ -55,3 +55,38 @@ def increase_view_number(cursor, question_id):
     SET view_number = view_number + 1
     WHERE id = {question_id}"""
     cursor.execute(query)
+
+
+@connection_sql.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    query = f"""
+        SELECT *
+        FROM answer
+        WHERE id = {answer_id}"""
+    cursor.execute(query)
+    return cursor.fetchone()
+
+@connection_sql.connection_handler
+def get_answers(cursor, question_id):
+    query = f"""
+        SELECT *
+        FROM answer
+        WHERE question_id = {question_id}
+        ORDER BY submission_time"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def change_answers_vote_number(cursor, vote, answer_id):
+    if vote == 'vote_up':
+        query = f"""
+        UPDATE answer
+        SET vote_number = vote_number + 1
+        WHERE id = {answer_id}"""
+    elif vote == 'vote_down':
+        query = f"""
+        UPDATE answer
+        SET vote_number = vote_number - 1
+        WHERE id = {answer_id}"""
+    cursor.execute(query)
