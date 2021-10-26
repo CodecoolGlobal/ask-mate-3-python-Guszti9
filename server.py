@@ -40,7 +40,7 @@ def add_question():
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
     if request.method == 'POST':
-        data_manager_sql.edit_question(request.form['title'], request.form['message'], request.files['image'].filename)
+        data_manager_sql.edit_question(question_id, request.form['title'], request.form['message'], request.files['image'].filename)
         if request.files['image']:
             connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
