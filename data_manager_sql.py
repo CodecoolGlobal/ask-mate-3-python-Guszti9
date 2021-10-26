@@ -66,6 +66,7 @@ def get_answer_by_id(cursor, answer_id):
     cursor.execute(query)
     return cursor.fetchone()
 
+
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = f"""
@@ -75,6 +76,14 @@ def get_answers(cursor, question_id):
         ORDER BY submission_time"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def add_new_answer(cursor, question_id, message, image=''):
+    query = f"""
+        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+        VALUES (CURRENT_TIMESTAMP, 0, '{question_id}', '{message}', '{image}')"""
+    cursor.execute(query)
 
 
 @connection_sql.connection_handler

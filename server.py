@@ -76,14 +76,11 @@ def display_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    answers_to_the_question = data_manager.filter_answers_by_question_id(question_id)
-    question = data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH)
     if request.method == 'POST':
-        answer = data_manager.initialize_answer(question_id, request.form['message'], request.files['image'].filename)
-        connection.append_to_dict_file(connection.ANSWERS_FILE_PATH, answer, connection.ANSWER_HEADER)
         connection.upload_image(request.files['image'])
+        data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("post-answer.html", question=question, answers=answers_to_the_question)
+    return render_template("post-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
 
 
 @app.route("/answer/<answer_id>/delete")
