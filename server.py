@@ -11,11 +11,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 
-@app.template_filter('datetime')
-def datetime_format(unix_timestamp):
-    return datetime.utcfromtimestamp(int(unix_timestamp)).strftime('%Y-%m-%d %H:%M')
-
-
 @app.route("/")
 def hello():
     return redirect('/list')
@@ -78,12 +73,10 @@ def post_answer(question_id):
 
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
-    all_answers = connection.read_from_dict_file(connection.ANSWERS_FILE_PATH)
-    answer_to_delete = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
+    answer_to_delete = data_manager_sql.get_answer_by_id(answer_id)
     if answer_to_delete['image']:
         connection.delete_image(answer_to_delete['image'])
-    all_answers.remove(answer_to_delete)
-    connection.write_to_dict_file(connection.ANSWERS_FILE_PATH, all_answers, connection.ANSWER_HEADER)
+    data_manager_sql.delete_answer(answer_id)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
