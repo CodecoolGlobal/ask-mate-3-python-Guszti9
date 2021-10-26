@@ -5,6 +5,8 @@ import data_manager_sql
 from datetime import datetime
 
 
+import data_manager_sql
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
@@ -69,8 +71,7 @@ def vote_question(question_id, vote):
 @app.route("/question/<question_id>")
 def display_question(question_id):
     data_manager_sql.increase_view_number(question_id)
-    answers = data_manager.filter_answers_by_question_id(question_id)
-    return render_template("question_page.html", question_data=data_manager_sql.get_question_by_id(question_id), answers=answers)
+    return render_template("question_page.html", question_data=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
 
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
@@ -99,8 +100,8 @@ def delete_answer(answer_id):
 
 @app.route("/answer/<answer_id>/<vote>")
 def vote_answer(answer_id, vote):
-    data_manager.change_vote_number(vote, answer_id, connection.ANSWERS_FILE_PATH, connection.ANSWER_HEADER)
-    answer_to_vote = data_manager.find_data_by_id(answer_id, connection.ANSWERS_FILE_PATH)
+    answer_to_vote = data_manager_sql.get_answer_by_id(answer_id)
+    data_manager_sql.change_answers_vote_number(vote, answer_id)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
