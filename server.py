@@ -3,6 +3,8 @@ import data_manager
 import connection
 from datetime import datetime
 
+import data_manager_temp_sql
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
@@ -19,12 +21,10 @@ def hello():
 
 @app.route("/list")
 def list_questions():
-    is_descending = request.args.get('sorting_order') == 'descending'
-    if request.args.get('order_by') is not None:
-        return render_template("list.html", data=data_manager.sorting(is_descending, request.args.get('order_by')))
-    else:
-        is_descending = True
-        return render_template("list.html", data=data_manager.sorting(is_descending))
+    data = data_manager_temp_sql.get_questions()
+    if request.args.get('order_by'):
+        return render_template("list.html", data=data_manager_temp_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
+    return render_template("list.html", data=data)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])

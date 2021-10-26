@@ -37,14 +37,6 @@ def increase_view_number(question_id):
     connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, all_questions, connection.QUESTION_HEADER)
 
 
-def sorting(is_descending, sorted_by='submission_time'):
-    list_of_data = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    if sorted_by == 'title' or sorted_by == 'message':
-        return sorted(list_of_data, key=lambda i: str(i[sorted_by].capitalize()), reverse=is_descending)
-    else:
-        return sorted(list_of_data, key=lambda i: int(i[sorted_by]), reverse=is_descending)
-
-
 def initialize_question(title, message, image=''):
     all_question = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     max_id = max(item['id'] for item in all_question)
