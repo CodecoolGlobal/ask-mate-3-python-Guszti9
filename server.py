@@ -51,14 +51,7 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
-    data = []
-    for question in questions:
-        if question['id'] != question_id:
-            data.append(question)
-        if question['id'] == question_id and question['image']:
-            connection.delete_image(question['image'])
-    connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, data, connection.QUESTION_HEADER)
+    data_manager_sql.delete_question(question_id)
     return redirect('/list')
 
 

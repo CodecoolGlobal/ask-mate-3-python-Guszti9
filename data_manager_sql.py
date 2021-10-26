@@ -29,6 +29,14 @@ def edit_question(cursor, question_id, title, message, image):
 
 
 @connection_sql.connection_handler
+def delete_question(cursor, question_id):
+    query = f"""
+        DELETE FROM question
+        WHERE id = {question_id}"""
+    cursor.execute(query)
+
+
+@connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = f"""
         SELECT *
