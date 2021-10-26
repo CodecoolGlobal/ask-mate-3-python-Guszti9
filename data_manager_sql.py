@@ -107,3 +107,11 @@ def change_answers_vote_number(cursor, vote, answer_id):
         SET vote_number = vote_number - 1
         WHERE id = {answer_id}"""
     cursor.execute(query)
+
+
+@connection_sql.connection_handler
+def delete_answer(cursor, answer_id):
+    query = f"""
+        DELETE FROM answer
+        WHERE id = {answer_id}"""
+    cursor.execute(query)
