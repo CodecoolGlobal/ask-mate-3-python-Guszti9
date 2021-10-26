@@ -46,3 +46,12 @@ def get_questions(cursor, order_by='submission_time', order='desc'):
         ORDER BY {order_by} {order}"""
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def increase_view_number(cursor, question_id):
+    query = f"""
+    UPDATE question
+    SET view_number = view_number + 1
+    WHERE id = {question_id}"""
+    cursor.execute(query)
