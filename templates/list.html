@@ -43,13 +43,13 @@
                     {% endif %}
                 </td>
                 <td>
-                    <p>{{ data[i]['vote_number'] }}</p>
+                    <p class="centered">{{ data[i]['vote_number'] }}</p>
                     <form>
                         <p><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button></p>
                         <p><button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button></p>
                     </form>
                 </td>
-                <td><p>{{ data[i]['view_number'] }}</p></td>
+                <td><p class="centered">{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
     </table>

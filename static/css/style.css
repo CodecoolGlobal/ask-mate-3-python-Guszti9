@@ -12,6 +12,6 @@ table, th, td {
             border-radius: 10px;
         }
 
-p {
+p.centered {
     text-align: center;
 }
