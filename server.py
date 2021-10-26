@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager
 import connection
+import data_manager_sql
 from datetime import datetime
 
 import data_manager_temp_sql
@@ -30,25 +31,18 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
-        new_question = data_manager.initialize_question(request.form['title'], request.form['message'], request.files['image'].filename)
-        connection.append_to_dict_file(connection.QUESTIONS_FILE_PATH, new_question, connection.QUESTION_HEADER)
         connection.upload_image(request.files['image'])
+        data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)
         return redirect('/list')
     return render_template("add-edit-question.html")
 
 
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
-    questions = connection.read_from_dict_file(connection.QUESTIONS_FILE_PATH)
     if request.method == 'POST':
-        for question in questions:
-            if question['id'] == question_id:
-                question['title'] = request.form['title']
-                question['message'] = request.form['message']
-                if request.files['image']:
-                    question['image'] = request.files['image'].filename
-                    connection.upload_image(request.files['image'])
-        connection.write_to_dict_file(connection.QUESTIONS_FILE_PATH, questions, connection.QUESTION_HEADER)
+        data_manager_sql.edit_question(request.form['title'], request.form['message'], request.files['image'].filename)
+        if request.files['image']:
+            connection.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager.find_data_by_id(question_id, connection.QUESTIONS_FILE_PATH))

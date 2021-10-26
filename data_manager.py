@@ -1,6 +1,5 @@
 import connection
 import time
-import connection_temp_sql
 
 
 def filter_answers_by_question_id(question_id):
