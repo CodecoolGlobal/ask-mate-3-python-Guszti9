@@ -5,10 +5,8 @@ import data_manager_sql
 from datetime import datetime
 
 
-import data_manager_sql
-
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = data_manager_sql.UPLOAD_FOLDER
 
 
 @app.template_filter('datetime')

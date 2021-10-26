@@ -5,20 +5,20 @@ body {
 
 }
 
-header {
-    display: flex;
+header, section {
     background-color: skyblue;
     border: solid black;
-    align-items: center;
     box-shadow: 5px 5px 5px grey;
 }
 
+header {
+    display: flex;
+    align-items: center;
+}
+
 section {
-    background-color: skyblue;
     margin-top: 50px;
-    border: solid black;
     padding: 20px;
-    box-shadow: 5px 5px 5px grey;
 }
 
 header > h1 {
