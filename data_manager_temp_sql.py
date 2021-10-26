@@ -1,2 +1,0 @@
-import time
-import connection_temp_sql
