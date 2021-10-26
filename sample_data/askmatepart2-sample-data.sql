@@ -121,3 +121,31 @@ SELECT pg_catalog.setval('tag_id_seq', 3, true);
 INSERT INTO question_tag VALUES (0, 1);
 INSERT INTO question_tag VALUES (1, 3);
 INSERT INTO question_tag VALUES (2, 3);
+
+alter table answer drop constraint fk_question_id;
+
+alter table answer
+	add constraint fk_question_id
+		foreign key (question_id) references question
+			on delete cascade;
+
+alter table question_tag drop constraint fk_question_id;
+
+alter table question_tag
+	add constraint fk_question_id
+		foreign key (question_id) references question
+			on delete cascade;
+
+alter table comment drop constraint fk_question_id;
+
+alter table comment
+	add constraint fk_question_id
+		foreign key (question_id) references question
+			on delete cascade;
+
+alter table comment drop constraint fk_answer_id;
+
+alter table comment
+	add constraint fk_answer_id
+		foreign key (answer_id) references answer
+			on delete cascade;
