@@ -15,7 +15,7 @@ def add_question(cursor, title, message, image):
 
 @connection_sql.connection_handler
 def edit_question(cursor, question_id, title, message, image):
-    if not image == '':
+    if image:
         query = f"""
             UPDATE question
             SET title = '{title}', message = '{message}', image = '{image}'
