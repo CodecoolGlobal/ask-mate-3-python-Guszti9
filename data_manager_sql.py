@@ -12,3 +12,17 @@ def add_question(cursor, title, message, image):
         VALUES (CURRENT_TIMESTAMP, 0, 0, '{title}', '{message}', '{image}')"""
     cursor.execute(query)
 
+
+@connection_sql.connection_handler
+def edit_question(cursor, question_id, title, message, image):
+    if not image == '':
+        query = f"""
+            UPDATE question
+            SET title = '{title}', message = '{message}', image = '{image}'
+            WHERE id = {question_id}"""
+    else:
+        query = f"""
+            UPDATE question
+            SET title = '{title}', message = '{message}'
+            WHERE id = {question_id}"""
+    cursor.execute(query)
