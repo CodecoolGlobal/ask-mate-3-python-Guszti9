@@ -11,11 +11,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 
-@app.template_filter('datetime')
-def datetime_format(unix_timestamp):
-    return datetime.utcfromtimestamp(int(unix_timestamp)).strftime('%Y-%m-%d %H:%M')
-
-
 @app.route("/")
 def hello():
     return redirect('/list')
