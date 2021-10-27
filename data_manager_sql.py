@@ -142,6 +142,26 @@ def delete_answer(cursor, answer_id):
     cursor.execute(query)
 
 
+@connection_sql.connection_handler
+def get_comments_by_question_id(cursor, question_id):
+    query = """
+        SELECT message, submission_time
+        FROM comment
+        WHERE question_id = %(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def add_comments_to_question(cursor, question_id, message):
+    query = """
+        INSERT INTO comment (question_id, message, submission_time, edited_count)
+        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        """
+    cursor.execute(query, {'question_id': question_id, 'message': message})
+
+
 def upload_image(image):
     if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
         filename = secure_filename(image.filename)
