@@ -17,15 +17,18 @@ def list_questions():
     data = data_manager_sql.get_questions()
     if request.args.get('order_by'):
         return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
+    if request.args.get('search'):
+        return render_template("list.html", data=data_manager_sql.search_question(request.args.get('search')))
     return render_template("list.html", data=data)
+
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
         util.upload_image(request.files['image'])
-        data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)
-        return redirect('/list')
+        question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)['id']
+        return redirect(f'/question/{question_id}')
     return render_template("add-edit-question.html")
 
 
