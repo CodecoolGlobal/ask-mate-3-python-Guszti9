@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 import data_manager_sql
+import util
 
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = data_manager_sql.UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 
 
 @app.route("/")
@@ -16,13 +17,15 @@ def list_questions():
     data = data_manager_sql.get_questions()
     if request.args.get('order_by'):
         return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
+    if request.args.get('search'):
+        return render_template("list.html", data=data_manager_sql.search_question(request.args.get('search')))
     return render_template("list.html", data=data)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
-        data_manager_sql.upload_image(request.files['image'])
+        util.upload_image(request.files['image'])
         question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)['id']
         return redirect(f'/question/{question_id}')
     return render_template("add-edit-question.html")
@@ -33,7 +36,7 @@ def edit_question(question_id):
     if request.method == 'POST':
         data_manager_sql.edit_question(question_id, request.form['title'], request.form['message'], request.files['image'].filename)
         if request.files['image']:
-            data_manager_sql.upload_image(request.files['image'])
+            util.upload_image(request.files['image'])
         return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager_sql.get_question_by_id(question_id))
@@ -63,7 +66,7 @@ def display_question(question_id):
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
     if request.method == 'POST':
-        data_manager_sql.upload_image(request.files['image'])
+        util.upload_image(request.files['image'])
         data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
     return render_template("post-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
@@ -73,7 +76,7 @@ def post_answer(question_id):
 def delete_answer(answer_id):
     answer_to_delete = data_manager_sql.get_answer_by_id(answer_id)
     if answer_to_delete['image']:
-        data_manager_sql.delete_image(answer_to_delete['image'])
+        util.delete_image(answer_to_delete['image'])
     data_manager_sql.delete_answer(answer_id)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
