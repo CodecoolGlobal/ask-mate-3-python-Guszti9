@@ -23,8 +23,8 @@ def list_questions():
 def add_question():
     if request.method == 'POST':
         data_manager_sql.upload_image(request.files['image'])
-        data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)
-        return redirect('/list')
+        question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename)['id']
+        return redirect(f'/question/{question_id}')
     return render_template("add-edit-question.html")
 
 

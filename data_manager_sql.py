@@ -13,8 +13,14 @@ ALLOWED_EXTENSIONS = {'png', 'jpg'}
 def add_question(cursor, title, message, image):
     query = f"""
         INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, 0, '{title}', '{message}', '{image}')"""
+        VALUES (CURRENT_TIMESTAMP, -1, 0, '{title}', '{message}', '{image}')"""
     cursor.execute(query)
+    query = """
+        SELECT id
+        FROM question
+        WHERE view_number = -1"""
+    cursor.execute(query)
+    return cursor.fetchone()
 
 
 @connection_sql.connection_handler
