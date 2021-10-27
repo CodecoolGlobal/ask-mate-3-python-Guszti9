@@ -158,11 +158,22 @@ def edit_answer(cursor, answer_id, message, image):
 def search_question(cursor, search_word):
     query = """
     SELECT *
-    FROM question, answer
+    FROM question
     WHERE title ILIKE %s
-    OR question.message ILIKE %s
-    OR answer.message ILIKE %s"""
-    args = ['%' + search_word + '%'] * 3
+    OR question.message ILIKE %s"""
+    args = ['%' + search_word + '%'] * 2
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def search_answer(cursor, search_word):
+    query = """
+    SELECT *
+    FROM question
+    JOIN answer ON question.id = answer.question_id
+    WHERE answer.message ILIKE %s"""
+    args = ['%' + search_word + '%']
     cursor.execute(query, args)
     return cursor.fetchall()
 
@@ -175,6 +186,17 @@ def get_comments_by_question_id(cursor, question_id):
         WHERE question_id = %(question_id)s
         """
     cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_comments_by_answer_id(cursor, answer_id):
+    query = """
+        SELECT id, message, submission_time
+        FROM comment
+        WHERE answer_id = %(answer_id)s
+        """
+    cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchall()
 
 
@@ -196,6 +218,15 @@ def add_comments_to_question(cursor, question_id, message):
         VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
         """
     cursor.execute(query, {'question_id': question_id, 'message': message})
+
+
+@connection_sql.connection_handler
+def add_comments_to_answer(cursor, answer_id, message):
+    query = """
+        INSERT INTO comment (answer_id, message, submission_time, edited_count)
+        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        """
+    cursor.execute(query, {'answer_id': answer_id, 'message': message})
 
 
 @connection_sql.connection_handler
