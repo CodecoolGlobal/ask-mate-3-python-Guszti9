@@ -24,7 +24,7 @@ def list_questions():
     if request.args.get('search'):
         qdata = data_manager_sql.search_question(request.args.get('search'))
         adata = data_manager_sql.search_answer(request.args.get('search'))
-        return render_template("list.html", data=qdata, adata=adata)
+        return render_template("list.html", data=qdata, adata=adata, searchword=request.args.get('search'))
     return render_template("list.html", data=data)
 
 

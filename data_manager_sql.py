@@ -169,7 +169,7 @@ def search_question(cursor, search_word):
 @connection_sql.connection_handler
 def search_answer(cursor, search_word):
     query = """
-    SELECT *
+    SELECT question.submission_time, question.title, question.message, question.image, question.vote_number, question.view_number, answer.message AS amessage
     FROM question
     JOIN answer ON question.id = answer.question_id
     WHERE answer.message ILIKE %s"""
