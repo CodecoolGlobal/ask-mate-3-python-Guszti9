@@ -145,7 +145,7 @@ def edit_answer(cursor, answer_id, message, image):
             UPDATE answer
             SET message = %(message)s, image = %(image)s
             WHERE id = %(answer_id)s"""
-        cursor.execute(query, {'message': message, 'image': 'images/' + image, 'answer_id': answer_id})
+        cursor.execute(query, {'message': message, 'image': image, 'answer_id': answer_id})
     else:
         query = f"""
             UPDATE answer
