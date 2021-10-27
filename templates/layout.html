@@ -7,9 +7,10 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <header style="background-color:skyblue;">
-            <img src="{{ url_for('static', filename='images/maskate.png') }}" alt="Funny monkey eats mask">
-            <h1 style="text-align:center">AteMask</h1>
+        <header>
+                <img src="{{ url_for('static', filename='images/maskate.png') }}" alt="Funny monkey eats mask">
+            <h1>AteMask</h1>
+            <form><button  formaction="{{ url_for('home') }}">Home</button></form>
         </header>
         <section>
             <h2 class="title text-center">{{ self.page_title() }}</h2>
