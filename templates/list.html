@@ -52,11 +52,31 @@
                 <td><p>{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
-    </table>
-            <form action="{{ url_for('list_questions') }}">
-                <label for="search">Search in questions</label>
-                <input id="search" name="search">
-                <button type="submit">Submit</button>
-            </form>
+        {% for i in range(adata|length) if adata %}
+                <tr>
+                    <td><p>{{ adata[i]['submission_time']  }}</p></td>
+                    <td><strong><a href="{{ url_for('display_question',question_id=adata[i]['id'])}}">{{ adata[i]['title'] }}</a></strong></td>
+                    <td><p>{{ adata[i]['message'] }}</p></td>
+                    <td>
+                        {% if adata[i]['image'] %}
+                        <img src="{{ url_for('static', filename=adata[i]['image']) }}" alt="image broke" width="200">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <p>{{ adata[i]['vote_number'] }}</p>
+                        <form>
+                            <button formaction="{{ url_for('vote_question', question_id=adata[i]['id'], vote='vote_up')}}">Vote Up</button>
+                            <button formaction="{{ url_for('vote_question', question_id=adata[i]['id'], vote='vote_down')}}">Vote Down</button>
+                        </form>
+                    </td>
+                    <td><p>{{ adata[i]['view_number'] }}</p></td>
+                </tr>
+            {% endfor %}
+        </table>
+                <form action="{{ url_for('list_questions') }}">
+                    <label for="search">Search in questions</label>
+                    <input id="search" name="search">
+                    <button type="submit">Submit</button>
+                </form>
 
-{% endblock %}
+    {% endblock %}
