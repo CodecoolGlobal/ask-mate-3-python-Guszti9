@@ -158,11 +158,22 @@ def edit_answer(cursor, answer_id, message, image):
 def search_question(cursor, search_word):
     query = """
     SELECT *
-    FROM question, answer
+    FROM question
     WHERE title ILIKE %s
-    OR question.message ILIKE %s
-    OR answer.message ILIKE %s"""
-    args = ['%' + search_word + '%'] * 3
+    OR question.message ILIKE %s"""
+    args = ['%' + search_word + '%'] * 2
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def search_answer(cursor, search_word):
+    query = """
+    SELECT *
+    FROM question
+    JOIN answer ON question.id = answer.question_id
+    WHERE answer.message ILIKE %s"""
+    args = ['%' + search_word + '%']
     cursor.execute(query, args)
     return cursor.fetchall()
 
