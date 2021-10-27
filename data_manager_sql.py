@@ -142,10 +142,9 @@ def delete_answer(cursor, answer_id):
 def search_question(cursor, search_word):
     query = """
     SELECT *
-    FROM question, answer
+    FROM question
     WHERE title ILIKE %s
-    OR question.message ILIKE %s
-    OR answer.message ILIKE %s"""
-    args = ['%' + search_word + '%'] * 3
+    OR message ILIKE %s"""
+    args = ['%' + search_word + '%'] * 2
     cursor.execute(query, args)
     return cursor.fetchall()
