@@ -179,6 +179,17 @@ def get_comments_by_question_id(cursor, question_id):
 
 
 @connection_sql.connection_handler
+def get_comments_by_answer_id(cursor, answer_id):
+    query = """
+        SELECT id, message, submission_time
+        FROM comment
+        WHERE answer_id = %(answer_id)s
+        """
+    cursor.execute(query, {'answer_id': answer_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
 def get_comment(cursor, comment_id):
     query = """
         SELECT message, question_id, answer_id
@@ -196,6 +207,15 @@ def add_comments_to_question(cursor, question_id, message):
         VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
         """
     cursor.execute(query, {'question_id': question_id, 'message': message})
+
+
+@connection_sql.connection_handler
+def add_comments_to_answer(cursor, answer_id, message):
+    query = """
+        INSERT INTO comment (answer_id, message, submission_time, edited_count)
+        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        """
+    cursor.execute(query, {'answer_id': answer_id, 'message': message})
 
 
 @connection_sql.connection_handler

@@ -19,7 +19,7 @@
         </form>
 
         <br><br>
-        {% for comment in comments %}
+        {% for comment in comments['question'] %}
             <p> {{ comment['submission_time'] }}</p>
             <p>{{ comment['message'] }} </p>
             <form><button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button></form>
@@ -40,6 +40,13 @@
                 <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
                 <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
             </form><br>
+            {% for comment in comments[answer['id']] %}
+                <p> {{ comment['submission_time'] }}</p>
+                <p>{{ comment['message'] }} </p>
+                <form><button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button></form>
+            {% endfor %}
+            <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+
         {% endfor %}
         <br>
         <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
