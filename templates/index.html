@@ -20,7 +20,7 @@
             <th>Vote number</th>
             <th>View number</th>
         </tr>
-        {% for i in range(5) %}
+        {% for i in range(loop_range) %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
                 <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>

@@ -10,7 +10,10 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 @app.route("/")
 def home():
     data = data_manager_sql.get_questions()
-    return render_template("index.html", data=data)
+    loop_range = 5
+    if len(data) < 5:
+        loop_range = len(data)
+    return render_template("index.html", data=data, loop_range=loop_range)
 
 
 @app.route("/list")
