@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    {{"Edit Comment" if comment_data else "Add Comment"}}
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" enctype=multipart/form-data>
+        <label for="message">Message:</label> <br>
+        <textarea id="message" name="message" required rows="6" cols="50">{{comment_data["message"] if comment_data}}</textarea> <br>
+        <br>
+        <button type="submit">{{"Edit Comment" if comment_data else "Add Comment"}}</button>
+    </form>
+    <br>
+    <form><button  formaction="{{ url_for('list_questions') }}">Go back</button></form>
+
+{% endblock %}

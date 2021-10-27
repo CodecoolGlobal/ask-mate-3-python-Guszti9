@@ -151,6 +151,22 @@ def delete_answer(cursor, answer_id):
 
 
 @connection_sql.connection_handler
+def edit_answer(cursor, answer_id, message, image):
+    if image:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s, image = %(image)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'image': 'images/' + image, 'answer_id': answer_id})
+    else:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
 def search_question(cursor, search_word):
     query = """
     SELECT *
@@ -161,3 +177,23 @@ def search_question(cursor, search_word):
     args = ['%' + search_word + '%'] * 3
     cursor.execute(query, args)
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_comments_by_question_id(cursor, question_id):
+    query = """
+        SELECT message, submission_time
+        FROM comment
+        WHERE question_id = %(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def add_comments_to_question(cursor, question_id, message):
+    query = """
+        INSERT INTO comment (question_id, message, submission_time, edited_count)
+        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        """
+    cursor.execute(query, {'question_id': question_id, 'message': message})
