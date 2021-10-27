@@ -8,8 +8,8 @@ import connection_sql
 def add_question(cursor, title, message, image):
     query = """
         INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s,  %(image)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': image})
+        VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
+    cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image})
     query = """
             SELECT id
             FROM question
@@ -25,7 +25,7 @@ def edit_question(cursor, question_id, title, message, image):
             UPDATE question
             SET title = %(title)s, message = %(message)s, image = %(image)s
             WHERE id = %(question_id)s"""
-        cursor.execute(query, {'title': title, 'message': message, 'image': image, 'question_id': question_id})
+        cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image, 'question_id': question_id})
     else:
         query = """
             UPDATE question
@@ -54,7 +54,7 @@ def get_question_by_id(cursor, question_id):
 
 @connection_sql.connection_handler
 def get_questions(cursor, order_by='submission_time', order='desc'):
-    query = """
+    query = f"""
         SELECT *
         FROM question
         ORDER BY {order_by} {order}"""
@@ -92,7 +92,7 @@ def get_answer_by_id(cursor, answer_id):
         SELECT *
         FROM answer
         WHERE id = %(answer_id)s"""
-    cursor.execute(query, {'answer_id', answer_id})
+    cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchone()
 
 
@@ -112,7 +112,7 @@ def add_new_answer(cursor, question_id, message, image=''):
     query = """
         INSERT INTO answer (submission_time, vote_number, question_id, message, image)
         VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': 'images/' + image})
 
 
 @connection_sql.connection_handler
@@ -127,7 +127,7 @@ def change_answers_vote_number(cursor, vote, answer_id):
         UPDATE answer
         SET vote_number = vote_number - 1
         WHERE id = %(answer_id)s"""
-    cursor.execute(query, {'answer_id', answer_id})
+    cursor.execute(query, {'answer_id': answer_id})
 
 
 @connection_sql.connection_handler
@@ -135,7 +135,7 @@ def delete_answer(cursor, answer_id):
     query = """
         DELETE FROM answer
         WHERE id = %(answer_id)s"""
-    cursor.execute(query, {'answer_id', answer_id})
+    cursor.execute(query, {'answer_id': answer_id})
 
 
 @connection_sql.connection_handler

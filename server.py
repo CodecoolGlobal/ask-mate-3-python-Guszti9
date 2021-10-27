@@ -22,7 +22,6 @@ def list_questions():
     return render_template("list.html", data=data)
 
 
-
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     if request.method == 'POST':
