@@ -5,7 +5,7 @@ import connection_sql
 import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'static'
+UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
 
 
@@ -67,7 +67,7 @@ def change_question_vote_number(cursor, question_id, vote):
         UPDATE question
         SET vote_number = vote_number + 1
         WHERE id = {question_id}"""
-    elif vote == 'vote_down':
+    else:
         query = f"""
         UPDATE question
         SET vote_number = vote_number - 1
@@ -120,7 +120,7 @@ def change_answers_vote_number(cursor, vote, answer_id):
         UPDATE answer
         SET vote_number = vote_number + 1
         WHERE id = {answer_id}"""
-    elif vote == 'vote_down':
+    else:
         query = f"""
         UPDATE answer
         SET vote_number = vote_number - 1
