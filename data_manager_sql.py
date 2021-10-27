@@ -5,11 +5,11 @@ import connection_sql
 
 
 @connection_sql.connection_handler
-def add_question(cursor, title, message, image):
+def add_question(cursor, title, message, image=''):
     query = """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image})
+                INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
+    cursor.execute(query, {'title': title, 'message': message, 'image': image})
     query = """
             SELECT id
             FROM question
@@ -25,7 +25,7 @@ def edit_question(cursor, question_id, title, message, image):
             UPDATE question
             SET title = %(title)s, message = %(message)s, image = %(image)s
             WHERE id = %(question_id)s"""
-        cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image, 'question_id': question_id})
+        cursor.execute(query, {'title': title, 'message': message, 'image': image, 'question_id': question_id})
     else:
         query = """
             UPDATE question
@@ -110,9 +110,9 @@ def get_answers(cursor, question_id):
 @connection_sql.connection_handler
 def add_new_answer(cursor, question_id, message, image=''):
     query = """
-        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': 'images/' + image})
+                INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
 
 
 @connection_sql.connection_handler
@@ -139,6 +139,22 @@ def delete_answer(cursor, answer_id):
 
 
 @connection_sql.connection_handler
+def edit_answer(cursor, answer_id, message, image):
+    if image:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s, image = %(image)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'image': 'images/' + image, 'answer_id': answer_id})
+    else:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
 def search_question(cursor, search_word):
     query = """
     SELECT *
@@ -160,3 +176,44 @@ def search_answer(cursor, search_word):
     args = ['%' + search_word + '%']
     cursor.execute(query, args)
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_comments_by_question_id(cursor, question_id):
+    query = """
+        SELECT id, message, submission_time
+        FROM comment
+        WHERE question_id = %(question_id)s
+        """
+    cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_comment(cursor, comment_id):
+    query = """
+        SELECT message, question_id, answer_id
+        FROM comment
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id})
+    return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def add_comments_to_question(cursor, question_id, message):
+    query = """
+        INSERT INTO comment (question_id, message, submission_time, edited_count)
+        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        """
+    cursor.execute(query, {'question_id': question_id, 'message': message})
+
+
+@connection_sql.connection_handler
+def edit_comments(cursor, comment_id, message):
+    query = """
+        UPDATE comment
+        SET message = %(message)s, submission_time = CURRENT_TIMESTAMP, edited_count = edited_count + 1
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id, 'message': message})

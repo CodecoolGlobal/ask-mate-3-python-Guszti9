@@ -9,6 +9,7 @@ header, section {
     background-color: skyblue;
     border: solid black;
     box-shadow: 5px 5px 5px grey;
+    border-radius: 10px;
 }
 
 header {
@@ -53,4 +54,8 @@ td:nth-child(5), td:nth-child(6) {
 
 button {
     margin: 5px;
+}
+
+.navbar {
+    display: flex;
 }

@@ -6,9 +6,11 @@
 
 {% block content %}
 
-    <form>
-        <button formaction="{{ url_for('add_question')}}">Add new question</button>
-    </form>
+    <div class="navbar">
+    <form><button  formaction="{{ url_for('home') }}">Go back</button></form>
+    <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
+    </div>
+
     <br>
     <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sort_by">Sorting order:</label>
@@ -39,7 +41,7 @@
                 <td><p>{{ data[i]['message'] }}</p></td>
                 <td>
                     {% if data[i]['image'] %}
-                    <img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200">
+                    <img src="{{ url_for('static', filename='images/'+data[i]['image']) }}" alt="image broke" width="200">
                     {% endif %}
                 </td>
                 <td>

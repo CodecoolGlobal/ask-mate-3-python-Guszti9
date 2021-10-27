@@ -8,8 +8,9 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 
 
 @app.route("/")
-def hello():
-    return redirect('/list')
+def home():
+    data = data_manager_sql.get_questions()
+    return render_template("index.html", data=data)
 
 
 @app.route("/list")
@@ -59,7 +60,10 @@ def vote_question(question_id, vote):
 @app.route("/question/<question_id>")
 def display_question(question_id):
     data_manager_sql.increase_view_number(question_id)
-    return render_template("question_page.html", question_data=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
+    question_data = data_manager_sql.get_question_by_id(question_id)
+    answers_data = data_manager_sql.get_answers(question_id)
+    comment_data = data_manager_sql.get_comments_by_question_id(question_id)
+    return render_template("question_page.html", question_data=question_data, answers=answers_data, comments=comment_data)
 
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
@@ -68,7 +72,7 @@ def post_answer(question_id):
         util.upload_image(request.files['image'])
         data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("post-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
+    return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id), answer=False)
 
 
 @app.route("/answer/<answer_id>/delete")
@@ -87,6 +91,39 @@ def vote_answer(answer_id, vote):
     data_manager_sql.change_answers_vote_number(vote, answer_id)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
+
+
+@app.route("/question/<question_id>/new-comment", methods=['GET', 'POST'])
+def add_comment_to_question(question_id):
+    if request.method == 'POST':
+        data_manager_sql.add_comments_to_question(question_id, request.form['message'])
+        return redirect(url_for('display_question', question_id=question_id))
+    return render_template("add-edit-comment.html")
+
+
+@app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    comment = data_manager_sql.get_comment(comment_id)
+    if request.method == 'POST':
+        data_manager_sql.edit_comments(comment_id, request.form['message'])
+        if comment['question_id']:
+            question_id = comment['question_id']
+        else:
+            question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
+        return redirect(url_for('display_question', question_id=question_id))
+    return render_template("add-edit-comment.html", comment_data=comment)
+
+
+@app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answer_to_edit = data_manager_sql.get_answer_by_id(answer_id)
+    question_id = answer_to_edit['question_id']
+    if request.method == 'POST':
+        data_manager_sql.edit_answer(answer_id, request.form['message'], request.files['image'].filename)
+        if request.files['image']:
+            data_manager_sql.upload_image(request.files['image'])
+        return redirect(url_for('display_question', question_id=question_id))
+    return render_template('add-edit-answer.html', answer=answer_to_edit, question=data_manager_sql.get_question_by_id(question_id))
 
 
 if __name__ == "__main__":
