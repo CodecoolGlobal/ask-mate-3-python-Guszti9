@@ -10,7 +10,7 @@
         <h3>{{ question_data['title'] }}</h3>
         <p>{{ question_data['message'] }}</p>
         {% if question_data['image'] %}
-            <img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200">
+            <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke" width="200">
         {% endif %}
         <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
         <form>
@@ -31,7 +31,7 @@
         {% for answer in answers %}
             <p>{{ answer['message'] }} </p>
             {% if answer['image'] %}
-                    <img src="{{ url_for('static', filename=answer['image']) }}" alt="image broke" width="200">
+                    <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200">
             {% endif %}
             <p>Votes: {{ answer['vote_number'] }}</p>
             <form>
