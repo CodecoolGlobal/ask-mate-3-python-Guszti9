@@ -9,11 +9,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = data_manager_sql.UPLOAD_FOLDER
 
 
-@app.template_filter('datetime')
-def datetime_format(unix_timestamp):
-    return datetime.utcfromtimestamp(int(unix_timestamp)).strftime('%Y-%m-%d %H:%M')
-
-
 @app.route("/")
 def hello():
     return redirect('/list')
@@ -55,7 +50,7 @@ def delete_question(question_id):
 
 @app.route("/question/<question_id>/<vote>")
 def vote_question(question_id, vote):
-    data_manager.change_vote_number(vote, question_id, connection.QUESTIONS_FILE_PATH, connection.QUESTION_HEADER)
+    data_manager_sql.change_question_vote_number(question_id, vote)
     return redirect('/list')
 
 

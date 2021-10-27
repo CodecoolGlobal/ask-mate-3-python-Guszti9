@@ -61,6 +61,21 @@ def get_questions(cursor, order_by='submission_time', order='desc'):
 
 
 @connection_sql.connection_handler
+def change_question_vote_number(cursor, question_id, vote):
+    if vote == 'vote_up':
+        query = f"""
+        UPDATE question
+        SET vote_number = vote_number + 1
+        WHERE id = {question_id}"""
+    elif vote == 'vote_down':
+        query = f"""
+        UPDATE question
+        SET vote_number = vote_number - 1
+        WHERE id = {question_id}"""
+    cursor.execute(query)
+
+
+@connection_sql.connection_handler
 def increase_view_number(cursor, question_id):
     query = f"""
     UPDATE question
