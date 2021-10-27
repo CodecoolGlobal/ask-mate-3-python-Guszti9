@@ -142,6 +142,17 @@ def delete_answer(cursor, answer_id):
     cursor.execute(query)
 
 
+@connection_sql.connection_handler
+def search_question(cursor, search_word):
+    query = """
+    SELECT *
+    FROM question
+    WHERE title LIKE %s"""
+    args = ['%' + search_word + '%']
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
 def upload_image(image):
     if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
         filename = secure_filename(image.filename)
