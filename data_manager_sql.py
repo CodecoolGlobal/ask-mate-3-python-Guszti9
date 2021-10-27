@@ -154,11 +154,6 @@ def edit_answer(cursor, answer_id, message, image):
         cursor.execute(query, {'message': message, 'answer_id': answer_id})
 
 
-def upload_image(image):
-    if '.' in image.filename and image.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS:
-        filename = secure_filename(image.filename)
-        image.save(os.path.join(UPLOAD_FOLDER, filename))
-
 @connection_sql.connection_handler
 def search_question(cursor, search_word):
     query = """
