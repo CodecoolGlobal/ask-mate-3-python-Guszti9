@@ -1,8 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-import data_manager
-import connection
 import data_manager_sql
-from datetime import datetime
 
 
 app = Flask(__name__)
@@ -73,7 +70,7 @@ def post_answer(question_id):
 def delete_answer(answer_id):
     answer_to_delete = data_manager_sql.get_answer_by_id(answer_id)
     if answer_to_delete['image']:
-        connection.delete_image(answer_to_delete['image'])
+        data_manager_sql.delete_image(answer_to_delete['image'])
     data_manager_sql.delete_answer(answer_id)
     question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
