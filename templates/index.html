@@ -6,7 +6,41 @@
 
 {% block content %}
 
+    <div class="navbar">
+        <form><button formaction="{{ url_for("list_questions") }}">Full question list</button></form>
+        <form><button formaction="{{ url_for('add_question')}}">Add new question</button></form>
+    </div>
 
+    <table>
+        <tr>
+            <th>Submission time</th>
+            <th>Title</th>
+            <th>Message</th>
+            <th>Image</th>
+            <th>Vote number</th>
+            <th>View number</th>
+        </tr>
+        {% for i in range(5) %}
+            <tr>
+                <td><p>{{ data[i]['submission_time']  }}</p></td>
+                <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
+                <td><p>{{ data[i]['message'] }}</p></td>
+                <td>
+                    {% if data[i]['image'] %}
+                    <img src="{{ url_for('static', filename=data[i]['image']) }}" alt="image broke" width="200">
+                    {% endif %}
+                </td>
+                <td>
+                    <p>{{ data[i]['vote_number'] }}</p>
+                    <form>
+                        <button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button>
+                        <button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button>
+                    </form>
+                </td>
+                <td><p>{{ data[i]['view_number'] }}</p></td>
+            </tr>
+        {% endfor %}
+    </table>
 
 
 {% endblock %}

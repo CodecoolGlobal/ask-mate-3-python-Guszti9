@@ -54,3 +54,7 @@ td:nth-child(5), td:nth-child(6) {
 button {
     margin: 5px;
 }
+
+.navbar {
+    display: flex;
+}

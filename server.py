@@ -8,8 +8,9 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 
 
 @app.route("/")
-def hello():
-    return redirect('/list')
+def home():
+    data = data_manager_sql.get_questions()
+    return render_template("index.html", data=data)
 
 
 @app.route("/list")

@@ -6,9 +6,11 @@
 
 {% block content %}
 
-    <form>
-        <button formaction="{{ url_for('add_question')}}">Add new question</button>
-    </form>
+    <div class="navbar">
+    <form><button  formaction="{{ url_for('home') }}">Go back</button></form>
+    <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
+    </div>
+
     <br>
     <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sort_by">Sorting order:</label>
