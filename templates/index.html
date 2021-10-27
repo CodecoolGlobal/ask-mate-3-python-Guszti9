@@ -1,30 +1,16 @@
 {% extends "layout.html" %}
 
 {% block page_title %}
-    List of questions
+    Main page
 {% endblock %}
 
 {% block content %}
 
     <div class="navbar">
-    <form><button  formaction="{{ url_for('home') }}">Go back</button></form>
-    <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
+        <form><button formaction="{{ url_for("list_questions") }}">Full question list</button></form>
+        <form><button formaction="{{ url_for('add_question')}}">Add new question</button></form>
     </div>
 
-    <br>
-    <form action="{{ url_for('list_questions') }}" method="GET">
-             <label for="sort_by">Sorting order:</label>
-                <select id="sort_by" name="sorting_order">
-                    <option value="asc" name="asc_desc">Ascending</option>
-                    <option value="desc" name="asc_desc">Descending</option>
-                </select><br>
-            <button name="order_by" value="submission_time" type="submit">Sort by Time</button>
-            <button name="order_by" value="view_number" type="submit">Sort by Views</button>
-            <button name="order_by" value="vote_number" type="submit">Sort by Votes</button>
-            <button name="order_by" value="title" type="submit">Sort by Title</button>
-            <button name="order_by" value="message" type="submit">Sort by Message</button>
-    </form>
-    <br>
     <table>
         <tr>
             <th>Submission time</th>
@@ -34,7 +20,7 @@
             <th>Vote number</th>
             <th>View number</th>
         </tr>
-        {% for i in range(data|length) %}
+        {% for i in range(5) %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
                 <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
@@ -55,10 +41,6 @@
             </tr>
         {% endfor %}
     </table>
-            <form action="{{ url_for('list_questions') }}">
-                <label for="search">Search in questions</label>
-                <input id="search" name="search">
-                <button type="submit">Submit</button>
-            </form>
+
 
 {% endblock %}
