@@ -119,7 +119,7 @@ def edit_answer(answer_id):
     if request.method == 'POST':
         data_manager_sql.edit_answer(answer_id, request.form['message'], request.files['image'].filename)
         if request.files['image']:
-            data_manager_sql.upload_image(request.files['image'])
+            util.upload_image(request.files['image'])
         return redirect(url_for('display_question', question_id=question_id))
     return render_template('add-edit-answer.html', answer=answer_to_edit, question=data_manager_sql.get_question_by_id(question_id))
 
