@@ -98,6 +98,19 @@ def add_comment_to_question(question_id):
     return render_template("add-edit-comment.html")
 
 
+@app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    comment = data_manager_sql.get_comment(comment_id)
+    if request.method == 'POST':
+        data_manager_sql.edit_comments(comment_id, request.form['message'])
+        if comment['question_id']:
+            question_id = comment['question_id']
+        else:
+            question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
+        return redirect(url_for('display_question', question_id=question_id))
+    return render_template("add-edit-comment.html", comment_data=comment)
+
+
 @app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
 def edit_answer(answer_id):
     answer_to_edit = data_manager_sql.get_answer_by_id(answer_id)

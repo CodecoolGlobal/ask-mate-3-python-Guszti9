@@ -170,12 +170,23 @@ def search_question(cursor, search_word):
 @connection_sql.connection_handler
 def get_comments_by_question_id(cursor, question_id):
     query = """
-        SELECT message, submission_time
+        SELECT id, message, submission_time
         FROM comment
         WHERE question_id = %(question_id)s
         """
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_comment(cursor, comment_id):
+    query = """
+        SELECT message, question_id, answer_id
+        FROM comment
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id})
+    return cursor.fetchone()
 
 
 @connection_sql.connection_handler
@@ -185,3 +196,13 @@ def add_comments_to_question(cursor, question_id, message):
         VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
         """
     cursor.execute(query, {'question_id': question_id, 'message': message})
+
+
+@connection_sql.connection_handler
+def edit_comments(cursor, comment_id, message):
+    query = """
+        UPDATE comment
+        SET message = %(message)s, submission_time = CURRENT_TIMESTAMP, edited_count = edited_count + 1
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id, 'message': message})

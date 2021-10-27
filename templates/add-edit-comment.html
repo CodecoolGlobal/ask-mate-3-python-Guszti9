@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    <form method="post" enctype=multipart/form-data>
+    <form method="post">
         <label for="message">Message:</label> <br>
         <textarea id="message" name="message" required rows="6" cols="50">{{comment_data["message"] if comment_data}}</textarea> <br>
         <br>
