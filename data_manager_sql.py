@@ -237,3 +237,12 @@ def edit_comments(cursor, comment_id, message):
         WHERE id = %(comment_id)s
         """
     cursor.execute(query, {'comment_id': comment_id, 'message': message})
+
+
+@connection_sql.connection_handler
+def delete_comments(cursor, comment_id):
+    query = """
+        DELETE FROM comment
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id})
