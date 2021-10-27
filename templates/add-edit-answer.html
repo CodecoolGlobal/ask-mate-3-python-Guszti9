@@ -9,7 +9,7 @@
     <h1>{{ question['title'] }}</h1>
     <p> {{ question['message'] }} </p>
     {% if question['image'] %}
-        <img src="{{ url_for('static', filename=question['image']) }}" alt="image broke" width="200">
+        <img src="{{ url_for('static', filename='images/'+question['image']) }}" alt="image broke" width="200">
     {% endif %}
     <br>
     <br>
