@@ -6,10 +6,16 @@ import connection_sql
 
 @connection_sql.connection_handler
 def add_question(cursor, title, message, image):
-    query = """
-        INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-        VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image})
+    if image:
+        query = """
+            INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+            VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
+        cursor.execute(query, {'title': title, 'message': message, 'image': 'images/' + image})
+    else:
+        query = """
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
+        cursor.execute(query, {'title': title, 'message': message, 'image': image})
     query = """
             SELECT id
             FROM question
@@ -109,10 +115,16 @@ def get_answers(cursor, question_id):
 
 @connection_sql.connection_handler
 def add_new_answer(cursor, question_id, message, image=''):
-    query = """
-        INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-        VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': 'images/' + image})
+    if image:
+        query = """
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+            VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
+        cursor.execute(query, {'question_id': question_id, 'message': message, 'image': 'images/' + image})
+    else:
+        query = """
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
+        cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
 
 
 @connection_sql.connection_handler
