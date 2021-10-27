@@ -69,7 +69,7 @@ def post_answer(question_id):
         util.upload_image(request.files['image'])
         data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("post-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id))
+    return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id), answer=False)
 
 
 @app.route("/answer/<answer_id>/delete")
@@ -96,6 +96,18 @@ def add_comment_to_question(question_id):
         data_manager_sql.add_comments_to_question(question_id, request.form['message'])
         return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-comment.html")
+
+
+@app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    answer_to_edit = data_manager_sql.get_answer_by_id(answer_id)
+    question_id = answer_to_edit['question_id']
+    if request.method == 'POST':
+        data_manager_sql.edit_answer(answer_id, request.form['message'], request.files['image'].filename)
+        if request.files['image']:
+            data_manager_sql.upload_image(request.files['image'])
+        return redirect(url_for('display_question', question_id=question_id))
+    return render_template('add-edit-answer.html', answer=answer_to_edit, question=data_manager_sql.get_question_by_id(question_id))
 
 
 if __name__ == "__main__":

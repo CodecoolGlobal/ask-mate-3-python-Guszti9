@@ -139,6 +139,22 @@ def delete_answer(cursor, answer_id):
 
 
 @connection_sql.connection_handler
+def edit_answer(cursor, answer_id, message, image):
+    if image:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s, image = %(image)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'image': 'images/' + image, 'answer_id': answer_id})
+    else:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
 def search_question(cursor, search_word):
     query = """
     SELECT *
