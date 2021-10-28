@@ -6,6 +6,10 @@
 
 {% block content %}
 
+        <div class="navbar">
+            <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
+            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+        </div>
         <div class="question">
             <h3>{{ question_data['title'] }}</h3>
             <p>{{ question_data['message'] }}</p>
@@ -21,10 +25,11 @@
 
             <div class="comments">
                 <button type="button" class="collapsible">Comments</button>
-                <div class="content">
+                <div class="comment">
                     {% for comment in comments['question'] %}
                         <p> {{ comment['submission_time'] }}</p>
                         <p>{{ comment['message'] }} </p>
+                        <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                         <form>
                             <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
                             <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
@@ -53,38 +58,33 @@
 
                 <div class="comments">
                     <button type="button" class="collapsible">Comments</button>
-                    <div class="content">
+                    <div class="comment">
                         {% for comment in comments[answer['id']] %}
                             <p> {{ comment['submission_time'] }}</p>
-                            <p>{{ comment['message'] }} </p>
+                            <p>{{ comment['message'] }}</p>
+                            <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                             <form>
                                 <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
                                 <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
                             </form>
+                            <br>
                         {% endfor %}
+                    <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
                     </div>
-                    <form>
-                        <button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button>
-                    </form>
                 </div>
 
             {% endfor %}
-            <br>
-            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
         </div>
 
-        <br>
-
-        <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
 
     <script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
+    let coll = document.getElementsByClassName("collapsible");
+    let i;
 
     for (i = 0; i < coll.length; i++) {
       coll[i].addEventListener("click", function() {
         this.classList.toggle("active");
-        var content = this.nextElementSibling;
+        let content = this.nextElementSibling;
         if (content.style.display === "block") {
           content.style.display = "none";
         } else {
@@ -93,4 +93,6 @@
       });
     }
     </script>
+
+
 {% endblock %}
