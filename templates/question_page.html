@@ -6,59 +6,94 @@
 
 {% block content %}
 
-        <h2>Question:</h2>
-        <h3>{{ question_data['title'] }}</h3>
-        <p>{{ question_data['message'] }}</p>
-        {% if question_data['image'] %}
-            <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke" width="200">
-        {% endif %}
-        <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
-        <form>
-            <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
-            <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
-        </form>
-
-        <br><br>
-        {% for comment in comments['question'] %}
-            <p> {{ comment['submission_time'] }}</p>
-            <p>{{ comment['message'] }} </p>
-            <form>
-                <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
-                <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
-            </form>
-        {% endfor %}
-         <form><button  formaction="{{ url_for('add_comment_to_question', question_id=question_data['id']) }}">Add new comment</button></form>
-
-        <br><br>
-        <h2>Answers:</h2>
-        {% for answer in answers %}
-            <p>{{ answer['message'] }} </p>
-            {% if answer['image'] %}
-                    <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200">
+        <div class="question">
+            <h2>Question:</h2>
+            <h3>{{ question_data['title'] }}</h3>
+            <p>{{ question_data['message'] }}</p>
+            {% if question_data['image'] %}
+                <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke" width="200">
             {% endif %}
-            <p>Votes: {{ answer['vote_number'] }}</p>
+            <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
             <form>
-                <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
-                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
-                <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
-                <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
-            </form><br>
-            {% for comment in comments[answer['id']] %}
-                <p> {{ comment['submission_time'] }}</p>
-                <p>{{ comment['message'] }} </p>
-                <form>
-                    <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
-                    <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
-                </form>
-            {% endfor %}
-            <form>
-                <button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button>
+                <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
+                <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
             </form>
 
-        {% endfor %}
+            <br><br>
+
+            <div class="comments">
+                <button type="button" class="collapsible">Comments</button>
+                <div class="content">
+                    {% for comment in comments['question'] %}
+                        <p> {{ comment['submission_time'] }}</p>
+                        <p>{{ comment['message'] }} </p>
+                        <form>
+                            <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
+                            <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
+                        </form>
+                    {% endfor %}
+                     <form><button  formaction="{{ url_for('add_comment_to_question', question_id=question_data['id']) }}">Add new comment</button></form>
+                </div>
+            </div>
+        </div>
+
+        <br><br>
+
+        <dic class="answers">
+            <h2>Answers:</h2>
+            {% for answer in answers %}
+                <p>{{ answer['message'] }} </p>
+                {% if answer['image'] %}
+                        <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200">
+                {% endif %}
+                <p>Votes: {{ answer['vote_number'] }}</p>
+                <form>
+                    <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}">Vote Up</button>
+                    <button formaction="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}">Vote Down</button>
+                    <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
+                </form><br>
+
+                <div class="comments">
+                    <button type="button" class="collapsible">Comments</button>
+                    <div class="content">
+                        {% for comment in comments[answer['id']] %}
+                            <p> {{ comment['submission_time'] }}</p>
+                            <p>{{ comment['message'] }} </p>
+                            <form>
+                                <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
+                                <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
+                            </form>
+                        {% endfor %}
+                    </div>
+                    <form>
+                        <button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button>
+                    </form>
+                </div>
+
+            {% endfor %}
+            <br>
+            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+        </dic>
+
         <br>
-        <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
-        <br>
+
         <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
 
+    <script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+    </script>
 {% endblock %}
