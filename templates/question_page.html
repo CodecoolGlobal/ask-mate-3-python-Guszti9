@@ -12,7 +12,7 @@
         </div>
         <div class="question">
             <h3>{{ question_data['title'] }}</h3>
-            <p>{{ question_data['message'] }}</p>
+            <p><strong>{{ question_data['message'] }}</strong></p>
             {% if question_data['image'] %}
                 <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke">
             {% endif %}
@@ -29,7 +29,7 @@
                 <div class="comment">
                     {% for comment in comments['question'] %}
                         <p> {{ comment['submission_time'] }}</p>
-                        <p>{{ comment['message'] }} </p>
+                        <p><strong>{{ comment['message'] }}</strong></p>
                         <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                         <form>
                             <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
@@ -45,7 +45,7 @@
         <div class="answers">
             <h2>Answers:</h2>
             {% for answer in answers %}
-                <p>{{ answer['message'] }} </p>
+                <p><strong>{{ answer['message'] }}</strong></p>
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
@@ -62,7 +62,7 @@
                     <div class="comment">
                         {% for comment in comments[answer['id']] %}
                             <p> {{ comment['submission_time'] }}</p>
-                            <p>{{ comment['message'] }}</p>
+                            <p><strong>{{ comment['message'] }}</strong></p>
                             <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                             <form>
                                 <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
