@@ -128,3 +128,14 @@ img {
     font-weight: bold;
     color: #1d2024;
 }
+
+.vote_image{
+    margin: 10px;
+    border: none;
+    height: 60px;
+}
+
+.vote_image:hover{
+    height: 65px;
+    margin: 5px;
+}

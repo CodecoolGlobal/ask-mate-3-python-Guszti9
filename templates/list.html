@@ -48,10 +48,8 @@
                 </td>
                 <td>
                     <p>{{ data[i]['vote_number'] }}</p>
-                    <form>
-                        <button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}">Vote Up</button>
-                        <button formaction="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}">Vote Down</button>
-                    </form>
+                    <a href="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
+                    <a href="{{ url_for('vote_question', question_id=data[i]['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
                 </td>
                 <td><p>{{ data[i]['view_number'] }}</p></td>
             </tr>
