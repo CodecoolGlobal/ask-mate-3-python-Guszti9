@@ -80,11 +80,10 @@ button:hover {
 .navbar {
     display: flex;
 }
-
 mark {
-    color: red;
+    color: black;
+    background: orange;
 }
-
 img {
     max-width: 500px;
     max-height: 400px;
