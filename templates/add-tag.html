@@ -11,7 +11,7 @@
         {% if question_data['image'] %}
             <img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200">
         {% endif %}
-        <p>Tags: {% for tag in tags %} #{{ tag['name'] }} {% endfor %} </p>
+        <p>Tags: {% if not tags %}No tags yet{% endif %}{% for tag in tags %} #{{ tag['name'] }} {% endfor %} </p>
     <h3>Add new tag:</h3>
     <form method="post">
         <label for="select-tag">Select from existing tags:</label>
@@ -29,4 +29,5 @@
         <button type="submit">Submit</button>
         <input type="hidden" id="postId" name="postId" value="2">
     </form>
+    <form><button formaction="{{ url_for('display_question', question_id=question_data['id']) }}">Go back</button></form>
 {% endblock %}
