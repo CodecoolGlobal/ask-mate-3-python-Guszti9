@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block page_title %}Main page{% endblock %} - AteMask</title>
+    <title>{% block page_title %}Main page{% endblock %} - MaskAte</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="content-wrapper">
         <header>
                 <img src="{{ url_for('static', filename='images/maskate.png') }}" alt="Funny monkey eats mask">
-            <h1>AteMask</h1>
+            <h1>MaskAte</h1>
             <form><button  formaction="{{ url_for('home') }}">Home</button></form>
         </header>
         <section>
