@@ -1,9 +1,17 @@
 import os
 from werkzeug.utils import secure_filename
+from markupsafe import Markup
 
 
 UPLOAD_FOLDER = 'static/images'
 ALLOWED_EXTENSIONS = {'png', 'jpg'}
+
+
+def marking(dictionary, search_phrase):
+    dictionary['message'] = dictionary['message'].casefold()
+    dictionary['message'] = Markup(dictionary['message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+    dictionary['title'] = dictionary['title'].casefold()
+    dictionary['title'] = Markup(dictionary['title'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
 
 
 def upload_image(image):
