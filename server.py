@@ -164,5 +164,18 @@ def edit_answer(answer_id):
     return render_template('add-edit-answer.html', answer=answer_to_edit, question=data_manager_sql.get_question_by_id(question_id))
 
 
+@app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
+def add_tag(question_id):
+    if request.method == 'POST':
+        if request.form["postId"] == "2":
+            data_manager_sql.add_tag(question_id, request.form['new-tag'])
+        else:
+            data_manager_sql.add_question_tag(int(question_id), int(request.form.get('select-tag')))
+    tags = data_manager_sql.get_tags(question_id)
+    non_added_tags = data_manager_sql.get_non_added_tags_for_question(tags, question_id)
+    question_data = data_manager_sql.get_question_by_id(question_id)
+    return render_template("add-tag.html", tags=tags, question_data=question_data, non_added_tags=non_added_tags)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
