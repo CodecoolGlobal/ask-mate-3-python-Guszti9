@@ -27,8 +27,8 @@ def list_questions():
         for dictionary in question_data:
             util.marking(dictionary, search_phrase)
         for dictionary in answer_data:
-            dictionary['amessage'] = dictionary['amessage'].casefold()
-            dictionary['amessage'] = Markup(dictionary['amessage'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['a_message'] = dictionary['a_message'].casefold()
+            dictionary['a_message'] = Markup(dictionary['a_message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
             util.marking(dictionary, search_phrase)
         return render_template("list.html", data=question_data, answer_data=answer_data)
     return render_template("list.html", data=data)
