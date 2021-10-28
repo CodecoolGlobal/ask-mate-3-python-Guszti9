@@ -39,19 +39,26 @@ h2 {
 th {
     background-color: saddlebrown;
     color: white;
+    padding: 10px;
 }
 
 table {
     background-color: saddlebrown;
+    width: 100%;
 }
 
 td {
     background-color: darkseagreen;
+    padding: 10px;
 }
 
 table, td {
     border: 2px solid black;
     border-radius: 10px;
+}
+
+td:nth-child(1) {
+    text-align: center;
 }
 
 td:nth-child(5), td:nth-child(6) {
@@ -61,21 +68,16 @@ td:nth-child(5), td:nth-child(6) {
 
 button {
     background-color: saddlebrown;
-    border-radius: 30px;
-    border: solid saddlebrown;
+    border-radius: 20px;
     display: inline-block;
-    padding: 3px 5px;
+    padding: 10px 20px;
     margin: 10px;
     color: white;
+    font-weight: bold;
     text-align: center;
     text-decoration: none;
-    font-size: small;
     cursor: pointer;
     white-space: nowrap;
-}
-
-button:hover {
-    background-color: transparent;
 }
 
 button:hover {
@@ -105,9 +107,4 @@ img {
     border-radius: 10px;
     background-color: lightgray;
     display: none;
-}
-
-#navbar {
-    display: inline-block;
-
 }

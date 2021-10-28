@@ -42,7 +42,7 @@ def delete_question(cursor, question_id):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT *
+        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
         FROM question
         WHERE id = %(question_id)s"""
     cursor.execute(query, {'question_id': question_id})
@@ -52,7 +52,7 @@ def get_question_by_id(cursor, question_id):
 @connection_sql.connection_handler
 def get_questions(cursor, order_by='submission_time', order='desc'):
     query = f"""
-        SELECT *
+        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
         FROM question
         ORDER BY {order_by} {order}"""
     cursor.execute(query)
@@ -178,7 +178,7 @@ def search_answer(cursor, search_word):
 @connection_sql.connection_handler
 def get_comments_by_question_id(cursor, question_id):
     query = """
-        SELECT id, message, submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
         FROM comment
         WHERE question_id = %(question_id)s
         """
@@ -189,7 +189,7 @@ def get_comments_by_question_id(cursor, question_id):
 @connection_sql.connection_handler
 def get_comments_by_answer_id(cursor, answer_id):
     query = """
-        SELECT id, message, submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
         FROM comment
         WHERE answer_id = %(answer_id)s
         """
