@@ -57,6 +57,7 @@ def edit_question(question_id):
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
     data_manager_sql.delete_question(question_id)
+    data_manager_sql.delete_tag_if_not_in_question_tag()
     return redirect('/list')
 
 
@@ -72,9 +73,10 @@ def display_question(question_id):
     question_data = data_manager_sql.get_question_by_id(question_id)
     answers_data = data_manager_sql.get_answers(question_id)
     comment_data = {'question': data_manager_sql.get_comments_by_question_id(question_id)}
+    tags = data_manager_sql.get_tags(question_id)
     for answer in answers_data:
         comment_data[answer['id']] = data_manager_sql.get_comments_by_answer_id(answer['id'])
-    return render_template("question_page.html", question_data=question_data, answers=answers_data, comments=comment_data)
+    return render_template("question_page.html", question_data=question_data, answers=answers_data, comments=comment_data, tags=tags)
 
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
@@ -169,6 +171,14 @@ def add_tag(question_id):
     non_added_tags = data_manager_sql.get_non_added_tags_for_question(tags, question_id)
     question_data = data_manager_sql.get_question_by_id(question_id)
     return render_template("add-tag.html", tags=tags, question_data=question_data, non_added_tags=non_added_tags)
+
+
+@app.route("/question/<question_id>/tag/<tag_id>/delete")
+def delete_tag(question_id, tag_id):
+    data_manager_sql.delete_question_tag(tag_id)
+    data_manager_sql.delete_tag_if_not_in_question_tag()
+    question_data = data_manager_sql.get_question_by_id(question_id)
+    return redirect(url_for('display_question', question_id=question_data['id']))
 
 
 if __name__ == "__main__":

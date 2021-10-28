@@ -251,7 +251,7 @@ def delete_comments(cursor, comment_id):
 @connection_sql.connection_handler
 def get_tags(cursor, question_id):
     query = """
-    SELECT name from question_tag
+    SELECT tag_id, name from question_tag
     inner join tag t on t.id = question_tag.tag_id
     WHERE question_id = %(question_id)s"""
     cursor.execute(query, {'question_id': question_id})
@@ -289,3 +289,21 @@ def add_tag(cursor, question_id, tag_name):
     INSERT INTO question_tag (question_id, tag_id)
     VALUES (%(question_id)s, %(tag_id)s)"""
     cursor.execute(query, {'question_id': question_id, 'tag_id': tag_id})
+
+
+@connection_sql.connection_handler
+def delete_question_tag(cursor, tag_id):
+    query = """
+        DELETE FROM question_tag
+        WHERE tag_id = %(tag_id)s
+        """
+    cursor.execute(query, {'tag_id': tag_id})
+
+
+@connection_sql.connection_handler
+def delete_tag_if_not_in_question_tag(cursor):
+    query = """
+    DELETE FROM tag
+    WHERE id NOT IN (SELECT tag_id FROM question_tag)
+    """
+    cursor.execute(query)
