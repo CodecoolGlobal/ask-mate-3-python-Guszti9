@@ -3,7 +3,6 @@ body {
     background-color: darkseagreen;
     font-family: Arial, serif;
     margin: 5%;
-
 }
 
 header, section {
@@ -99,9 +98,9 @@ img {
     border: solid black;
 }
 
-.comment {;
-    padding-inline-end: 20px;
-    padding: 0 0 0 30px;
+.comment {
+    padding-top: 10px;
+    padding-left: 30px;
     border-left: solid black;
     border-bottom: solid black;
     border-radius: 10px;
