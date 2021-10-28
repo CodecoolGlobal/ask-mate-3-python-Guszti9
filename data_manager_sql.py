@@ -246,3 +246,46 @@ def delete_comments(cursor, comment_id):
         WHERE id = %(comment_id)s
         """
     cursor.execute(query, {'comment_id': comment_id})
+
+
+@connection_sql.connection_handler
+def get_tags(cursor, question_id):
+    query = """
+    SELECT name from question_tag
+    inner join tag t on t.id = question_tag.tag_id
+    WHERE question_id = %(question_id)s"""
+    cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_non_added_tags_for_question(cursor, added_tags, question_id):
+    query = """
+        SELECT id, name from tag
+        WHERE name NOT IN (SELECT name from tag
+        inner join question_tag q on q.tag_id = tag.id
+        WHERE question_id = %(question_id)s)"""
+    cursor.execute(query, {'added_tags': added_tags, 'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def add_question_tag(cursor, question_id, tag_id):
+    query = """
+    INSERT INTO question_tag (question_id, tag_id)
+    VALUES (%(question_id)s, %(tag_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'tag_id': tag_id})
+
+
+@connection_sql.connection_handler
+def add_tag(cursor, question_id, tag_name):
+    query = """
+    INSERT INTO tag (name)
+    VALUES (%(tag_name)s)
+    RETURNING id """
+    cursor.execute(query, {'tag_name': tag_name})
+    tag_id = cursor.fetchone()['id']
+    query = """
+    INSERT INTO question_tag (question_id, tag_id)
+    VALUES (%(question_id)s, %(tag_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'tag_id': tag_id})
