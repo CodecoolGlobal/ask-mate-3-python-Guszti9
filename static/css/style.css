@@ -9,7 +9,7 @@ body {
 header, section {
     background-color: darkseagreen;
     border: solid black;
-    box-shadow: 5px 5px 5px darkslategray;
+    box-shadow: 5px 5px 5px darkolivegreen;
     border-radius: 10px;
 }
 
@@ -24,7 +24,7 @@ section {
 }
 
 header > h1 {
-    text-shadow: 5px 5px 5px white;
+    text-shadow: 3px 3px 3px darkolivegreen;
     font-weight: bold;
     font-size: 4em;
     margin-left: 50px;
