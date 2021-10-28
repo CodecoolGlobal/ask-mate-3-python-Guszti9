@@ -61,16 +61,21 @@ td:nth-child(5), td:nth-child(6) {
 
 button {
     background-color: saddlebrown;
+    border-radius: 30px;
+    border: solid saddlebrown;
     display: inline-block;
-    padding: 10px 20px;
+    padding: 3px 5px;
     margin: 10px;
     color: white;
     text-align: center;
     text-decoration: none;
-    font-size: 16px;
+    font-size: small;
     cursor: pointer;
-    border: none;
     white-space: nowrap;
+}
+
+button:hover {
+    background-color: transparent;
 }
 
 button:hover {
@@ -90,4 +95,19 @@ img {
     max-width: 500px;
     max-height: 400px;
     border: solid black;
+}
+
+.comment {;
+    padding-inline-end: 20px;
+    padding: 0 0 0 30px;
+    border-left: solid black;
+    border-bottom: solid black;
+    border-radius: 10px;
+    background-color: lightgray;
+    display: none;
+}
+
+#navbar {
+    display: inline-block;
+
 }
