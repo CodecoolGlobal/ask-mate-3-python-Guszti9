@@ -11,7 +11,7 @@
         {% if question_data['image'] %}
             <img src="{{ url_for('static', filename=question_data['image']) }}" alt="image broke" width="200">
         {% endif %}
-    <p>Tags: {% if not tags %}No tags yet{% endif %}{% for tag in tags %} #{{ tag['name'] }} <a href="{{ url_for('delete_tag', question_id=question_data['id'], tag_id=tag['tag_id']) }}">x</a>{% endfor %} </p>
+    <div class="tags">Tags: {% if not tags %}No tags yet{% endif %}{% for tag in tags %} <p>#{{ tag['name'] }} <a href="{{ url_for('delete_tag', question_id=question_data['id'], tag_id=tag['tag_id']) }}">x</a>{% endfor %} </p></div>
     <h3>Add new tag:</h3>
     <form method="post">
         <label for="select-tag">Select from existing tags:</label>

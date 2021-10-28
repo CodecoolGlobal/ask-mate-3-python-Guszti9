@@ -108,3 +108,24 @@ img {
     background-color: lightgray;
     display: none;
 }
+
+.tags {
+    display: block;
+    margin: 15px 0;
+}
+
+.tags p {
+    color: #32363d;
+    font-size: 14px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0 10px;
+    border: 1px solid #1d2024;
+    border-radius: 20px;
+}
+
+.tags a{
+    text-decoration: none;
+    font-weight: bold;
+    color: #1d2024;
+}
