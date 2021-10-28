@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from markupsafe import Markup
 import data_manager_sql
 import util
 
@@ -20,9 +21,17 @@ def list_questions():
     if request.args.get('order_by'):
         return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
     if request.args.get('search'):
+        search_phrase = request.args.get("search")
         question_data = data_manager_sql.search_question(request.args.get('search'))
         answer_data = data_manager_sql.search_answer(request.args.get('search'))
-        return render_template("list.html", data=question_data, answer_data=answer_data, searchword=request.args.get('search'))
+        for dictionary in question_data:
+            dictionary['message'] = Markup(dictionary['message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['title'] = Markup(dictionary['title'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+        for dictionary in answer_data:
+            dictionary['amessage'] = Markup(dictionary['amessage'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['message'] = Markup(dictionary['message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['title'] = Markup(dictionary['title'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+        return render_template("list.html", data=question_data, answer_data=answer_data)
     return render_template("list.html", data=data)
 
 
