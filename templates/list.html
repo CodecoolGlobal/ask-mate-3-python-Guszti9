@@ -56,25 +56,25 @@
                 <td><p>{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
-        {% for i in range(adata|length) if adata %}
+        {% for i in range(answer_data|length) if answer_data %}
                 <tr>
-                    <td><p>{{ adata[i]['submission_time']  }}</p></td>
-                    <td><strong><a href="{{ url_for('display_question',question_id=adata[i]['id'])}}">{{ adata[i]['title'] }}</a></strong></td>
-                    <td><p>{{ adata[i]['message'] }}</p></td>
+                    <td><p>{{ answer_data[i]['submission_time']  }}</p></td>
+                    <td><strong><a href="{{ url_for('display_question',question_id=answer_data[i]['id'])}}">{{ answer_data[i]['title'] }}</a></strong></td>
+                    <td><p>{{ answer_data[i]['message'] }}</p></td>
                     <td>
-                        {% if adata[i]['image'] %}
-                        <img src="{{ url_for('static', filename=adata[i]['image']) }}" alt="image broke" width="200">
+                        {% if answer_data[i]['image'] %}
+                        <img src="{{ url_for('static', filename=answer_data[i]['image']) }}" alt="image broke" width="200">
                         {% endif %}
                     </td>
                     <td>
-                        <p>{{ adata[i]['vote_number'] }}</p>
+                        <p>{{ answer_data[i]['vote_number'] }}</p>
                         <form>
-                            <button formaction="{{ url_for('vote_question', question_id=adata[i]['id'], vote='vote_up')}}">Vote Up</button>
-                            <button formaction="{{ url_for('vote_question', question_id=adata[i]['id'], vote='vote_down')}}">Vote Down</button>
+                            <button formaction="{{ url_for('vote_question', question_id=answer_data[i]['id'], vote='vote_up')}}">Vote Up</button>
+                            <button formaction="{{ url_for('vote_question', question_id=answer_data[i]['id'], vote='vote_down')}}">Vote Down</button>
                         </form>
                     </td>
-                    <td><p>{{ adata[i]['view_number'] }}</p></td>
-                    <td><p>{{ adata[i]['amessage'] }}</p></td>
+                    <td><p>{{ answer_data[i]['view_number'] }}</p></td>
+                    <td><p>{{ answer_data[i]['amessage'] }}</p></td>
                 </tr>
             {% endfor %}
         </table>
