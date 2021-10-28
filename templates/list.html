@@ -32,6 +32,9 @@
             <th>Image</th>
             <th>Vote number</th>
             <th>View number</th>
+        {% if adata %}
+            <th>Answer message</th>
+        {% endif %}
         </tr>
         {% for i in range(data|length) %}
             <tr>
