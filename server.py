@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from markupsafe import Markup
 import data_manager_sql
 import util
 
@@ -10,9 +11,7 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 @app.route("/")
 def home():
     data = data_manager_sql.get_questions()
-    loop_range = 5
-    if len(data) < 5:
-        loop_range = len(data)
+    loop_range = 5 if len(data) > 5 else len(data)
     return render_template("index.html", data=data, loop_range=loop_range)
 
 
@@ -22,9 +21,22 @@ def list_questions():
     if request.args.get('order_by'):
         return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
     if request.args.get('search'):
-        qdata = data_manager_sql.search_question(request.args.get('search'))
-        adata = data_manager_sql.search_answer(request.args.get('search'))
-        return render_template("list.html", data=qdata, adata=adata, searchword=request.args.get('search'))
+        search_phrase = request.args.get("search")
+        question_data = data_manager_sql.search_question(request.args.get('search'))
+        answer_data = data_manager_sql.search_answer(request.args.get('search'))
+        for dictionary in question_data:
+            dictionary['message'] = dictionary['message'].casefold()
+            dictionary['message'] = Markup(dictionary['message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['title'] = dictionary['title'].casefold()
+            dictionary['title'] = Markup(dictionary['title'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+        for dictionary in answer_data:
+            dictionary['amessage'] = dictionary['amessage'].casefold()
+            dictionary['amessage'] = Markup(dictionary['amessage'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['message'] = dictionary['message'].casefold()
+            dictionary['message'] = Markup(dictionary['message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            dictionary['title'] = dictionary['title'].casefold()
+            dictionary['title'] = Markup(dictionary['title'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+        return render_template("list.html", data=question_data, answer_data=answer_data)
     return render_template("list.html", data=data)
 
 
@@ -77,7 +89,8 @@ def post_answer(question_id):
         util.upload_image(request.files['image'])
         data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
-    return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id), answers=data_manager_sql.get_answers(question_id), answer=False)
+    return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id),
+                           answers=data_manager_sql.get_answers(question_id), answer=False)
 
 
 @app.route("/answer/<answer_id>/delete")
