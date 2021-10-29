@@ -29,7 +29,7 @@
                 <div class="comment">
                     {% for comment in comments['question'] %}
                         <p> {{ comment['submission_time'] }}</p>
-                        <p><strong>{{ comment['message'] }}</strong></p>
+                        <p>{{ comment['message'] }}</p>
                         <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                         <form>
                             <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
@@ -62,7 +62,7 @@
                     <div class="comment">
                         {% for comment in comments[answer['id']] %}
                             <p> {{ comment['submission_time'] }}</p>
-                            <p><strong>{{ comment['message'] }}</strong></p>
+                            <p>{{ comment['message'] }}</p>
                             <p><small>Edited {{ comment['edited_count'] }} times</small></p>
                             <form>
                                 <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>

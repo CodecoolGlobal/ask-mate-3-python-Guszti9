@@ -23,7 +23,7 @@
         {% for i in range(loop_range) %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
-                <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
+                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
                 <td><p>{{ data[i]['message'] }}</p></td>
                 <td>
                     {% if data[i]['image'] %}

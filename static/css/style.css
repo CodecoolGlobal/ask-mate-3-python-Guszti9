@@ -60,6 +60,11 @@ td:nth-child(1) {
     text-align: center;
 }
 
+td:nth-child(2) {
+    font-weight: bold;
+    font-size: 20px;
+}
+
 td:nth-child(5), td:nth-child(6) {
     text-align: center;
     white-space: nowrap;
@@ -138,4 +143,20 @@ img {
 .vote_image:hover{
     height: 65px;
     margin: 5px;
+}
+
+strong {
+    font-size: 20px;
+    background-color: lightgray;
+    border: solid black;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+p {
+    font-size: 18px;
 }

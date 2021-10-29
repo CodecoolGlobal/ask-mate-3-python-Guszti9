@@ -39,7 +39,7 @@
         {% for i in range(data|length) if data %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
-                <td><strong><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></strong></td>
+                <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
                 <td><p>{{ data[i]['message'] }}</p></td>
                 <td>
                     {% if data[i]['image'] %}
@@ -57,7 +57,7 @@
         {% for i in range(answer_data|length) if answer_data %}
                 <tr>
                     <td><p>{{ answer_data[i]['submission_time']  }}</p></td>
-                    <td><strong><a href="{{ url_for('display_question',question_id=answer_data[i]['id'])}}">{{ answer_data[i]['title'] }}</a></strong></td>
+                    <td><a href="{{ url_for('display_question',question_id=answer_data[i]['id'])}}">{{ answer_data[i]['title'] }}</a></td>
                     <td><p>{{ answer_data[i]['message'] }}</p></td>
                     <td>
                         {% if answer_data[i]['image'] %}
