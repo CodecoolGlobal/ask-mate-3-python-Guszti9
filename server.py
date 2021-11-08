@@ -202,5 +202,17 @@ def registration():
     return render_template('registration.html', info=information)
 
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    logininfo = ''
+    usernames = data_manager_sql.get_users
+    if request.form['username'] in usernames:
+        username = request.form['username']
+        password = request.form['password']
+        if util.verify_password(password, data_manager_sql.get_user_password(username)):
+
+    return render_template('login.html')
+
+
 if __name__ == "__main__":
     app.run(debug=True)
