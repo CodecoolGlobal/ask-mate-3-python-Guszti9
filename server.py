@@ -202,5 +202,9 @@ def registration():
     return render_template('registration.html', info=information)
 
 
+@app.route("/tag_page")
+def tag_page():
+    return render_template("tag_page.html", tags_and_questions=data_manager_sql.get_tags_and_number_of_question())
+
 if __name__ == "__main__":
     app.run(debug=True)
