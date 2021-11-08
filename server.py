@@ -3,7 +3,6 @@ from bonus_questions import SAMPLE_QUESTIONS
 from markupsafe import Markup
 import data_manager_sql
 import util
-import bcrypt
 
 
 app = Flask(__name__)
