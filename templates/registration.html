@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    Registration
+{% endblock %}
+
+{% block content %}
+<div>
+    <form method="POST" action="/registration">
+        <label for="username">Username:</label><br>
+        <input id="username" name="username" required placeholder="veghbela"><br>
+        <label for="password">Password:</label><br>
+        <input id="password" name="password" required><br>
+        <label for="check_password">Password again:</label><br>
+        <input id="check_password" name="check_password" required ><br>
+    </form>
+</div>
+{% endblock %}
