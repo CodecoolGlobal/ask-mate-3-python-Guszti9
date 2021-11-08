@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from bonus_questions import SAMPLE_QUESTIONS
 from markupsafe import Markup
 import data_manager_sql
@@ -6,6 +6,7 @@ import util
 
 
 app = Flask(__name__)
+app.secret_key = 'powerpuffprogrammers'
 app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 
 
@@ -210,8 +211,13 @@ def login():
         username = request.form['username']
         password = request.form['password']
         if util.verify_password(password, data_manager_sql.get_user_password(username)):
-
-    return render_template('login.html')
+            session['username'] = request.form['username']
+            return redirect("/")
+        else:
+            logininfo = 'Invalid login attempt!'
+    else:
+        logininfo = 'There is no user with this name!'
+    return render_template('login.html', logininfo=logininfo)
 
 
 if __name__ == "__main__":
