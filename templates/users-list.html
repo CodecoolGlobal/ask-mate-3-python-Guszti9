@@ -15,7 +15,7 @@
         <th>Number of comments</th>
         <th>Reputation</th>
     </tr>
-    {% for user in range(users|length)%}
+    {% for user in users%}
         <tr>
             <td><p>{{ user['username'] }}</p></td>
             <td><p>{{ user['registration_date']  }}</p></td>
