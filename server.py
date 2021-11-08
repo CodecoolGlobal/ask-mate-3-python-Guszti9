@@ -202,5 +202,11 @@ def registration():
     return render_template('registration.html', info=information)
 
 
+@app.route("/users")
+def list_users():
+    users = data_manager_sql.get_users()
+    return render_template("users-list.html", users=users)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
