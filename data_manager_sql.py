@@ -317,7 +317,8 @@ def registration(cursor, username, password):
 @connection_sql.connection_handler
 def get_users(cursor):
     query = """
-    SELECT * FROM users
+        SELECT username, reputation, registration_date
+        FROM users
     """
     cursor.execute(query)
     return cursor.fetchall()

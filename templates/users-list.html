@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    List of Users
+{% endblock %}
+
+{% block content %}
+
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Registration date</th>
+        <th>Number of asked questions</th>
+        <th>Number of answers</th>
+        <th>Number of comments</th>
+        <th>Reputation</th>
+    </tr>
+    {% for user in range(users|length)%}
+        <tr>
+            <td><p>{{ user['username'] }}</p></td>
+            <td><p>{{ user['registration_date']  }}</p></td>
+            <td><p>{{ user['username'] }}</p></td>
+            <td><p>{{ user['username'] }}</p></td>
+            <td><p>{{ user['username'] }}</p></td>
+            <td><p>{{ user['reputation'] }}</p></td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
