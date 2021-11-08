@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    {{"Edit Answer" if answer_data else "Post Answer"}}
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{ question['title'] }}</h1>
+    <p> {{ question['message'] }} </p>
+    {% if question['image'] %}
+        <img src="{{ url_for('static', filename='images/'+question['image']) }}" alt="image broke" width="200">
+    {% endif %}
+    <br>
+    <br>
+    <form method="post" enctype=multipart/form-data>
+        <h3><label for="post-answer">Your Answer:</label></h3>
+        <textarea id="post-answer" name="message" required rows="6" cols="50">{{answer["message"] if answer}}</textarea> <br>
+        <br>
+        <label for="image">{{ "Change image:" if answer else "Upload image:" }}</label>
+        <input type="file" id="image" name="image" accept="image/*"> <br>
+        <br>
+        {% if answer['image'] %}
+            <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200"> <br>
+        {% endif %}
+        <button {% if answer %} formaction="{{ url_for('edit_answer', answer_id=answer['id']) }}" {% endif %} type="submit">{{"Edit Answer" if answer else "Post Answer"}}</button>
+    </form>
+    <br>
+    <form><button  formaction="{{ url_for('display_question', question_id=question['id']) }}">Go back</button></form>
+
+{% endblock %}

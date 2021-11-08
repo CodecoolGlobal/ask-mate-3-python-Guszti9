@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    Add tag
+{% endblock %}
+
+{% block content %}
+    <h2>Question:</h2>
+        <h3>{{ question_data['title'] }}</h3>
+        <p>{{ question_data['message'] }}</p>
+        {% if question_data['image'] %}
+            <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke" width="200">
+        {% endif %}
+    <div class="tags">Tags: {% if not tags %}No tags yet{% endif %}{% for tag in tags %} <p>#{{ tag['name'] }} <a href="{{ url_for('delete_tag', question_id=question_data['id'], tag_id=tag['tag_id']) }}">x</a>{% endfor %} </p></div>
+    <h3>Add new tag:</h3>
+    <form method="post">
+        <label for="select-tag">Select from existing tags:</label>
+        <select name="select-tag">
+        {% for tag in non_added_tags %}
+          <option value="{{ tag['id'] }}">{{ tag['name'] }}</option>
+        {% endfor %}
+        </select><br>
+        <button type="submit">Submit</button>
+        <input type="hidden" id="postId" name="postId" value="1">
+    </form>
+    <form method="post">
+        <label for="new-tag">Add a new tag:</label>
+        <input type="text" name="new-tag"><br>
+        <button type="submit">Submit</button>
+        <input type="hidden" id="postId" name="postId" value="2">
+    </form>
+    <form><button formaction="{{ url_for('display_question', question_id=question_data['id']) }}">Go back</button></form>
+{% endblock %}

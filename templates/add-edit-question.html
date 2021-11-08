@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    {{"Edit question" if question_data else "Add Questions"}}
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" enctype=multipart/form-data>
+        <label for="title">Title:</label><br>
+        <input type="text" name="title" id="title" value="{{question_data["title"] if question_data}}" required><br>
+        <br>
+        <label for="message">Message:</label> <br>
+        <textarea id="message" name="message" required rows="6" cols="50">{{question_data["message"] if question_data}}</textarea> <br>
+        <br>
+        <label for="image">Upload image:</label>
+        <input type="file" id="image" name="image" accept="image/*"> <br>
+        <br>
+        <button type="submit">{{"Edit question" if question_data else "Add Questions"}}</button>
+    </form>
+    <br>
+    <form><button  formaction="{{ url_for('list_questions') }}">Go back</button></form>
+
+{% endblock %}
