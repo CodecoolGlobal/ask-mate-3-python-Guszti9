@@ -312,3 +312,17 @@ def registration(cursor, username, password):
     INSERT INTO users (username, password, reputation, registration_date)
     VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
     cursor.execute(query, {'username': username, 'password': password})
+
+
+@connection_sql.connection_handler
+def get_tags_and_number_of_question(cursor):
+    query = """
+    SELECT name, COUNT(question_id) as number_of_questions
+    FROM tag
+    INNER JOIN question_tag qt
+    ON tag.id = qt.tag_id
+    GROUP BY name
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
