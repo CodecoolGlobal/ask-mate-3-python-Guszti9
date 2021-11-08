@@ -216,8 +216,6 @@ def login():
                 return redirect("/")
             else:
                 logininfo = 'Invalid login attempt!'
-        else:
-            logininfo = 'There is no user with this name!'
     return render_template('login.html', logininfo=logininfo)
 
 

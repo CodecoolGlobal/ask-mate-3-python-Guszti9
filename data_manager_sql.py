@@ -332,4 +332,5 @@ def get_user_password(cursor, username):
     FROM users
     WHERE username = %(username)s;"""
     cursor.execute(query, {'username': username})
-    return cursor.fetchall()
+    hashed_password = [row["password"] for row in cursor.fetchall()]
+    return hashed_password[0]
