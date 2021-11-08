@@ -1,14 +1,19 @@
 body {
-    background-image: url(background.jpg);
-    background-color: darkseagreen;
+    background-image: url(powerpuff_wallpaper.jpg);
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-blend-mode: soft-light;
+    background-color: lightblue;
     font-family: Arial, serif;
     margin: 5%;
 }
 
 header, section {
-    background-color: darkseagreen;
+    background-color: transparent;
     border: solid black;
-    box-shadow: 5px 5px 5px darkolivegreen;
+    box-shadow: 5px 5px 5px #617889;
     border-radius: 10px;
 }
 
@@ -23,7 +28,7 @@ section {
 }
 
 header > h1 {
-    text-shadow: 3px 3px 3px darkolivegreen;
+    text-shadow: 3px 3px 3px #617889;
     font-weight: bold;
     font-size: 4em;
     margin-left: 50px;
