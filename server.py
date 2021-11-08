@@ -187,5 +187,10 @@ def delete_tag(question_id, tag_id):
     return redirect(url_for('display_question', question_id=question_data['id']))
 
 
+@app.route("/registration")
+def registration():
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
