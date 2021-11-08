@@ -312,3 +312,13 @@ def registration(cursor, username, password):
     INSERT INTO users (username, password, reputation, registration_date)
     VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
     cursor.execute(query, {'username': username, 'password': password})
+
+
+@connection_sql.connection_handler
+def get_users(cursor):
+    query = """
+    SELECT * FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
