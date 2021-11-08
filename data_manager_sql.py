@@ -304,3 +304,11 @@ def delete_tag_if_not_in_question_tag(cursor):
     WHERE id NOT IN (SELECT tag_id FROM question_tag)
     """
     cursor.execute(query)
+
+
+@connection_sql.connection_handler
+def registration(cursor, username, password):
+    query = """
+    INSERT INTO users (username, password, reputation, registration_date)
+    VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
+    cursor.execute(query, {'username': username, 'password': password})
