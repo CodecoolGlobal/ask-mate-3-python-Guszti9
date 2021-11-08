@@ -189,9 +189,16 @@ def delete_tag(question_id, tag_id):
 
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
+    information = ''
     if request.method == 'POST':
-        print('keke')
-    return render_template('registration.html')
+        if request.form['password'] == request.form['checkpassword']:
+            username = request.form['username']
+            password = request.form['password']
+            hashed_password = util.hash_password(password)
+            data_manager_sql.registration(username, hashed_password)
+        else:
+            information = 'Passwords does not match!'
+    return render_template('registration.html', info=information)
 
 
 if __name__ == "__main__":
