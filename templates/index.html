@@ -8,6 +8,7 @@
 
     <div class="navbar">
         <form><button formaction="{{ url_for("list_questions") }}">Full question list</button></form>
+        <form><button formaction="{{ url_for("tag_page") }}">Tags</button></form>
         <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
         <form><button formaction="{{ url_for('registration') }}">Register</button></form>
     </div>

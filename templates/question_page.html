@@ -17,6 +17,7 @@
                 <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke">
             {% endif %}
             <div class="tags">Tags: {% if not tags %}No tags yet{% endif %}{% for tag in tags %} <p> #{{ tag['name'] }} <a href="{{ url_for('delete_tag', question_id=question_data['id'], tag_id=tag['tag_id']) }}">x</a>{% endfor %} </p></div>
+            <form><button formaction="{{ url_for("tag_page") }}">Tags</button></form>
             <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
             <form>
                 <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
