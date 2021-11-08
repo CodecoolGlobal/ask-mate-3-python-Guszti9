@@ -206,17 +206,18 @@ def registration():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     logininfo = ''
-    usernames = data_manager_sql.get_users
-    if request.form['username'] in usernames:
-        username = request.form['username']
-        password = request.form['password']
-        if util.verify_password(password, data_manager_sql.get_user_password(username)):
-            session['username'] = request.form['username']
-            return redirect("/")
+    usernames = data_manager_sql.get_users()
+    if request.method == 'POST':
+        if request.form['username'] in usernames:
+            username = request.form['username']
+            password = request.form['password']
+            if util.verify_password(password, data_manager_sql.get_user_password(username)):
+                session['username'] = request.form['username']
+                return redirect("/")
+            else:
+                logininfo = 'Invalid login attempt!'
         else:
-            logininfo = 'Invalid login attempt!'
-    else:
-        logininfo = 'There is no user with this name!'
+            logininfo = 'There is no user with this name!'
     return render_template('login.html', logininfo=logininfo)
 
 

@@ -318,9 +318,11 @@ def registration(cursor, username, password):
 def get_users(cursor):
     query = """
     SELECT username
-    FROM users;"""
+    FROM users
+    GROUP BY username;"""
     cursor.execute(query)
-    return cursor.fetchall()
+    usernames = [row["username"] for row in cursor.fetchall()]
+    return usernames
 
 
 @connection_sql.connection_handler
