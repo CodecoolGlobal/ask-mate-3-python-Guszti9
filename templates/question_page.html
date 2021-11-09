@@ -6,7 +6,7 @@
 
 {% block content %}
         <div class="question">
-            <h3>{{ question_data['title'] }}</h3>
+            <h3>{{ question_data['title'] }} <p>- by {{ question_data['username'] }}</p></h3>
             <p><strong>{{ question_data['message'] }}</strong></p>
             {% if question_data['image'] %}
                 <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke">
@@ -51,7 +51,7 @@
             <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
             {% endif %}
             {% for answer in answers %}
-                <p><strong>{{ answer['message'] }}</strong></p>
+                <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}</strong></p>
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}

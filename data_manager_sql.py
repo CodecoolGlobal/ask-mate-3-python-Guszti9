@@ -42,9 +42,10 @@ def delete_question(cursor, question_id):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
-        FROM question
-        WHERE id = %(question_id)s"""
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username
+        FROM question, users
+        WHERE question.id = %(question_id)s
+        AND users.id = question.user_id;"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchone()
 
@@ -96,9 +97,10 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT *
-        FROM answer
+        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username
+        FROM answer, users
         WHERE question_id = %(question_id)s
+        AND user_id = users.id
         ORDER BY submission_time"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
