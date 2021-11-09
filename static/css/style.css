@@ -61,12 +61,6 @@ nav ul li a{
     bottom: 0;
 }
 
-.float-child #title{
-    width: 100px;
-    position: fixed;
-    left: 0;
-    top: 100px;
-}
 
 .float-child .right-div {
     overflow: scroll;
