@@ -178,7 +178,7 @@ def search_answer(cursor, search_word):
 @connection_sql.connection_handler
 def get_comments_by_question_id(cursor, question_id):
     query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
         FROM comment
         WHERE question_id = %(question_id)s
         """
@@ -189,7 +189,7 @@ def get_comments_by_question_id(cursor, question_id):
 @connection_sql.connection_handler
 def get_comments_by_answer_id(cursor, answer_id):
     query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
         FROM comment
         WHERE answer_id = %(answer_id)s
         """
@@ -200,7 +200,7 @@ def get_comments_by_answer_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_comment(cursor, comment_id):
     query = """
-        SELECT message, question_id, answer_id
+        SELECT message, question_id, answer_id, user_id
         FROM comment
         WHERE id = %(comment_id)s
         """

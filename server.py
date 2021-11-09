@@ -139,25 +139,31 @@ def add_comment_to_answer(answer_id):
 
 @app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
 def edit_comment(comment_id):
-    comment = data_manager_sql.get_comment(comment_id)
-    if request.method == 'POST':
-        data_manager_sql.edit_comments(comment_id, request.form['message'])
-        if comment['question_id']:
-            question_id = comment['question_id']
-        else:
-            question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
-        return redirect(url_for('display_question', question_id=question_id))
+    if 'username' in session:
+        user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
+        comment = data_manager_sql.get_comment(comment_id)
+        if request.method == 'POST':
+            if user_id == comment['user_id']:
+                data_manager_sql.edit_comments(comment_id, request.form['message'])
+                if comment['question_id']:
+                    question_id = comment['question_id']
+                else:
+                    question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
+                return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-comment.html", comment_data=comment)
 
 
 @app.route("/comments/<comment_id>/delete")
 def delete_comment(comment_id):
-    comment = data_manager_sql.get_comment(comment_id)
-    if comment['question_id']:
-        question_id = comment['question_id']
-    else:
-        question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
-    data_manager_sql.delete_comments(comment_id)
+    if 'username' in session:
+        user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
+        comment = data_manager_sql.get_comment(comment_id)
+        if user_id == comment['user_id']:
+            if comment['question_id']:
+                question_id = comment['question_id']
+            else:
+                question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
+            data_manager_sql.delete_comments(comment_id)
     return redirect(url_for('display_question', question_id=question_id))
 
 
@@ -213,6 +219,7 @@ def registration():
 def tag_page():
     return render_template("tag_page.html", tags_and_questions=data_manager_sql.get_tags_and_number_of_question())
 
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     logininfo = ''
@@ -222,7 +229,8 @@ def login():
             username = request.form['username']
             password = request.form['password']
             if util.verify_password(password, data_manager_sql.get_user_password(username)):
-                session['username'] = request.form['username']
+                session['username'] = username
+                session['id'] = data_manager_sql.get_user_id_by_user_name(username)['user_id']
                 return redirect("/")
             else:
                 logininfo = 'Invalid login attempt!'
@@ -232,6 +240,7 @@ def login():
 @app.route("/logout")
 def logout():
     session.pop('username', None)
+    session.pop('id', None)
     return redirect("/")
 
 
