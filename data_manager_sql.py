@@ -386,7 +386,7 @@ def get_user_id_by_user_name(cursor, username):
 
 
 @connection_sql.connection_handler
-def change_question_reputation(cursor, question_id, vote):
+def change_reputation_by_question(cursor, question_id, vote):
     if vote == 'vote_up':
         query = """
         UPDATE users
@@ -404,5 +404,26 @@ def change_question_reputation(cursor, question_id, vote):
                 AND question.user_id = users.id;
                 """
     cursor.execute(query, {'question_id': question_id})
+
+
+@connection_sql.connection_handler
+def change_reputation_by_answer(cursor, answer_id, vote):
+    if vote == 'vote_up':
+        query = """
+        UPDATE users
+        SET reputation = reputation + 10
+        FROM answer
+        WHERE answer.id = %(answer_id)s 
+        AND answer.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 2
+                FROM answer
+                WHERE answer.id = %(answer_id)s 
+                AND answer.user_id = users.id;
+                """
+    cursor.execute(query, {'answer_id': answer_id})
 
 
