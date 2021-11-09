@@ -198,8 +198,6 @@ img {
 
 strong {
     font-size: 20px;
-    background-color: lightgray;
-    border: solid black;
     padding: 5px;
     border-radius: 10px;
 }
@@ -236,10 +234,10 @@ button:hover {
     text-decoration: none;
 }
 
-#order-by-buttons{
+.buttons-next-to-each-other{
     display: flex;
 }
 
-button #order-by-buttons{
+button .buttons-next-to-each-other{
     flex: 1;
 }
