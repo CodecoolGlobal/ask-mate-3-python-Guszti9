@@ -6,18 +6,37 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="content-wrapper">
-        <header>
-            <img src="{{ url_for('static', filename='images/powerpuff_header.png') }}" alt="Powerpuff Girls">
-            <img id="powerpuff-programmers-header" src="{{ url_for('static', filename='images/powerpuff_programmers.png') }}" alt="Powerpuff Programmers">
-            <form><button  formaction="{{ url_for('home') }}">Home</button></form>
-        </header>
-        <section>
-            <h2 class="title text-center">{{ self.page_title() }}</h2>
+        <div class="navbar">
+            <h1>Powerpuff <br>Programmers</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for("list_questions") }}">Questions</a></li>
+                    <li><a href="{{ url_for("tag_page") }}">Tags</a></li>
+                    <li><a href="{{ url_for('registration') }}">Registration</a></li>
+                    <li><a href="">Log In</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="container">
+        <div class="float-container">
+            <div class="float-child">
+                <div class="left-div">
+                    <div id="title"><h2 class="title text-center">{{ self.page_title() }}</h2></div>
+                    <div id="footer-image"><img id="logo" src="{{ url_for("static", filename='/images/powerpuff_header.png') }}" alt="Powerpuff Programmers"></div>
+                </div>
+            </div>
+            <div class="float-child">
+                <div class="right-div">
+                <section>
+                    {% block content %}{% endblock %}
+                </section>
+            </div>
+          </div>
 
-            {% block content %}{% endblock %}
-        </section>
+        </div>
     </div>
+
 </body>
 </html>
 
