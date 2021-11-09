@@ -2,11 +2,11 @@ import connection_sql
 
 
 @connection_sql.connection_handler
-def add_question(cursor, title, message, image=''):
+def add_question(cursor, title, message, user_id, image=''):
     query = """
-                INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': image})
+                INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'title': title, 'message': message, 'image': image, 'user_id': user_id})
     query = """
             SELECT id
             FROM question
@@ -373,4 +373,15 @@ def get_tags_and_number_of_question(cursor):
     """
     cursor.execute(query)
     return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_user_id_by_user_name(cursor, username):
+    query = """
+    SELECT id AS user_id
+    FROM users
+    WHERE username = %(username)s"""
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
+
 

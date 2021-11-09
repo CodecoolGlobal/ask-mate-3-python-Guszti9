@@ -5,11 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="navbar">
     <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
-    </div>
-
     <br>
     <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sort_by">Sorting order:</label>
@@ -17,11 +13,13 @@
                     <option value="asc" name="asc_desc">Ascending</option>
                     <option value="desc" name="asc_desc">Descending</option>
                 </select><br>
+        <div class="buttons-next-to-each-other">
             <button name="order_by" value="submission_time" type="submit">Sort by Time</button>
             <button name="order_by" value="view_number" type="submit">Sort by Views</button>
             <button name="order_by" value="vote_number" type="submit">Sort by Votes</button>
             <button name="order_by" value="title" type="submit">Sort by Title</button>
             <button name="order_by" value="message" type="submit">Sort by Message</button>
+            </div>
     </form>
     <br>
     <table>

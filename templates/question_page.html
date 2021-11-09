@@ -5,11 +5,6 @@
 {% endblock %}
 
 {% block content %}
-
-        <div class="navbar">
-            <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
-            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
-        </div>
         <div class="question">
             <h3>{{ question_data['title'] }}</h3>
             <p><strong>{{ question_data['message'] }}</strong></p>
@@ -20,9 +15,11 @@
             <form><button formaction="{{ url_for("tag_page") }}">Tags</button></form>
             <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
             <form>
+                <div class="buttons-next-to-each-other">
                 <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
                 <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
                 <button formaction="{{ url_for('add_tag', question_id=question_data['id'])}}">Add tag</button>
+                </div>
             </form>
 
             <div class="comments">
@@ -45,6 +42,7 @@
 
         <div class="answers">
             <h2>Answers:</h2>
+            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
             {% for answer in answers %}
                 <p><strong>{{ answer['message'] }}</strong></p>
                 {% if answer['image'] %}
@@ -77,7 +75,7 @@
 
             {% endfor %}
         </div>
-
+    <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
 
     <script>
     let coll = document.getElementsByClassName("collapsible");
