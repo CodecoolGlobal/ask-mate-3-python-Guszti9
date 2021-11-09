@@ -258,5 +258,12 @@ def list_users():
     return render_template("users-list.html", users=users)
 
 
+@app.route("/accept_answer/<answer_id>")
+def accept_answer(answer_id):
+    data_manager_sql.accept_answer(answer_id)
+    question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
+    return redirect(url_for("display_question", question_id=question_id))
+
+
 if __name__ == "__main__":
     app.run(debug=True)

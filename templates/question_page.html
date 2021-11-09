@@ -55,6 +55,7 @@
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
+                    <a href="{{ url_for('accept_answer', answer_id=answer['id'])}}">Accept answer</a>
                 <p>Votes: {{ answer['vote_number'] }}</p>
             {% if session  %}
                 <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>

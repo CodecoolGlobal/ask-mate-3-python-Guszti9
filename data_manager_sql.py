@@ -429,3 +429,10 @@ def change_reputation_by_answer(cursor, answer_id, vote):
     cursor.execute(query, {'answer_id': answer_id})
 
 
+@connection_sql.connection_handler
+def accept_answer(cursor, answer_id):
+    query = """
+        UPDATE answer
+        SET accepted = 1
+        WHERE answer.id = %(answer_id)s;"""
+    cursor.execute(query, {'answer_id': answer_id})
