@@ -315,7 +315,7 @@ def registration(cursor, username, password):
 
 
 @connection_sql.connection_handler
-def get_users(cursor):
+def get_usernames(cursor):
     query = """
     SELECT username
     FROM users

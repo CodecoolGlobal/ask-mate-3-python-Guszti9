@@ -206,7 +206,7 @@ def registration():
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     logininfo = ''
-    usernames = data_manager_sql.get_users()
+    usernames = data_manager_sql.get_usernames()
     if request.method == 'POST':
         if request.form['username'] in usernames:
             username = request.form['username']
