@@ -7,31 +7,38 @@ body {
     background-blend-mode: soft-light;
     background-color: lightblue;
     font-family: Arial, serif;
-    margin: 5%;
-}
-
-header, section {
-    background-color: transparent;
-    border: solid black;
-    box-shadow: 5px 5px 5px #617889;
-    border-radius: 10px;
 }
 
 header {
     display: flex;
     justify-content: space-between;
+    border-radius: 10px;
+    box-shadow: 5px 5px 5px 5px #617889;
 }
+
+section {
+    background-color: transparent;
+    border: solid black;
+    box-shadow: 5px 5px 5px #617889;
+    border-radius: 10px;
+    margin: 5%;
+}
+
+header > img {
+    border: none;
+    height: 200px;
+}
+
+#powerpuff-programmers-header {
+    margin: auto;
+    display: block;
+    height: 70px;
+}
+
 
 section {
     margin-top: 50px;
     padding: 20px;
-}
-
-header > h1 {
-    text-shadow: 3px 3px 3px #617889;
-    font-weight: bold;
-    font-size: 4em;
-    margin-left: 50px;
 }
 
 h2 {

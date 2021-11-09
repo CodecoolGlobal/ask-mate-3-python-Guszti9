@@ -334,3 +334,20 @@ def get_user_password(cursor, username):
     cursor.execute(query, {'username': username})
     hashed_password = [row["password"] for row in cursor.fetchall()]
     return hashed_password[0]
+
+
+@connection_sql.connection_handler
+def get_users(cursor):
+    query = """
+        SELECT 
+            username,
+            reputation,
+            registration_date,
+            (select count(*) from question where user_id = users.id) as number_of_asked_questions,
+            (select count(*) from answer where user_id = users.id) as number_of_answers,
+            (select count(*) from comment where user_id = users.id) as number_of_comments
+        FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
