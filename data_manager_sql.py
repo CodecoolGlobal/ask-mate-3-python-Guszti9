@@ -341,6 +341,7 @@ def get_user_password(cursor, username):
 def get_users(cursor):
     query = """
         SELECT 
+            id,
             username,
             reputation,
             registration_date,
