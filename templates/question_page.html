@@ -36,7 +36,10 @@
                         </form>
                         {% endif %}
                     {% endfor %}
-                     <form><button  formaction="{{ url_for('add_comment_to_question', question_id=question_data['id']) }}">Add new comment</button></form>
+
+                    {% if session %}
+                    <form><button  formaction="{{ url_for('add_comment_to_question', question_id=question_data['id']) }}">Add new comment</button></form>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -73,7 +76,10 @@
                             {% endif %}
                             <br>
                         {% endfor %}
-                    <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+
+                        {% if session %}
+                        <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+                        {% endif %}
                     </div>
                 </div>
 
