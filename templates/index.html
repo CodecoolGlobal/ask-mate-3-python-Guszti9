@@ -16,8 +16,11 @@
             <th>Image</th>
             <th>Vote number</th>
             <th>View number</th>
+        {% if answer_data %}
+            <th>Answer message</th>
+        {% endif %}
         </tr>
-        {% for i in range(loop_range) %}
+        {% for i in range(data|length) if data %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
                 <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
@@ -33,7 +36,33 @@
                 <td><p>{{ data[i]['view_number'] }}</p></td>
             </tr>
         {% endfor %}
-    </table>
+    {% for i in range(answer_data|length) if answer_data %}
+                <tr>
+                    <td><p>{{ answer_data[i]['submission_time']  }}</p></td>
+                    <td><a href="{{ url_for('display_question',question_id=answer_data[i]['id'])}}">{{ answer_data[i]['title'] }}</a></td>
+                    <td><p>{{ answer_data[i]['message'] }}</p></td>
+                    <td>
+                        {% if answer_data[i]['image'] %}
+                        <img src="{{ url_for('static', filename='images/'+answer_data[i]['image']) }}" alt="image broke" width="200">
+                        {% endif %}
+                    </td>
+                    <td>
+                        <p>{{ answer_data[i]['vote_number'] }}</p>
+                        <form>
+                            <button formaction="{{ url_for('vote_question', question_id=answer_data[i]['id'], vote='vote_up')}}">Vote Up</button>
+                            <button formaction="{{ url_for('vote_question', question_id=answer_data[i]['id'], vote='vote_down')}}">Vote Down</button>
+                        </form>
+                    </td>
+                    <td><p>{{ answer_data[i]['view_number'] }}</p></td>
+                    <td><p>{{ answer_data[i]['a_message'] }}</p></td>
+                </tr>
+            {% endfor %}
+        </table>
+                <form action="{{ url_for('home') }}">
+                    <label for="search">Search in questions</label>
+                    <input id="search" name="search">
+                    <button type="submit">Submit</button>
+                </form>
 
 
 {% endblock %}

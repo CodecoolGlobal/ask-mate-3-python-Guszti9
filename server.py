@@ -14,6 +14,17 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 def home():
     data = data_manager_sql.get_questions()
     loop_range = 5 if len(data) > 5 else len(data)
+    if request.args.get('search'):
+        search_phrase = request.args.get("search")
+        question_data = data_manager_sql.search_question(request.args.get('search'))
+        answer_data = data_manager_sql.search_answer(request.args.get('search'))
+        for dictionary in question_data:
+            util.marking(dictionary, search_phrase)
+        for dictionary in answer_data:
+            dictionary['a_message'] = dictionary['a_message'].casefold()
+            dictionary['a_message'] = Markup(dictionary['a_message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
+            util.marking(dictionary, search_phrase)
+        return render_template("index.html", data=question_data, answer_data=answer_data)
     return render_template("index.html", data=data, loop_range=loop_range)
 
 
@@ -27,17 +38,6 @@ def list_questions():
     data = data_manager_sql.get_questions()
     if request.args.get('order_by'):
         return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
-    if request.args.get('search'):
-        search_phrase = request.args.get("search")
-        question_data = data_manager_sql.search_question(request.args.get('search'))
-        answer_data = data_manager_sql.search_answer(request.args.get('search'))
-        for dictionary in question_data:
-            util.marking(dictionary, search_phrase)
-        for dictionary in answer_data:
-            dictionary['a_message'] = dictionary['a_message'].casefold()
-            dictionary['a_message'] = Markup(dictionary['a_message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
-            util.marking(dictionary, search_phrase)
-        return render_template("list.html", data=question_data, answer_data=answer_data)
     return render_template("list.html", data=data)
 
 
@@ -95,32 +95,35 @@ def display_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
-    username = session['username']
-    user_id = data_manager_sql.get_user_id_by_user_name(username)['user_id']
-    if request.method == 'POST':
-        util.upload_image(request.files['image'])
-        data_manager_sql.add_new_answer(question_id, request.form['message'], user_id, request.files['image'].filename)
-        return redirect(url_for('display_question', question_id=question_id))
+    if 'username' in session:
+        username = session['username']
+        user_id = data_manager_sql.get_user_id_by_user_name(username)['user_id']
+        if request.method == 'POST':
+            util.upload_image(request.files['image'])
+            data_manager_sql.add_new_answer(question_id, request.form['message'], user_id, request.files['image'].filename)
+            return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id),
                            answers=data_manager_sql.get_answers(question_id), answer=False)
 
 
 @app.route("/answer/<answer_id>/delete")
 def delete_answer(answer_id):
-    answer_to_delete = data_manager_sql.get_answer_by_id(answer_id)
-    if answer_to_delete['image']:
-        util.delete_image(answer_to_delete['image'])
-    data_manager_sql.delete_answer(answer_id)
-    question_id = answer_to_delete['question_id']
+    if 'username' in session:
+        answer_to_delete = data_manager_sql.get_answer_by_id(answer_id)
+        if answer_to_delete['image']:
+            util.delete_image(answer_to_delete['image'])
+        data_manager_sql.delete_answer(answer_id)
+        question_id = answer_to_delete['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
 
 @app.route("/answer/<answer_id>/<vote>")
 def vote_answer(answer_id, vote):
-    answer_to_vote = data_manager_sql.get_answer_by_id(answer_id)
-    data_manager_sql.change_answers_vote_number(vote, answer_id)
-    data_manager_sql.change_reputation_by_answer(answer_id, vote)
-    question_id = answer_to_vote['question_id']
+    if 'username' in session:
+        answer_to_vote = data_manager_sql.get_answer_by_id(answer_id)
+        data_manager_sql.change_answers_vote_number(vote, answer_id)
+        data_manager_sql.change_reputation_by_answer(answer_id, vote)
+        question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
 
@@ -177,13 +180,14 @@ def delete_comment(comment_id):
 
 @app.route("/answer/<answer_id>/edit", methods=['GET', 'POST'])
 def edit_answer(answer_id):
-    answer_to_edit = data_manager_sql.get_answer_by_id(answer_id)
-    question_id = answer_to_edit['question_id']
-    if request.method == 'POST':
-        data_manager_sql.edit_answer(answer_id, request.form['message'], request.files['image'].filename)
-        if request.files['image']:
-            util.upload_image(request.files['image'])
-        return redirect(url_for('display_question', question_id=question_id))
+    if 'username' in session:
+        answer_to_edit = data_manager_sql.get_answer_by_id(answer_id)
+        question_id = answer_to_edit['question_id']
+        if request.method == 'POST':
+            data_manager_sql.edit_answer(answer_id, request.form['message'], request.files['image'].filename)
+            if request.files['image']:
+                util.upload_image(request.files['image'])
+            return redirect(url_for('display_question', question_id=question_id))
     return render_template('add-edit-answer.html', answer=answer_to_edit, question=data_manager_sql.get_question_by_id(question_id))
 
 
