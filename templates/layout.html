@@ -8,6 +8,7 @@
 <body>
         <div class="navbar">
             <h1>Powerpuff <br>Programmers</h1>
+            <h2>WELCOME {{ session['username'] }}</h2>
             <nav>
                 <ul>
                     <li><a href="{{ url_for('home') }}">Home</a></li>
