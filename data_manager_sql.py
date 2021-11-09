@@ -6,7 +6,7 @@ def add_question(cursor, title, message, user_id, image=''):
     query = """
                 INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
                 VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s, %(user_id)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'user_id': user_id, 'image': image})
+    cursor.execute(query, {'title': title, 'message': message, 'image': image, 'user_id': user_id})
     query = """
             SELECT id
             FROM question
@@ -373,6 +373,6 @@ def get_user_id_by_user_name(cursor, username):
     FROM users
     WHERE username = %(username)s"""
     cursor.execute(query, {'username': username})
-    return cursor.fetchall()
+    return cursor.fetchone()
 
 
