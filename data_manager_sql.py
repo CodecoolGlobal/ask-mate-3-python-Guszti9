@@ -97,9 +97,10 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT *
-        FROM answer
+        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username
+        FROM answer, users
         WHERE question_id = %(question_id)s
+        AND user_id = users.id
         ORDER BY submission_time"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
