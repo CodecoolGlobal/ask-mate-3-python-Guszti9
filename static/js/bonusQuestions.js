@@ -9,15 +9,25 @@ function getSortedItems(items, sortField, sortDirection) {
     // effect this function has on the table
     //
     if (sortDirection === "asc") {
-        const firstItem = items.shift()
-        if (firstItem) {
-            items.push(firstItem)
-        }
+        items.sort((first, second) => {
+            return compareObjects(first, second, sortField)
+        })
     } else {
-        const lastItem = items.pop()
-        if (lastItem) {
-            items.push(lastItem)
+        items.sort((first, second) => {
+            return compareObjects(first, second, sortField)
+        }).reverse()
+    }
+
+    function compareObjects(object1, object2, key){
+        const obj1 = object1[key].toUpperCase()
+        const obj2 = object2[key].toUpperCase()
+        if (obj1 < obj2) {
+            return -1
         }
+        if (obj1 > obj2) {
+            return 1
+        }
+        return 0
     }
 
     return items
