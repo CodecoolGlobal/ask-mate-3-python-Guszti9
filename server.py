@@ -44,10 +44,10 @@ def list_questions():
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
     username = session['username']
-    user_id = data_manager_sql.get_user_id_by_user_name(username)
+    user_id = data_manager_sql.get_user_id_by_user_name(username)['user_id']
     if request.method == 'POST':
         util.upload_image(request.files['image'])
-        question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], request.files['image'].filename, user_id)['id']
+        question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], user_id, request.files['image'].filename)['id']
         return redirect(f'/question/{question_id}')
     return render_template("add-edit-question.html")
 
@@ -90,9 +90,11 @@ def display_question(question_id):
 
 @app.route("/question/<question_id>/new-answer", methods=['GET', 'POST'])
 def post_answer(question_id):
+    username = session['username']
+    user_id = data_manager_sql.get_user_id_by_user_name(username)['user_id']
     if request.method == 'POST':
         util.upload_image(request.files['image'])
-        data_manager_sql.add_new_answer(question_id, request.form['message'], request.files['image'].filename)
+        data_manager_sql.add_new_answer(question_id, request.form['message'], user_id, request.files['image'].filename)
         return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-answer.html", question=data_manager_sql.get_question_by_id(question_id),
                            answers=data_manager_sql.get_answers(question_id), answer=False)

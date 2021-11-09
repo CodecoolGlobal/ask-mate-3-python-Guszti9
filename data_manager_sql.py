@@ -105,11 +105,11 @@ def get_answers(cursor, question_id):
 
 
 @connection_sql.connection_handler
-def add_new_answer(cursor, question_id, message, image=''):
+def add_new_answer(cursor, question_id, message, user_id, image=''):
     query = """
-                INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
+                INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
@@ -373,6 +373,6 @@ def get_user_id_by_user_name(cursor, username):
     FROM users
     WHERE username = %(username)s"""
     cursor.execute(query, {'username': username})
-    return cursor.fetchall()
+    return cursor.fetchone()
 
 
