@@ -43,8 +43,7 @@ def list_questions():
 
 @app.route("/add-question", methods=['GET', 'POST'])
 def add_question():
-    username = session['username']
-    user_id = data_manager_sql.get_user_id_by_user_name(username)['user_id']
+    user_id = session['id']
     if request.method == 'POST':
         util.upload_image(request.files['image'])
         question_id = data_manager_sql.add_question(request.form['title'], request.form['message'], user_id, request.files['image'].filename)['id']

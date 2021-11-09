@@ -5,7 +5,9 @@
 {% endblock %}
 
 {% block content %}
+    {% if session %}
     <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
+    {% endif %}
     <br>
     <form action="{{ url_for('list_questions') }}" method="GET">
              <label for="sort_by">Sorting order:</label>

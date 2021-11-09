@@ -6,7 +6,9 @@
 
 {% block content %}
 
+    {% if session %}
     <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
+    {% endif %}
 
     <table>
         <tr>
