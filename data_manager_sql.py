@@ -6,7 +6,7 @@ def add_question(cursor, title, message, user_id, image=''):
     query = """
                 INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
                 VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s, %(user_id)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': image, 'user_id': user_id})
+    cursor.execute(query, {'title': title, 'message': message, 'user_id': user_id, 'image': image})
     query = """
             SELECT id
             FROM question
@@ -105,11 +105,11 @@ def get_answers(cursor, question_id):
 
 
 @connection_sql.connection_handler
-def add_new_answer(cursor, question_id, message, image=''):
+def add_new_answer(cursor, question_id, message, user_id, image=''):
     query = """
-            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-            VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
+                INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
