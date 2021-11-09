@@ -44,20 +44,25 @@
 
         <div class="answers">
             <h2>Answers:</h2>
+            {% if session  %}
             <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+            {% endif %}
             {% for answer in answers %}
                 <p><strong>{{ answer['message'] }}</strong></p>
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
                 <p>Votes: {{ answer['vote_number'] }}</p>
+            {% if session  %}
                 <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
                 <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
+            {% endif %}
+            {% if session and 'id' in session and answer['user_id'] == session['id'] %}
                 <form>
                     <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
                     <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
-                </form><br>
-
+                </form>
+            {% endif %}
                 <div class="comments">
                     <button type="button" class="collapsible">Comments</button>
                     <div class="comment">
@@ -73,7 +78,9 @@
                             {% endif %}
                             <br>
                         {% endfor %}
+                    {% if session  %}
                     <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+                    {% endif %}
                     </div>
                 </div>
 
