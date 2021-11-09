@@ -15,11 +15,13 @@
             <form><button formaction="{{ url_for("tag_page") }}">Tags</button></form>
             <p>Votes: {{ question_data['vote_number'] }}  Views: {{ question_data['view_number'] }}</p>
             <form>
+                {% if session and 'id' in session and question_data['user_id'] == session['id'] %}
                 <div class="buttons-next-to-each-other">
-                <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
-                <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
-                <button formaction="{{ url_for('add_tag', question_id=question_data['id'])}}">Add tag</button>
+                    <button formaction="{{ url_for('edit_question', question_id=question_data['id'])}}">Edit</button>
+                    <button formaction="{{ url_for('delete_question', question_id=question_data['id'])}}">Delete</button>
+                    <button formaction="{{ url_for('add_tag', question_id=question_data['id'])}}">Add tag</button>
                 </div>
+                {% endif %}
             </form>
 
             <div class="comments">

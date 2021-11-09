@@ -55,18 +55,22 @@ def add_question():
 @app.route("/question/<question_id>/edit", methods=['GET', 'POST'])
 def edit_question(question_id):
     if request.method == 'POST':
-        data_manager_sql.edit_question(question_id, request.form['title'], request.form['message'], request.files['image'].filename)
-        if request.files['image']:
-            util.upload_image(request.files['image'])
-        return redirect(f"/question/{question_id}")
+        user_id = data_manager_sql.get_question_by_id(question_id)['user_id']
+        if session['id'] == user_id:
+            data_manager_sql.edit_question(question_id, request.form['title'], request.form['message'], request.files['image'].filename)
+            if request.files['image']:
+                util.upload_image(request.files['image'])
+            return redirect(f"/question/{question_id}")
 
     return render_template("add-edit-question.html", question_data=data_manager_sql.get_question_by_id(question_id))
 
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    data_manager_sql.delete_question(question_id)
-    data_manager_sql.delete_tag_if_not_in_question_tag()
+    user_id = data_manager_sql.get_question_by_id(question_id)['user_id']
+    if session['id'] == user_id:
+        data_manager_sql.delete_question(question_id)
+        data_manager_sql.delete_tag_if_not_in_question_tag()
     return redirect('/list')
 
 
