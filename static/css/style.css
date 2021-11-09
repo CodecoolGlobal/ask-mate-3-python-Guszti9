@@ -187,12 +187,13 @@ img {
 .vote_image{
     margin: 10px;
     border: none;
-    height: 60px;
+    max-width: 45px;
+    padding: 5px;
 }
 
 .vote_image:hover{
-    height: 65px;
-    margin: 5px;
+    max-width: 50px;
+    padding: 0;
 }
 
 strong {
@@ -233,4 +234,12 @@ button:hover {
     background-position: right center; /* change the direction of the change here */
     color: #fff;
     text-decoration: none;
+}
+
+#order-by-buttons{
+    display: flex;
+}
+
+button #order-by-buttons{
+    flex: 1;
 }
