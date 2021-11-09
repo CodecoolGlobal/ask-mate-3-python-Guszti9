@@ -73,6 +73,7 @@ def delete_question(question_id):
 @app.route("/question/<question_id>/<vote>")
 def vote_question(question_id, vote):
     data_manager_sql.change_question_vote_number(question_id, vote)
+    data_manager_sql.change_reputation_by_question(question_id, vote)
     return redirect('/list')
 
 
@@ -114,6 +115,7 @@ def delete_answer(answer_id):
 def vote_answer(answer_id, vote):
     answer_to_vote = data_manager_sql.get_answer_by_id(answer_id)
     data_manager_sql.change_answers_vote_number(vote, answer_id)
+    data_manager_sql.change_reputation_by_answer(answer_id, vote)
     question_id = answer_to_vote['question_id']
     return redirect(url_for('display_question', question_id=question_id))
 
