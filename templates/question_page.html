@@ -6,7 +6,7 @@
 
 {% block content %}
         <div class="question">
-            <h3>{{ question_data['title'] }}</h3>
+            <h3>{{ question_data['title'] }} <p>- by {{ question_data['username'] }}</p></h3>
             <p><strong>{{ question_data['message'] }}</strong></p>
             {% if question_data['image'] %}
                 <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke">
