@@ -9,15 +9,25 @@ function getSortedItems(items, sortField, sortDirection) {
     // effect this function has on the table
     //
     if (sortDirection === "asc") {
-        const firstItem = items.shift()
-        if (firstItem) {
-            items.push(firstItem)
-        }
+        items.sort((first, second) => {
+            return compareObjects(first, second, sortField)
+        })
     } else {
-        const lastItem = items.pop()
-        if (lastItem) {
-            items.push(lastItem)
+        items.sort((first, second) => {
+            return compareObjects(first, second, sortField)
+        }).reverse()
+    }
+
+    function compareObjects(object1, object2, key){
+        const obj1 = object1[key].toUpperCase()
+        const obj2 = object2[key].toUpperCase()
+        if (obj1 < obj2) {
+            return -1
         }
+        if (obj1 > obj2) {
+            return 1
+        }
+        return 0
     }
 
     return items
@@ -32,8 +42,19 @@ function getFilteredItems(items, filterValue) {
     // if you have not changed the original html uncomment the code below to have an idea of the
     // effect this function has on the table
     //
-    for (let i=0; i<filterValue.length; i++) {
-        items.pop()
+
+    if (filterValue[0] === '!'){
+        if (filterValue.includes('Description:')){
+            items = items.filter(item => !item.Description.includes(filterValue.slice(13)))
+            return items
+        }
+        items = items.filter(item => !item.Title.includes(filterValue.slice(1)))
+    } else {
+        if (filterValue.includes('Description:')){
+            items = items.filter(item => item.Description.includes(filterValue.slice(12)))
+            return items
+        }
+        items = items.filter(item => item.Title.includes(filterValue))
     }
 
     return items
@@ -45,8 +66,22 @@ function toggleTheme() {
 
 function increaseFont() {
     console.log("increaseFont")
+    let elements = document.getElementsByTagName("td");
+    for (let i=0; i<elements.length; i++){
+        let currentSize = parseFloat(window.getComputedStyle(elements[i], null).getPropertyValue('font-size'));
+        if (currentSize < 15) {
+            elements[i].style.fontSize = (currentSize + 1) + "px";
+        }
+    }
 }
 
 function decreaseFont() {
     console.log("decreaseFont")
+    let elements = document.getElementsByTagName("td")
+    for (let i=0; i<elements.length; i++){
+        let currentSize = parseFloat(window.getComputedStyle(elements[i], null).getPropertyValue('font-size'));
+        if (currentSize > 3) {
+            elements[i].style.fontSize = (currentSize - 1) + "px";
+        }
+    }
 }
