@@ -73,6 +73,7 @@ def delete_question(question_id):
 @app.route("/question/<question_id>/<vote>")
 def vote_question(question_id, vote):
     data_manager_sql.change_question_vote_number(question_id, vote)
+    data_manager_sql.change_question_reputation(question_id, vote)
     return redirect('/list')
 
 
@@ -214,6 +215,7 @@ def registration():
 @app.route("/tag_page")
 def tag_page():
     return render_template("tag_page.html", tags_and_questions=data_manager_sql.get_tags_and_number_of_question())
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
