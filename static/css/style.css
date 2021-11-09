@@ -181,12 +181,12 @@ img {
 .vote_image{
     margin: 10px;
     border: none;
-    max-width: 45px;
+    max-width: 60px;
     padding: 5px;
 }
 
 .vote_image:hover{
-    max-width: 50px;
+    max-width: 65px;
     padding: 0;
 }
 
