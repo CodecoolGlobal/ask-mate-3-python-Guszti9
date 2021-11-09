@@ -355,12 +355,17 @@ def get_users(cursor):
 
 
 @connection_sql.connection_handler
-def get_user_id_by_user_name(cursor, username):
+def get_user(cursor, user_id):
     query = """
-    SELECT id AS user_id
-    FROM users
-    WHERE username = %(username)s"""
-    cursor.execute(query, {'username': username})
+        SELECT 
+            *,
+            (select count(*) from question where %(user_id)s = user_id) as number_of_asked_questions,
+            (select count(*) from answer where %(user_id)s = user_id) as number_of_answers,
+            (select count(*) from comment where %(user_id)s = user_id) as number_of_comments
+        FROM users
+        WHERE id = %(user_id)s
+    """
+    cursor.execute(query, {'user_id': user_id})
     return cursor.fetchone()
 
 

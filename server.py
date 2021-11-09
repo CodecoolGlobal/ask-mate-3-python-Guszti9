@@ -261,5 +261,11 @@ def list_users():
     return render_template("users-list.html", users=users)
 
 
+@app.route("/user/<user_id>")
+def display_user(user_id):
+    user = data_manager_sql.get_user(user_id)
+    return render_template("user.html", user = user)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
