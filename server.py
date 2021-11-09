@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from bonus_questions import SAMPLE_QUESTIONS
 from markupsafe import Markup
 import data_manager_sql
@@ -6,6 +6,7 @@ import util
 
 
 app = Flask(__name__)
+app.secret_key = 'powerpuffprogrammers'
 app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 
 
@@ -205,6 +206,34 @@ def registration():
 @app.route("/tag_page")
 def tag_page():
     return render_template("tag_page.html", tags_and_questions=data_manager_sql.get_tags_and_number_of_question())
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    logininfo = ''
+    usernames = data_manager_sql.get_usernames()
+    if request.method == 'POST':
+        if request.form['username'] in usernames:
+            username = request.form['username']
+            password = request.form['password']
+            if util.verify_password(password, data_manager_sql.get_user_password(username)):
+                session['username'] = request.form['username']
+                return redirect("/")
+            else:
+                logininfo = 'Invalid login attempt!'
+    return render_template('login.html', logininfo=logininfo)
+
+
+@app.route("/logout")
+def logout():
+    session.pop('username', None)
+    return redirect("/")
+
+
+@app.route("/users")
+def list_users():
+    users = data_manager_sql.get_users()
+    return render_template("users-list.html", users=users)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

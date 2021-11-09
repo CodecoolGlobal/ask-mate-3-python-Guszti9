@@ -315,6 +315,45 @@ def registration(cursor, username, password):
 
 
 @connection_sql.connection_handler
+def get_usernames(cursor):
+    query = """
+    SELECT username
+    FROM users
+    GROUP BY username;"""
+    cursor.execute(query)
+    usernames = [row["username"] for row in cursor.fetchall()]
+    return usernames
+
+
+@connection_sql.connection_handler
+def get_user_password(cursor, username):
+    query = """
+    SELECT password
+    FROM users
+    WHERE username = %(username)s;"""
+    cursor.execute(query, {'username': username})
+    hashed_password = [row["password"] for row in cursor.fetchall()]
+    return hashed_password[0]
+
+
+@connection_sql.connection_handler
+def get_users(cursor):
+    query = """
+        SELECT 
+            username,
+            reputation,
+            registration_date,
+            (select count(*) from question where user_id = users.id) as number_of_asked_questions,
+            (select count(*) from answer where user_id = users.id) as number_of_answers,
+            (select count(*) from comment where user_id = users.id) as number_of_comments
+        FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+
+@connection_sql.connection_handler
 def get_tags_and_number_of_question(cursor):
     query = """
     SELECT name, COUNT(question_id) as number_of_questions
