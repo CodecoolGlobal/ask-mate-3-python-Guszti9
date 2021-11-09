@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block page_title %}Main page{% endblock %} - MaskAte</title>
+    <title>{% block page_title %}Main page{% endblock %} - Powerpuff Programmers</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -27,12 +27,12 @@
         <div class="float-container">
             <div class="float-child">
                 <div class="left-div">
-                    <div id="title"><h2 class="title text-center">{{ self.page_title() }}</h2></div>
                     <div id="footer-image"><img id="logo" src="{{ url_for("static", filename='/images/powerpuff_header.png') }}" alt="Powerpuff Programmers"></div>
                 </div>
             </div>
             <div class="float-child">
                 <div class="right-div">
+                <div id="title"><h2 class="title text-center">{{ self.page_title() }}</h2></div>
                 <section>
                     {% block content %}{% endblock %}
                 </section>
