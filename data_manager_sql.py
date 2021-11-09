@@ -107,8 +107,8 @@ def get_answers(cursor, question_id):
 @connection_sql.connection_handler
 def add_new_answer(cursor, question_id, message, image=''):
     query = """
-                INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
+            INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+            VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
     cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
 
 
@@ -209,21 +209,21 @@ def get_comment(cursor, comment_id):
 
 
 @connection_sql.connection_handler
-def add_comments_to_question(cursor, question_id, message):
+def add_comments_to_question(cursor, question_id, message, user_id):
     query = """
-        INSERT INTO comment (question_id, message, submission_time, edited_count)
-        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        INSERT INTO comment (question_id, message, submission_time, edited_count, user_id)
+        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0, %(user_id)s)
         """
-    cursor.execute(query, {'question_id': question_id, 'message': message})
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
-def add_comments_to_answer(cursor, answer_id, message):
+def add_comments_to_answer(cursor, answer_id, message, user_id):
     query = """
-        INSERT INTO comment (answer_id, message, submission_time, edited_count)
-        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        INSERT INTO comment (answer_id, message, submission_time, edited_count, user_id)
+        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0, %(user_id)s)
         """
-    cursor.execute(query, {'answer_id': answer_id, 'message': message})
+    cursor.execute(query, {'answer_id': answer_id, 'message': message, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
@@ -351,6 +351,15 @@ def get_users(cursor):
     cursor.execute(query)
     return cursor.fetchall()
 
+
+@connection_sql.connection_handler
+def get_user_id_by_user_name(cursor, username):
+    query = """
+    SELECT id AS user_id
+    FROM users
+    WHERE username = %(username)s"""
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
 
 
 @connection_sql.connection_handler

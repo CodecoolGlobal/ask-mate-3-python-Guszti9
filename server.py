@@ -117,17 +117,21 @@ def vote_answer(answer_id, vote):
 @app.route("/question/<question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
     if request.method == 'POST':
-        data_manager_sql.add_comments_to_question(question_id, request.form['message'])
-        return redirect(url_for('display_question', question_id=question_id))
+        if 'username' in session:
+            user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
+            data_manager_sql.add_comments_to_question(question_id, request.form['message'], user_id)
+            return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-comment.html")
 
 
 @app.route("/answer/<answer_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_answer(answer_id):
     if request.method == 'POST':
-        data_manager_sql.add_comments_to_answer(answer_id, request.form['message'])
-        question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
-        return redirect(url_for('display_question', question_id=question_id))
+        if 'username' in session:
+            user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
+            data_manager_sql.add_comments_to_answer(answer_id, request.form['message'], user_id)
+            question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
+            return redirect(url_for('display_question', question_id=question_id))
     return render_template("add-edit-comment.html")
 
 
