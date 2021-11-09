@@ -317,7 +317,13 @@ def registration(cursor, username, password):
 @connection_sql.connection_handler
 def get_users(cursor):
     query = """
-        SELECT username, reputation, registration_date
+        SELECT 
+            username,
+            reputation,
+            registration_date,
+            (select count(*) from question where user_id = users.id) as number_of_asked_questions,
+            (select count(*) from answer where user_id = users.id) as number_of_answers,
+            (select count(*) from comment where user_id = users.id) as number_of_comments
         FROM users
     """
     cursor.execute(query)
