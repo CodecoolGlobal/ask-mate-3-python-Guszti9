@@ -16,11 +16,6 @@ def home():
     return render_template("index.html", data=data, loop_range=loop_range)
 
 
-@app.route("/bonus-questions")
-def main():
-    return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
-
-
 @app.route("/list")
 def list_questions():
     data = data_manager_sql.get_questions()
@@ -200,6 +195,11 @@ def registration():
         else:
             information = 'Passwords does not match!'
     return render_template('registration.html', info=information)
+
+
+@app.route("/bonus-questions")
+def bonus_questions():
+    return render_template('bonus_questions.html', questions=SAMPLE_QUESTIONS)
 
 
 if __name__ == "__main__":

@@ -32,8 +32,19 @@ function getFilteredItems(items, filterValue) {
     // if you have not changed the original html uncomment the code below to have an idea of the
     // effect this function has on the table
     //
-    for (let i=0; i<filterValue.length; i++) {
-        items.pop()
+
+    if (filterValue[0] === '!'){
+        if (filterValue.includes('Description:')){
+            items = items.filter(item => !item.Description.includes(filterValue.slice(13)))
+            return items
+        }
+        items = items.filter(item => !item.Title.includes(filterValue.slice(1)))
+    } else {
+        if (filterValue.includes('Description:')){
+            items = items.filter(item => item.Description.includes(filterValue.slice(12)))
+            return items
+        }
+        items = items.filter(item => item.Title.includes(filterValue))
     }
 
     return items
