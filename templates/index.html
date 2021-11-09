@@ -10,9 +10,10 @@
         {% if session %}
         <form><button formaction="{{ url_for("list_questions") }}">Full question list</button></form>
         <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
-        {% endif %}
+        {% else %}
         <form><button formaction="{{ url_for('registration') }}">Register</button></form>
         <form><button formaction="{{ url_for('login') }}">Login</button></form>
+        {% endif %}
     </div>
 
     <table>
