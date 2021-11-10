@@ -1,6 +1,10 @@
 h1 {
     color: #C1303D;
+    font-family: Chilanka;
+    font-size: xx-large;
     text-align: center;
+    text-transform: uppercase;
+    margin: 50px 0;
 }
 
 body {
