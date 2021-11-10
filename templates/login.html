@@ -5,14 +5,17 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        <form method="POST" action="/login">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required placeholder="admin">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required placeholder="*******">
-            <button type="submit">Login</button>
-            <p>{{ logininfo if logininfo }}</p>
-        </form>
+    <div id="login-form">
+        <div>
+            <form method="POST" action="/login">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required placeholder="admin"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="*******">
+                <button type="submit">Login</button>
+                <p>{{ logininfo if logininfo }}</p>
+            </form>
+        </div>
+        <div><img src="{{ url_for("static", filename='/images/professor.png') }}"></div>
     </div>
 {% endblock %}
