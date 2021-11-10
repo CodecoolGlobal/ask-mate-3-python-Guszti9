@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block page_title %}
+    {{ user['username'] }} User
+{% endblock %}
+
+{% block content %}
+    <ul>
+        <li>{{ user['id'] }}</li>
+        <li>{{ user['username'] }}</li>
+        <li>{{ user['registration_date'] }}</li>
+        <li>{{ user['number_of_asked_questions'] }}</li>
+        <li>{{ user['number_of_answers'] }}</li>
+        <li>{{ user['number_of_comments'] }}</li>
+        <li>{{ user['reputation'] }}</li>
+    </ul>
+
+    {% if questions|length > 0 %}
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Submission time</th>
+            <th>Message</th>
+            <th>Image</th>
+            <th>Vote number</th>
+            <th>View number</th>
+        </tr>
+        {% for question in questions%}
+        <tr>
+            <td><a href="/question/{{ question['id'] }}">{{ question['title'] }}</a></td>
+            <td><p>{{ question['submission_time']  }}</p></td>
+            <td><p>{{ question['message'] }}</p></td>
+            <td>
+                {% if question['image'] %}
+                    <img src="{{ url_for('static', filename='images/'+question['image']) }}" alt="image broke" width="200">
+                {% endif %}
+            </td>
+            <td><p>{{ question['vote_number'] }}</p></td>
+            <td><p>{{ question['view_number'] }}</p></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if answers|length > 0 %}
+    <table>
+        <tr>
+            <th>Question id</th>
+            <th>Submission time</th>
+            <th>Message</th>
+            <th>Image</th>
+            <th>Vote number</th>
+        </tr>
+        {% for answer in answers%}
+        <tr>
+            <td><a href="/question/{{ answer['question_id'] }}">{{ answer['question_id'] }}</a></td>
+            <td><p>{{ answer['submission_time']  }}</p></td>
+            <td><p>{{ answer['message'] }}</p></td>
+            <td>
+                {% if answer['image'] %}
+                    <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200">
+                {% endif %}
+            </td>
+            <td><p>{{ answer['vote_number'] }}</p></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    {% if comments|length > 0 %}
+    <table>
+        <tr>
+            <th>Question id</th>
+            <th>Answer id</th>
+            <th>Message</th>
+        </tr>
+        {% for comment in comments%}
+        <tr>
+            <td><a href="/question/{{ comment['question_id'] }}">{{ comment['question_id'] }}</a></td>
+            <td><p>{{ comment['answer_id']  }}</p></td>
+            <td><p>{{ comment['message'] }}</p></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% endblock %}

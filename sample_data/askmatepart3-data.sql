@@ -32,3 +32,6 @@ ADD user_id integer NOT NULL DEFAULT -1;
 ALTER TABLE ONLY comment
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 
+ALTER TABLE answer
+ADD accepted integer DEFAULT 0;
+

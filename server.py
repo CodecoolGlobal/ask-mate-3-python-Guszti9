@@ -258,8 +258,25 @@ def logout():
 
 @app.route("/users")
 def list_users():
-    users = data_manager_sql.get_users()
-    return render_template("users-list.html", users=users)
+    if session and 'username' in session:
+        users = data_manager_sql.get_users()
+        return render_template("users-list.html", users=users)
+
+
+@app.route("/user/<user_id>")
+def display_user(user_id):
+    user = data_manager_sql.get_user(user_id)
+    questions = data_manager_sql.get_questions_by_user_id(user_id)
+    answers = data_manager_sql.get_answers_by_user_id(user_id)
+    comments = data_manager_sql.get_comments_by_user_id(user_id)
+    return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
+
+
+@app.route("/answer_acceptance/<answer_id>/<acceptance_value>")
+def accept_refuse_answer(answer_id, acceptance_value):
+    question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
+    data_manager_sql.accept_refuse_answer(answer_id, acceptance_value)
+    return redirect(url_for("display_question", question_id=question_id))
 
 
 if __name__ == "__main__":
