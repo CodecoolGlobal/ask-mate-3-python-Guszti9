@@ -53,19 +53,19 @@
             <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
             {% endif %}
             {% for answer in answers %}
-                <p><strong>{{ answers['message'] }} -- by {{ answers['username'] }}</strong></p>
+                <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}</strong></p>
                 {% if answer['image'] %}
-                        <img src="{{ url_for('static', filename='images/'+answers['image']) }}" alt="image broke">
+                        <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
-                <p>Votes: {{ answers['vote_number'] }}</p>
+                <p>Votes: {{ answer['vote_number'] }}</p>
             {% if session  %}
-                <a href="{{ url_for('vote_answer', answer_id=answers['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
-                <a href="{{ url_for('vote_answer', answer_id=answers['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
+                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
+                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
             {% endif %}
-            {% if session and 'id' in session and answers['user_id'] == session['id'] %}
+            {% if session and 'id' in session and answer['user_id'] == session['id'] %}
                 <form>
-                    <button formaction="{{ url_for('delete_answer', answer_id=answers['id'])}}">Delete</button>
-                    <button formaction="{{ url_for('edit_answer', answer_id=answers['id'])}}">Edit</button>
+                    <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                    <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
                 </form>
             {% endif %}
                 <div class="comments">
@@ -85,7 +85,7 @@
                         {% endfor %}
 
                         {% if session %}
-                        <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answers['id']) }}">Add new comment</button></form>
+                        <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
                         {% endif %}
                     </div>
                 </div>
