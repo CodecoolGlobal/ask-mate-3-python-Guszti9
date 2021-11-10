@@ -6,13 +6,13 @@
 
 {% block content %}
     <ul>
-        <li>{{ user['id'] }}</li>
-        <li>{{ user['username'] }}</li>
-        <li>{{ user['registration_date'] }}</li>
-        <li>{{ user['number_of_asked_questions'] }}</li>
-        <li>{{ user['number_of_answers'] }}</li>
-        <li>{{ user['number_of_comments'] }}</li>
-        <li>{{ user['reputation'] }}</li>
+        <li><strong>Id:</strong> {{ user['id'] }}</li>
+        <li><strong>Username:</strong> {{ user['username'] }}</li>
+        <li><strong>Registration date:</strong> {{ user['registration_date'] }}</li>
+        <li><strong>Number of asked questions:</strong> {{ user['number_of_asked_questions'] }}</li>
+        <li><strong>Number of answers:</strong> {{ user['number_of_answers'] }}</li>
+        <li><strong>Number of comments:</strong> {{ user['number_of_comments'] }}</li>
+        <li><strong>Reputation:</strong> {{ user['reputation'] }}</li>
     </ul>
 
     {% if questions|length > 0 %}
