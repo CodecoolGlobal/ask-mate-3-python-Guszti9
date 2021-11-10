@@ -9,7 +9,11 @@
     {% if session %}
     <form><button formaction="{{ url_for('add_question') }}">Add new question</button></form>
     {% endif %}
-
+    <form action="{{ url_for('home') }}">
+        <label for="search">Search in questions</label>
+        <input id="search" name="search">
+        <button type="submit">Submit</button>
+    </form>
     <table>
         <tr>
             <th>Submission time</th>
@@ -60,11 +64,6 @@
                 </tr>
             {% endfor %}
         </table>
-                <form action="{{ url_for('home') }}">
-                    <label for="search">Search in questions</label>
-                    <input id="search" name="search">
-                    <button type="submit">Submit</button>
-                </form>
 
 
 {% endblock %}

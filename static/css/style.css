@@ -61,11 +61,6 @@ nav ul li a{
     bottom: 0;
 }
 
-
-.float-child .right-div {
-    overflow: scroll;
-}
-
 .float-container img{
     border: none;
     width: 250px;
@@ -234,4 +229,9 @@ button:hover {
 
 button .buttons-next-to-each-other{
     flex: 1;
+}
+
+.welcome{
+    text-align: right;
+    padding: 10px;
 }
