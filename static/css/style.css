@@ -10,7 +10,6 @@ body {
     box-sizing: border-box;
     position: relative;
     margin: 0;
-    overflow: hidden;
 }
 
 .navbar{
@@ -21,6 +20,7 @@ body {
     padding-left: 20px;
     background-color: aliceblue;
     border-bottom: solid thin black;
+    position: fixed;
 }
 
 .navbar h1{
