@@ -432,7 +432,7 @@ def change_reputation_by_accepted_answer(cursor, answer_id):
         SET reputation = reputation + 15
         FROM answer
         WHERE answer.id = %(answer_id)s
-        AND answer.user_id = users.id
+        AND answer.user_id = users.id;
         """
     else:
         query = """
