@@ -235,3 +235,7 @@ button:hover {
 button .buttons-next-to-each-other{
     flex: 1;
 }
+
+.user p{
+    columns: 100px 3;
+}
