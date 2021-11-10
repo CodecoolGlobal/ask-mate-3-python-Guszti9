@@ -55,8 +55,10 @@
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
-                <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="accept") }}">Accept answer</a>
-                <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="refuse")}}">Refuse answer</a>
+                {% if session and 'id' in session and question_data['user_id'] == session['id'] %}
+                    <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="accept") }}">Accept answer</a>
+                    <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="refuse")}}">Refuse answer</a>
+                {% endif %}
                 <p>Votes: {{ answer['vote_number'] }}</p>
             {% if session  %}
                 <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>

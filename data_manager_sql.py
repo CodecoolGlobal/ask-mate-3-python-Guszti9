@@ -42,7 +42,7 @@ def delete_question(cursor, question_id):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id
         FROM question, users
         WHERE question.id = %(question_id)s
         AND users.id = question.user_id;"""
