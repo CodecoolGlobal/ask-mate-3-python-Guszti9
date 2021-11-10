@@ -1,6 +1,8 @@
 import connection_sql
 
 
+# QUERY'S FOR QUESTIONS
+
 @connection_sql.connection_handler
 def add_question(cursor, title, message, user_id, image=''):
     query = """
@@ -40,6 +42,18 @@ def delete_question(cursor, question_id):
 
 
 @connection_sql.connection_handler
+def search_question(cursor, search_word):
+    query = """
+    SELECT *
+    FROM question
+    WHERE title ILIKE %s
+    OR question.message ILIKE %s"""
+    args = ['%' + search_word + '%'] * 2
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
         SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, user_id
@@ -47,16 +61,6 @@ def get_question_by_id(cursor, question_id):
         WHERE id = %(question_id)s"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchone()
-
-
-@connection_sql.connection_handler
-def get_questions(cursor, order_by='submission_time', order='desc'):
-    query = f"""
-        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
-        FROM question
-        ORDER BY {order_by} {order}"""
-    cursor.execute(query)
-    return cursor.fetchall()
 
 
 @connection_sql.connection_handler
@@ -84,6 +88,88 @@ def increase_view_number(cursor, question_id):
 
 
 @connection_sql.connection_handler
+def get_questions(cursor, order_by='submission_time', order='desc'):
+    query = f"""
+        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
+        FROM question
+        ORDER BY {order_by} {order}"""
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    query = """
+        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
+        FROM question
+        WHERE user_id = %(user_id)s
+    """
+    cursor.execute(query, {'user_id': user_id})
+    return cursor.fetchall()
+
+
+# QUERY'S FOR ANSWER
+
+@connection_sql.connection_handler
+def add_new_answer(cursor, question_id, message, user_id, image=''):
+    query = """
+                INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image, 'user_id': user_id})
+
+
+@connection_sql.connection_handler
+def edit_answer(cursor, answer_id, message, image):
+    if image:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s, image = %(image)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'image': image, 'answer_id': answer_id})
+    else:
+        query = f"""
+            UPDATE answer
+            SET message = %(message)s
+            WHERE id = %(answer_id)s"""
+        cursor.execute(query, {'message': message, 'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
+def delete_answer(cursor, answer_id):
+    query = """
+        DELETE FROM answer
+        WHERE id = %(answer_id)s"""
+    cursor.execute(query, {'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
+def change_answers_vote_number(cursor, vote, answer_id):
+    if vote == 'vote_up':
+        query = """
+        UPDATE answer
+        SET vote_number = vote_number + 1
+        WHERE id = %(answer_id)s"""
+    else:
+        query = """
+        UPDATE answer
+        SET vote_number = vote_number - 1
+        WHERE id = %(answer_id)s"""
+    cursor.execute(query, {'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
+def search_answer(cursor, search_word):
+    query = """
+    SELECT question.id, question.submission_time, question.title, question.message, question.image, question.vote_number, question.view_number, answer.message AS a_message
+    FROM question
+    JOIN answer ON question.id = answer.question_id
+    WHERE answer.message ILIKE %s"""
+    args = ['%' + search_word + '%']
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
 def get_answer_by_id(cursor, answer_id):
     query = """
         SELECT *
@@ -106,108 +192,17 @@ def get_answers(cursor, question_id):
 
 
 @connection_sql.connection_handler
-def add_new_answer(cursor, question_id, message, user_id, image=''):
+def get_answers_by_user_id(cursor, user_id):
     query = """
-                INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
-                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image, 'user_id': user_id})
-
-
-@connection_sql.connection_handler
-def change_answers_vote_number(cursor, vote, answer_id):
-    if vote == 'vote_up':
-        query = """
-        UPDATE answer
-        SET vote_number = vote_number + 1
-        WHERE id = %(answer_id)s"""
-    else:
-        query = """
-        UPDATE answer
-        SET vote_number = vote_number - 1
-        WHERE id = %(answer_id)s"""
-    cursor.execute(query, {'answer_id': answer_id})
-
-
-@connection_sql.connection_handler
-def delete_answer(cursor, answer_id):
-    query = """
-        DELETE FROM answer
-        WHERE id = %(answer_id)s"""
-    cursor.execute(query, {'answer_id': answer_id})
-
-
-@connection_sql.connection_handler
-def edit_answer(cursor, answer_id, message, image):
-    if image:
-        query = f"""
-            UPDATE answer
-            SET message = %(message)s, image = %(image)s
-            WHERE id = %(answer_id)s"""
-        cursor.execute(query, {'message': message, 'image': image, 'answer_id': answer_id})
-    else:
-        query = f"""
-            UPDATE answer
-            SET message = %(message)s
-            WHERE id = %(answer_id)s"""
-        cursor.execute(query, {'message': message, 'answer_id': answer_id})
-
-
-@connection_sql.connection_handler
-def search_question(cursor, search_word):
-    query = """
-    SELECT *
-    FROM question
-    WHERE title ILIKE %s
-    OR question.message ILIKE %s"""
-    args = ['%' + search_word + '%'] * 2
-    cursor.execute(query, args)
+        SELECT answer.id, submission_time, vote_number, question_id, message, image
+        from answer
+        where user_id = %(user_id)s
+    """
+    cursor.execute(query, {'user_id': user_id})
     return cursor.fetchall()
 
 
-@connection_sql.connection_handler
-def search_answer(cursor, search_word):
-    query = """
-    SELECT question.id, question.submission_time, question.title, question.message, question.image, question.vote_number, question.view_number, answer.message AS a_message
-    FROM question
-    JOIN answer ON question.id = answer.question_id
-    WHERE answer.message ILIKE %s"""
-    args = ['%' + search_word + '%']
-    cursor.execute(query, args)
-    return cursor.fetchall()
-
-
-@connection_sql.connection_handler
-def get_comments_by_question_id(cursor, question_id):
-    query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
-        FROM comment
-        WHERE question_id = %(question_id)s
-        """
-    cursor.execute(query, {'question_id': question_id})
-    return cursor.fetchall()
-
-
-@connection_sql.connection_handler
-def get_comments_by_answer_id(cursor, answer_id):
-    query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
-        FROM comment
-        WHERE answer_id = %(answer_id)s
-        """
-    cursor.execute(query, {'answer_id': answer_id})
-    return cursor.fetchall()
-
-
-@connection_sql.connection_handler
-def get_comment(cursor, comment_id):
-    query = """
-        SELECT message, question_id, answer_id, user_id
-        FROM comment
-        WHERE id = %(comment_id)s
-        """
-    cursor.execute(query, {'comment_id': comment_id})
-    return cursor.fetchone()
-
+# QUERY'S FOR COMMENT
 
 @connection_sql.connection_handler
 def add_comments_to_question(cursor, question_id, message, user_id):
@@ -247,25 +242,50 @@ def delete_comments(cursor, comment_id):
 
 
 @connection_sql.connection_handler
-def get_tags(cursor, question_id):
+def get_comments_by_question_id(cursor, question_id):
     query = """
-    SELECT tag_id, name from question_tag
-    inner join tag t on t.id = question_tag.tag_id
-    WHERE question_id = %(question_id)s"""
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
+        FROM comment
+        WHERE question_id = %(question_id)s
+        """
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
 
 
 @connection_sql.connection_handler
-def get_non_added_tags_for_question(cursor, added_tags, question_id):
+def get_comments_by_answer_id(cursor, answer_id):
     query = """
-        SELECT id, name from tag
-        WHERE name NOT IN (SELECT name from tag
-        inner join question_tag q on q.tag_id = tag.id
-        WHERE question_id = %(question_id)s)"""
-    cursor.execute(query, {'added_tags': added_tags, 'question_id': question_id})
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
+        FROM comment
+        WHERE answer_id = %(answer_id)s
+        """
+    cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchall()
 
+
+@connection_sql.connection_handler
+def get_comment(cursor, comment_id):
+    query = """
+        SELECT message, question_id, answer_id, user_id
+        FROM comment
+        WHERE id = %(comment_id)s
+        """
+    cursor.execute(query, {'comment_id': comment_id})
+    return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def get_comments_by_user_id(curses, user_id):
+    query = """
+        SELECT message, question_id, answer_id
+        FROM comment
+        WHERE user_id = %(user_id)s
+    """
+    curses.execute(query, {'user_id': user_id})
+    return curses.fetchall()
+
+
+# QUERY'S FOR TAG
 
 @connection_sql.connection_handler
 def add_question_tag(cursor, question_id, tag_id):
@@ -308,11 +328,76 @@ def delete_tag_if_not_in_question_tag(cursor):
 
 
 @connection_sql.connection_handler
+def get_tags(cursor, question_id):
+    query = """
+    SELECT tag_id, name from question_tag
+    inner join tag t on t.id = question_tag.tag_id
+    WHERE question_id = %(question_id)s"""
+    cursor.execute(query, {'question_id': question_id})
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_non_added_tags_for_question(cursor, added_tags, question_id):
+    query = """
+        SELECT id, name from tag
+        WHERE name NOT IN (SELECT name from tag
+        inner join question_tag q on q.tag_id = tag.id
+        WHERE question_id = %(question_id)s)"""
+    cursor.execute(query, {'added_tags': added_tags, 'question_id': question_id})
+    return cursor.fetchall()
+
+
+# QUERY'S FOR USERS
+
+@connection_sql.connection_handler
 def registration(cursor, username, password):
     query = """
     INSERT INTO users (username, password, reputation, registration_date)
     VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
     cursor.execute(query, {'username': username, 'password': password})
+
+
+@connection_sql.connection_handler
+def change_reputation_by_question(cursor, question_id, vote):
+    if vote == 'vote_up':
+        query = """
+        UPDATE users
+        SET reputation = reputation + 5
+        FROM question
+        WHERE question.id = %(question_id)s 
+        AND question.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 2
+                FROM question
+                WHERE question.id = %(question_id)s 
+                AND question.user_id = users.id;
+                """
+    cursor.execute(query, {'question_id': question_id})
+
+
+@connection_sql.connection_handler
+def change_reputation_by_answer(cursor, answer_id, vote):
+    if vote == 'vote_up':
+        query = """
+        UPDATE users
+        SET reputation = reputation + 10
+        FROM answer
+        WHERE answer.id = %(answer_id)s 
+        AND answer.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 2
+                FROM answer
+                WHERE answer.id = %(answer_id)s 
+                AND answer.user_id = users.id;
+                """
+    cursor.execute(query, {'answer_id': answer_id})
 
 
 @connection_sql.connection_handler
@@ -369,6 +454,8 @@ def get_user(cursor, user_id):
     return cursor.fetchone()
 
 
+# PLUS QUERY'S
+
 @connection_sql.connection_handler
 def get_tags_and_number_of_question(cursor):
     query = """
@@ -390,47 +477,3 @@ def get_user_id_by_user_name(cursor, username):
     WHERE username = %(username)s"""
     cursor.execute(query, {'username': username})
     return cursor.fetchone()
-
-
-@connection_sql.connection_handler
-def change_reputation_by_question(cursor, question_id, vote):
-    if vote == 'vote_up':
-        query = """
-        UPDATE users
-        SET reputation = reputation + 5
-        FROM question
-        WHERE question.id = %(question_id)s 
-        AND question.user_id = users.id;
-        """
-    else:
-        query = """
-                UPDATE users
-                SET reputation = reputation - 2
-                FROM question
-                WHERE question.id = %(question_id)s 
-                AND question.user_id = users.id;
-                """
-    cursor.execute(query, {'question_id': question_id})
-
-
-@connection_sql.connection_handler
-def change_reputation_by_answer(cursor, answer_id, vote):
-    if vote == 'vote_up':
-        query = """
-        UPDATE users
-        SET reputation = reputation + 10
-        FROM answer
-        WHERE answer.id = %(answer_id)s 
-        AND answer.user_id = users.id;
-        """
-    else:
-        query = """
-                UPDATE users
-                SET reputation = reputation - 2
-                FROM answer
-                WHERE answer.id = %(answer_id)s 
-                AND answer.user_id = users.id;
-                """
-    cursor.execute(query, {'answer_id': answer_id})
-
-

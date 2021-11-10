@@ -257,14 +257,18 @@ def logout():
 
 @app.route("/users")
 def list_users():
-    users = data_manager_sql.get_users()
-    return render_template("users-list.html", users=users)
+    if session and 'username' in session:
+        users = data_manager_sql.get_users()
+        return render_template("users-list.html", users=users)
 
 
 @app.route("/user/<user_id>")
 def display_user(user_id):
     user = data_manager_sql.get_user(user_id)
-    return render_template("user.html", user = user)
+    questions = data_manager_sql.get_questions_by_user_id(user_id)
+    answers = data_manager_sql.get_answers_by_user_id(user_id)
+    comments = data_manager_sql.get_comments_by_user_id(user_id)
+    return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
 
 
 if __name__ == "__main__":
