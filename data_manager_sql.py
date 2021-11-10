@@ -56,7 +56,7 @@ def search_question(cursor, search_word):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id
         FROM question, users
         WHERE question.id = %(question_id)s
         AND users.id = question.user_id;"""
@@ -183,7 +183,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username
+        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username, user_id
         FROM answer, users
         WHERE question_id = %(question_id)s
         AND user_id = users.id
@@ -202,6 +202,20 @@ def get_answers_by_user_id(cursor, user_id):
     cursor.execute(query, {'user_id': user_id})
     return cursor.fetchall()
 
+
+@connection_sql.connection_handler
+def accept_refuse_answer(cursor, answer_id, acceptance_value):
+    if acceptance_value == 'accept':
+        query = """
+            UPDATE answer
+            SET accepted = 1
+            WHERE answer.id = %(answer_id)s;"""
+    elif acceptance_value == "refuse":
+        query = """
+                    UPDATE answer
+                    SET accepted = -1
+                    WHERE answer.id = %(answer_id)s;"""
+    cursor.execute(query, {'answer_id': answer_id})
 
 # QUERY'S FOR COMMENT
 

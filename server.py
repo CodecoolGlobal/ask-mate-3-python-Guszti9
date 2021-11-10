@@ -271,5 +271,12 @@ def display_user(user_id):
     return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
 
 
+@app.route("/answer_acceptance/<answer_id>/<acceptance_value>")
+def accept_refuse_answer(answer_id, acceptance_value):
+    question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
+    data_manager_sql.accept_refuse_answer(answer_id, acceptance_value)
+    return redirect(url_for("display_question", question_id=question_id))
+
+
 if __name__ == "__main__":
     app.run(debug=True)
