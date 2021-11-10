@@ -12,7 +12,6 @@ body {
 }
 
 .navbar{
-    overflow: hidden;
     position: fixed;
     top: 0;
     width: 100%;
@@ -47,15 +46,13 @@ nav ul li a{
 
 
 .float-container {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
 }
 
-.float-child{
-    flex: 1;
-}
 
 .float-child #footer-image{
-    width: 100px;
+    width: 10%;
     position: fixed;
     left: 0;
     bottom: 0;
@@ -67,7 +64,7 @@ nav ul li a{
 }
 
 section {
-    width: 1000px;
+    width: 80%;
     background-color: transparent;
     padding: 20px;
 }
