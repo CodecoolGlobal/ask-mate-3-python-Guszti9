@@ -62,6 +62,9 @@ function getFilteredItems(items, filterValue) {
 
 function toggleTheme() {
     console.log("toggle theme")
+    let body = document.getElementsByTagName("body")
+    body[0].style.backgroundColor = "Black"
+    body[0].style.color = "White"
 }
 
 function increaseFont() {
