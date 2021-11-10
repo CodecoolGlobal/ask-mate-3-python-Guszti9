@@ -430,9 +430,15 @@ def change_reputation_by_answer(cursor, answer_id, vote):
 
 
 @connection_sql.connection_handler
-def accept_answer(cursor, answer_id):
-    query = """
-        UPDATE answer
-        SET accepted = 1
-        WHERE answer.id = %(answer_id)s;"""
+def accept_refuse_answer(cursor, answer_id, acceptance_value):
+    if acceptance_value == 'accept':
+        query = """
+            UPDATE answer
+            SET accepted = 1
+            WHERE answer.id = %(answer_id)s;"""
+    elif acceptance_value == "refuse":
+        query = """
+                    UPDATE answer
+                    SET accepted = -1
+                    WHERE answer.id = %(answer_id)s;"""
     cursor.execute(query, {'answer_id': answer_id})

@@ -258,10 +258,10 @@ def list_users():
     return render_template("users-list.html", users=users)
 
 
-@app.route("/accept_answer/<answer_id>")
-def accept_answer(answer_id):
-    data_manager_sql.accept_answer(answer_id)
+@app.route("/answer_acceptance/<answer_id>/<acceptance_value>")
+def accept_refuse_answer(answer_id, acceptance_value):
     question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
+    data_manager_sql.accept_refuse_answer(answer_id, acceptance_value)
     return redirect(url_for("display_question", question_id=question_id))
 
 
