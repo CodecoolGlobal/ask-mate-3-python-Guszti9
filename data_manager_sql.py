@@ -2,11 +2,11 @@ import connection_sql
 
 
 @connection_sql.connection_handler
-def add_question(cursor, title, message, image=''):
+def add_question(cursor, title, message, user_id, image=''):
     query = """
-                INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'title': title, 'message': message, 'image': image})
+                INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, -1, 0, %(title)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'title': title, 'message': message, 'user_id': user_id, 'image': image})
     query = """
             SELECT id
             FROM question
@@ -42,9 +42,10 @@ def delete_question(cursor, question_id):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image
-        FROM question
-        WHERE id = %(question_id)s"""
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username
+        FROM question, users
+        WHERE question.id = %(question_id)s
+        AND users.id = question.user_id;"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchone()
 
@@ -96,20 +97,21 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT *
-        FROM answer
+        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username
+        FROM answer, users
         WHERE question_id = %(question_id)s
+        AND user_id = users.id
         ORDER BY submission_time"""
     cursor.execute(query, {'question_id': question_id})
     return cursor.fetchall()
 
 
 @connection_sql.connection_handler
-def add_new_answer(cursor, question_id, message, image=''):
+def add_new_answer(cursor, question_id, message, user_id, image=''):
     query = """
-                INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s)"""
-    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image})
+                INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                VALUES (CURRENT_TIMESTAMP, 0, %(question_id)s, %(message)s, %(image)s, %(user_id)s)"""
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'image': image, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
@@ -178,7 +180,7 @@ def search_answer(cursor, search_word):
 @connection_sql.connection_handler
 def get_comments_by_question_id(cursor, question_id):
     query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
         FROM comment
         WHERE question_id = %(question_id)s
         """
@@ -189,7 +191,7 @@ def get_comments_by_question_id(cursor, question_id):
 @connection_sql.connection_handler
 def get_comments_by_answer_id(cursor, answer_id):
     query = """
-        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count
+        SELECT id, message, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, edited_count, user_id
         FROM comment
         WHERE answer_id = %(answer_id)s
         """
@@ -200,7 +202,7 @@ def get_comments_by_answer_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_comment(cursor, comment_id):
     query = """
-        SELECT message, question_id, answer_id
+        SELECT message, question_id, answer_id, user_id
         FROM comment
         WHERE id = %(comment_id)s
         """
@@ -209,21 +211,21 @@ def get_comment(cursor, comment_id):
 
 
 @connection_sql.connection_handler
-def add_comments_to_question(cursor, question_id, message):
+def add_comments_to_question(cursor, question_id, message, user_id):
     query = """
-        INSERT INTO comment (question_id, message, submission_time, edited_count)
-        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        INSERT INTO comment (question_id, message, submission_time, edited_count, user_id)
+        VALUES (%(question_id)s, %(message)s, CURRENT_TIMESTAMP, 0, %(user_id)s)
         """
-    cursor.execute(query, {'question_id': question_id, 'message': message})
+    cursor.execute(query, {'question_id': question_id, 'message': message, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
-def add_comments_to_answer(cursor, answer_id, message):
+def add_comments_to_answer(cursor, answer_id, message, user_id):
     query = """
-        INSERT INTO comment (answer_id, message, submission_time, edited_count)
-        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0)
+        INSERT INTO comment (answer_id, message, submission_time, edited_count, user_id)
+        VALUES (%(answer_id)s, %(message)s, CURRENT_TIMESTAMP, 0, %(user_id)s)
         """
-    cursor.execute(query, {'answer_id': answer_id, 'message': message})
+    cursor.execute(query, {'answer_id': answer_id, 'message': message, 'user_id': user_id})
 
 
 @connection_sql.connection_handler
@@ -312,3 +314,108 @@ def registration(cursor, username, password):
     INSERT INTO users (username, password, reputation, registration_date)
     VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
     cursor.execute(query, {'username': username, 'password': password})
+
+
+@connection_sql.connection_handler
+def get_usernames(cursor):
+    query = """
+    SELECT username
+    FROM users
+    GROUP BY username;"""
+    cursor.execute(query)
+    usernames = [row["username"] for row in cursor.fetchall()]
+    return usernames
+
+
+@connection_sql.connection_handler
+def get_user_password(cursor, username):
+    query = """
+    SELECT password
+    FROM users
+    WHERE username = %(username)s;"""
+    cursor.execute(query, {'username': username})
+    hashed_password = [row["password"] for row in cursor.fetchall()]
+    return hashed_password[0]
+
+
+@connection_sql.connection_handler
+def get_users(cursor):
+    query = """
+        SELECT 
+            username,
+            reputation,
+            registration_date,
+            (select count(*) from question where user_id = users.id) as number_of_asked_questions,
+            (select count(*) from answer where user_id = users.id) as number_of_answers,
+            (select count(*) from comment where user_id = users.id) as number_of_comments
+        FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def get_user_id_by_user_name(cursor, username):
+    query = """
+    SELECT id AS user_id
+    FROM users
+    WHERE username = %(username)s"""
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def get_tags_and_number_of_question(cursor):
+    query = """
+    SELECT name, COUNT(question_id) as number_of_questions
+    FROM tag
+    INNER JOIN question_tag qt
+    ON tag.id = qt.tag_id
+    GROUP BY name
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@connection_sql.connection_handler
+def change_reputation_by_question(cursor, question_id, vote):
+    if vote == 'vote_up':
+        query = """
+        UPDATE users
+        SET reputation = reputation + 5
+        FROM question
+        WHERE question.id = %(question_id)s 
+        AND question.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 2
+                FROM question
+                WHERE question.id = %(question_id)s 
+                AND question.user_id = users.id;
+                """
+    cursor.execute(query, {'question_id': question_id})
+
+
+@connection_sql.connection_handler
+def change_reputation_by_answer(cursor, answer_id, vote):
+    if vote == 'vote_up':
+        query = """
+        UPDATE users
+        SET reputation = reputation + 10
+        FROM answer
+        WHERE answer.id = %(answer_id)s 
+        AND answer.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 2
+                FROM answer
+                WHERE answer.id = %(answer_id)s 
+                AND answer.user_id = users.id;
+                """
+    cursor.execute(query, {'answer_id': answer_id})
+
+

@@ -1,43 +1,79 @@
 body {
-    background-image: url(powerpuff_wallpaper.jpg);
-    height: 100%;
+    height:100vh;
+    width: 100%;
+    background-image: url(background.png);
     background-position: center;
-    background-repeat: no-repeat;
     background-size: cover;
-    background-blend-mode: soft-light;
-    background-color: lightblue;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: Arial, serif;
+    box-sizing: border-box;
+    position: relative;
 }
 
-header {
+.navbar{
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
-    border-radius: 10px;
-    box-shadow: 5px 5px 5px 5px #617889;
+    align-items: center;
 }
 
-section {
-    background-color: transparent;
-    border: solid black;
-    box-shadow: 5px 5px 5px #617889;
-    border-radius: 10px;
-    margin: 5%;
+.navbar h1{
+    font-size: 20px;
 }
 
-header > img {
+nav{
+    flex: 1;
+    padding-left: 60px;
+}
+
+nav ul li{
+    display: inline-block;
+    list-style: none;
+    margin: 0px 20px;
+}
+
+nav ul li a{
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #1d2024;
+}
+.container{
+    padding: 16px;
+    margin-top: 30px;
+}
+
+
+.float-container {
+    display: flex;
+}
+
+.float-child{
+    flex: 1;
+}
+
+.float-child #footer-image{
+    width: 100px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+
+
+.float-child .right-div {
+    overflow: scroll;
+}
+
+.float-container img{
     border: none;
-    height: 200px;
+    width: 250px;
 }
-
-#powerpuff-programmers-header {
-    margin: auto;
-    display: block;
-    height: 70px;
-}
-
 
 section {
-    margin-top: 50px;
+    width: 1000px;
+    background-color: transparent;
     padding: 20px;
 }
 
@@ -48,25 +84,24 @@ h2 {
 }
 
 th {
-    background-color: saddlebrown;
-    color: white;
+    border-radius: 15px;
+    background-color: #d9f2ff;
+    color: black;
     padding: 10px;
 }
 
 table {
-    background-color: saddlebrown;
+    border-radius: 20px;
+    background-color: #d9f2ff;
     width: 100%;
 }
 
 td {
-    background-color: darkseagreen;
+    border-radius: 10px;
+    background-color: white;
     padding: 10px;
 }
 
-table, td {
-    border: 2px solid black;
-    border-radius: 10px;
-}
 
 td:nth-child(1) {
     text-align: center;
@@ -83,7 +118,7 @@ td:nth-child(5), td:nth-child(6) {
 }
 
 button {
-    background-color: saddlebrown;
+    background-color: #5a5a89;
     border-radius: 20px;
     display: inline-block;
     padding: 10px 20px;
@@ -97,12 +132,9 @@ button {
 }
 
 button:hover {
-    background-color: brown;
+    background-color: black;
 }
 
-.navbar {
-    display: flex;
-}
 
 mark {
     color: black;
@@ -149,18 +181,17 @@ img {
 .vote_image{
     margin: 10px;
     border: none;
-    height: 60px;
+    max-width: 60px;
+    padding: 5px;
 }
 
 .vote_image:hover{
-    height: 65px;
-    margin: 5px;
+    max-width: 65px;
+    padding: 0;
 }
 
 strong {
     font-size: 20px;
-    background-color: lightgray;
-    border: solid black;
     padding: 5px;
     border-radius: 10px;
 }
@@ -171,4 +202,36 @@ h3 {
 
 p {
     font-size: 18px;
+}
+
+
+button {
+    background-image: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%)
+}
+
+
+button {
+    margin: 10px;
+    padding: 15px 25px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 30px;
+    display: block;
+}
+
+button:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+
+.buttons-next-to-each-other{
+    display: flex;
+}
+
+button .buttons-next-to-each-other{
+    flex: 1;
 }
