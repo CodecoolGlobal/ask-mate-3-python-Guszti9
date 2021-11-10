@@ -17,6 +17,7 @@ def home():
     if request.args.get('search'):
         search_phrase = request.args.get("search")
         question_data = data_manager_sql.search_question(request.args.get('search'))
+        loop_range = 5 if len(question_data) > 5 else len(question_data)
         answer_data = data_manager_sql.search_answer(request.args.get('search'))
         for dictionary in question_data:
             util.marking(dictionary, search_phrase)
@@ -24,7 +25,7 @@ def home():
             dictionary['a_message'] = dictionary['a_message'].casefold()
             dictionary['a_message'] = Markup(dictionary['a_message'].replace(search_phrase, f"<mark>{search_phrase}</mark>"))
             util.marking(dictionary, search_phrase)
-        return render_template("index.html", data=question_data, answer_data=answer_data)
+        return render_template("index.html", data=question_data, answer_data=answer_data, loop_range=loop_range)
     return render_template("index.html", data=data, loop_range=loop_range)
 
 

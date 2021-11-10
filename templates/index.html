@@ -26,7 +26,7 @@
             <th>Answer message</th>
         {% endif %}
         </tr>
-        {% for i in range(data|length) if data %}
+        {% for i in range(loop_range) if data %}
             <tr>
                 <td><p>{{ data[i]['submission_time']  }}</p></td>
                 <td><a href="{{ url_for('display_question',question_id=data[i]['id'])}}">{{ data[i]['title'] }}</a></td>
