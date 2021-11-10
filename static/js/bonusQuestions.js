@@ -62,6 +62,15 @@ function getFilteredItems(items, filterValue) {
 
 function toggleTheme() {
     console.log("toggle theme")
+    let body = document.getElementsByTagName("body");
+    let style = window.getComputedStyle(body[0]).getPropertyValue('background-color');
+    if (style === "rgb(0, 0, 0)") {
+        body[0].style.backgroundColor = "White"
+        body[0].style.color = "Black"
+    } else {
+        body[0].style.backgroundColor = "Black"
+        body[0].style.color = "White"
+    }
 }
 
 function increaseFont() {
@@ -69,7 +78,7 @@ function increaseFont() {
     let elements = document.getElementsByTagName("td");
     for (let i=0; i<elements.length; i++){
         let currentSize = parseFloat(window.getComputedStyle(elements[i], null).getPropertyValue('font-size'));
-        if (currentSize < 15) {
+        if (currentSize <= 15) {
             elements[i].style.fontSize = (currentSize + 1) + "px";
         }
     }
@@ -80,7 +89,7 @@ function decreaseFont() {
     let elements = document.getElementsByTagName("td")
     for (let i=0; i<elements.length; i++){
         let currentSize = parseFloat(window.getComputedStyle(elements[i], null).getPropertyValue('font-size'));
-        if (currentSize > 3) {
+        if (currentSize >= 3) {
             elements[i].style.fontSize = (currentSize - 1) + "px";
         }
     }
