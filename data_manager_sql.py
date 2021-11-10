@@ -377,16 +377,6 @@ def get_tags_and_number_of_question(cursor):
 
 
 @connection_sql.connection_handler
-def get_user_id_by_user_name(cursor, username):
-    query = """
-    SELECT id AS user_id
-    FROM users
-    WHERE username = %(username)s"""
-    cursor.execute(query, {'username': username})
-    return cursor.fetchone()
-
-
-@connection_sql.connection_handler
 def change_reputation_by_question(cursor, question_id, vote):
     if vote == 'vote_up':
         query = """

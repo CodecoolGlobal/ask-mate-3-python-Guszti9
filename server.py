@@ -14,14 +14,6 @@ app.config['UPLOAD_FOLDER'] = util.UPLOAD_FOLDER
 def home():
     data = data_manager_sql.get_questions()
     loop_range = 5 if len(data) > 5 else len(data)
-    return render_template("index.html", data=data, loop_range=loop_range)
-
-
-@app.route("/list")
-def list_questions():
-    data = data_manager_sql.get_questions()
-    if request.args.get('order_by'):
-        return render_template("list.html", data=data_manager_sql.get_questions(request.args.get('order_by'), request.args.get('sorting_order')))
     if request.args.get('search'):
         search_phrase = request.args.get("search")
         question_data = data_manager_sql.search_question(request.args.get('search'))
