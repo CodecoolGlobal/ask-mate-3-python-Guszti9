@@ -425,6 +425,27 @@ def change_reputation_by_answer(cursor, answer_id, vote):
 
 
 @connection_sql.connection_handler
+def change_reputation_by_accepted_answer(cursor, answer_id):
+    if get_acceptance_value(answer_id) == 0:
+        query = """
+        UPDATE users
+        SET reputation = reputation + 15
+        FROM answer
+        WHERE answer.id = %(answer_id)s
+        AND answer.user_id = users.id;
+        """
+    else:
+        query = """
+                UPDATE users
+                SET reputation = reputation - 15
+                FROM answer
+                WHERE answer.id = %(answer_id)s
+                AND answer.user_id = users.id;
+                """
+    cursor.execute(query, {'answer_id': answer_id})
+
+
+@connection_sql.connection_handler
 def get_usernames(cursor):
     query = """
     SELECT username
@@ -500,4 +521,15 @@ def get_user_id_by_user_name(cursor, username):
     FROM users
     WHERE username = %(username)s"""
     cursor.execute(query, {'username': username})
+    return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def get_acceptance_value(cursor, answer_id):
+    query = """
+    SELECT accepted
+    FROM answer
+    WHERE id = %(answer_id)s;
+    """
+    cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchone()

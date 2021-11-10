@@ -14,22 +14,23 @@
                     <li><a href="{{ url_for("list_questions") }}">Questions</a></li>
                     <li><a href="{{ url_for("tag_page") }}">Tags</a></li>
                     {% if session %}
-                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for('list_users') }}">Users List</a></li>
                     {% else %}
                     <li><a href="{{ url_for('registration') }}">Registration</a></li>
                     <li><a href="{{ url_for('login') }}">Log In</a></li>
                     {% endif %}
                 </ul>
             </nav>
+            <div class="welcome">
+                {% if session %}
+                    <h3><a href="{{ url_for('display_user', user_id=session['id']) }}"> Welcome {{ session['username'] }}</a></h3>
+                {% endif %}
+            </div>
         </div>
         <div class="float-container">
             <div class="float-child">
                 <div class="left-div">
-                    <div class="welcome">
-            {% if session %}
-            <h2>Welcome {{ session['username'] }}</h2>
-            {% endif %}
-        </div>
                     <div id="footer-image"><img id="logo" src="{{ url_for("static", filename='/images/powerpuff_header.png') }}" alt="Powerpuff Programmers"></div>
                 </div>
             </div>

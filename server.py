@@ -276,6 +276,7 @@ def display_user(user_id):
 def accept_refuse_answer(answer_id, acceptance_value):
     question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
     data_manager_sql.accept_refuse_answer(answer_id, acceptance_value)
+    data_manager_sql.change_reputation_by_accepted_answer(answer_id)
     return redirect(url_for("display_question", question_id=question_id))
 
 
