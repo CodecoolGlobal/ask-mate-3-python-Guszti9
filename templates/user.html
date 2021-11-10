@@ -67,4 +67,20 @@
     </table>
     {% endif %}
 
+    {% if comments|length > 0 %}
+    <table>
+        <tr>
+            <th>Question id</th>
+            <th>Answer id</th>
+            <th>Message</th>
+        </tr>
+        {% for comment in comments%}
+        <tr>
+            <td><a href="/question/{{ comment['question_id'] }}">{{ comment['question_id'] }}</a></td>
+            <td><p>{{ comment['answer_id']  }}</p></td>
+            <td><p>{{ comment['message'] }}</p></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 {% endblock %}

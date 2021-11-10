@@ -277,8 +277,17 @@ def get_comment(cursor, comment_id):
 @connection_sql.connection_handler
 def get_comments_by_user_id(curses, user_id):
     query = """
-        SELECT message, question_id, answer_id
-        FROM comment
+        SELECT
+            message,
+            (case when c.question_id is null
+            THEN
+                (select a.question_id
+                from answer a
+                where a.id = c.answer_id)
+            ELSE c.question_id END)
+            as question_id,
+            answer_id
+        FROM comment c
         WHERE user_id = %(user_id)s
     """
     curses.execute(query, {'user_id': user_id})
