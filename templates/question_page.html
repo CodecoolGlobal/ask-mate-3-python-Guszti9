@@ -6,7 +6,8 @@
 
 {% block content %}
         <div class="question">
-            <h3>{{ question_data['title'] }} <p>- by {{ question_data['username'] }}</p></h3>
+            <h3>{{ question_data['title'] }} <p>- by {{ question_data['username'] }}
+            <img class="avatar" src="{{ url_for('static', filename='images/'+question_data['avatar']) }}" alt="image broke"></p></h3>
             <p><strong>{{ question_data['message'] }}</strong></p>
             {% if question_data['image'] %}
                 <img src="{{ url_for('static', filename='images/'+question_data['image']) }}" alt="image broke">
@@ -53,7 +54,8 @@
             <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
             {% endif %}
             {% for answer in answers %}
-                <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}</strong></p>
+                <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}
+                <img class="avatar" src="{{ url_for('static', filename='images/'+answer['avatar']) }}" alt="image broke"></strong></p>
                 {% if answer['image'] %}
                         <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
                 {% endif %}
@@ -100,6 +102,22 @@
             {% endfor %}
         </div>
     <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
+
+    <script>
+    let coll = document.getElementsByClassName("collapsible");
+    let i;
+
+    for (i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        let content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });}
+    </script>
 
 
 {% endblock %}

@@ -29,6 +29,7 @@
             <div class="welcome">
                 {% if session %}
                     <form><button  formaction="{{ url_for('display_user', user_id=session['id']) }}">Welcome {{ session['username'] }}</button></form>
+                    <img class="avatar" src="{{ url_for('static', filename='images/'+session['image']) }}" alt="image broke">
                 {% endif %}
             </div>
         </div>
@@ -46,8 +47,6 @@
                 </section>
             </div>
           </div>
-
         </div>
-
 </body>
 </html>

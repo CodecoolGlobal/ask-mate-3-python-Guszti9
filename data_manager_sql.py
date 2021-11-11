@@ -3,6 +3,7 @@ import connection_sql
 
 # QUERY'S FOR QUESTIONS
 
+
 @connection_sql.connection_handler
 def add_question(cursor, title, message, user_id, image=''):
     query = """
@@ -56,7 +57,7 @@ def search_question(cursor, search_word):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id, users.avatar AS avatar
         FROM question, users
         WHERE question.id = %(question_id)s
         AND users.id = question.user_id;"""
@@ -110,6 +111,7 @@ def get_questions_by_user_id(cursor, user_id):
 
 
 # QUERY'S FOR ANSWER
+
 
 @connection_sql.connection_handler
 def add_new_answer(cursor, question_id, message, user_id, image=''):
@@ -183,7 +185,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT answer.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted
+        SELECT answer.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted, users.avatar AS avatar
         FROM answer, users
         WHERE question_id = %(question_id)s
         AND user_id = users.id
@@ -218,6 +220,7 @@ def accept_refuse_answer(cursor, answer_id, acceptance_value):
     cursor.execute(query, {'answer_id': answer_id})
 
 # QUERY'S FOR COMMENT
+
 
 @connection_sql.connection_handler
 def add_comments_to_question(cursor, question_id, message, user_id):
@@ -311,6 +314,7 @@ def get_comments_by_user_id(curses, user_id):
 
 # QUERY'S FOR TAG
 
+
 @connection_sql.connection_handler
 def add_question_tag(cursor, question_id, tag_id):
     query = """
@@ -374,12 +378,13 @@ def get_non_added_tags_for_question(cursor, added_tags, question_id):
 
 # QUERY'S FOR USERS
 
+
 @connection_sql.connection_handler
-def registration(cursor, username, password):
+def registration(cursor, username, password, image=''):
     query = """
-    INSERT INTO users (username, password, reputation, registration_date)
-    VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
-    cursor.execute(query, {'username': username, 'password': password})
+    INSERT INTO users (username, password, reputation, registration_date, avatar)
+    VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP, %(image)s);"""
+    cursor.execute(query, {'username': username, 'password': password, 'image': image})
 
 
 @connection_sql.connection_handler
@@ -501,6 +506,7 @@ def get_user(cursor, user_id):
 
 # PLUS QUERY'S
 
+
 @connection_sql.connection_handler
 def get_tags_and_number_of_question(cursor):
     query = """
@@ -533,3 +539,15 @@ def get_acceptance_value(cursor, answer_id):
     """
     cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def get_avatar(cursor, user_id):
+    query = """
+    SELECT avatar
+    FROM users
+    WHERE id = %(user_id)s;
+    """
+    cursor.execute(query, {'user_id': user_id})
+    avatar = [row["avatar"] for row in cursor.fetchall()]
+    return avatar[0]
