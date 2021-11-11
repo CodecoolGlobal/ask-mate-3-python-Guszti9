@@ -183,7 +183,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted
+        SELECT answer.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted
         FROM answer, users
         WHERE question_id = %(question_id)s
         AND user_id = users.id
@@ -195,7 +195,7 @@ def get_answers(cursor, question_id):
 @connection_sql.connection_handler
 def get_answers_by_user_id(cursor, user_id):
     query = """
-        SELECT answer.id, submission_time, vote_number, question_id, message, image
+        SELECT answer.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, vote_number, question_id, message, image
         from answer
         where user_id = %(user_id)s
     """
@@ -474,7 +474,7 @@ def get_users(cursor):
             id,
             username,
             reputation,
-            registration_date,
+            to_char(registration_date, 'YYYY-MM-DD HH24:MI') AS registration_date,
             (select count(*) from question where user_id = users.id) as number_of_asked_questions,
             (select count(*) from answer where user_id = users.id) as number_of_answers,
             (select count(*) from comment where user_id = users.id) as number_of_comments

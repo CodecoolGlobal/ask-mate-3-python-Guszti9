@@ -109,10 +109,6 @@ td:nth-child(1) {
     text-align: center;
 }
 
-td:nth-child(2) {
-    font-weight: bold;
-    font-size: 20px;
-}
 
 td:nth-child(5), td:nth-child(6) {
     text-align: center;
