@@ -3,6 +3,7 @@ import connection_sql
 
 # QUERY'S FOR QUESTIONS
 
+
 @connection_sql.connection_handler
 def add_question(cursor, title, message, user_id, image=''):
     query = """
@@ -110,6 +111,7 @@ def get_questions_by_user_id(cursor, user_id):
 
 
 # QUERY'S FOR ANSWER
+
 
 @connection_sql.connection_handler
 def add_new_answer(cursor, question_id, message, user_id, image=''):
@@ -219,6 +221,7 @@ def accept_refuse_answer(cursor, answer_id, acceptance_value):
 
 # QUERY'S FOR COMMENT
 
+
 @connection_sql.connection_handler
 def add_comments_to_question(cursor, question_id, message, user_id):
     query = """
@@ -311,6 +314,7 @@ def get_comments_by_user_id(curses, user_id):
 
 # QUERY'S FOR TAG
 
+
 @connection_sql.connection_handler
 def add_question_tag(cursor, question_id, tag_id):
     query = """
@@ -374,12 +378,13 @@ def get_non_added_tags_for_question(cursor, added_tags, question_id):
 
 # QUERY'S FOR USERS
 
+
 @connection_sql.connection_handler
-def registration(cursor, username, password):
+def registration(cursor, username, password, image=''):
     query = """
-    INSERT INTO users (username, password, reputation, registration_date)
-    VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP);"""
-    cursor.execute(query, {'username': username, 'password': password})
+    INSERT INTO users (username, password, reputation, registration_date, avatar)
+    VALUES (%(username)s, %(password)s, 0, CURRENT_TIMESTAMP, %(image)s);"""
+    cursor.execute(query, {'username': username, 'password': password, 'image': image})
 
 
 @connection_sql.connection_handler
@@ -500,6 +505,7 @@ def get_user(cursor, user_id):
 
 
 # PLUS QUERY'S
+
 
 @connection_sql.connection_handler
 def get_tags_and_number_of_question(cursor):

@@ -232,8 +232,9 @@ def registration():
         if request.form['password'] == request.form['check_password']:
             username = request.form['username']
             password = request.form['password']
+            util.upload_image(request.files['image'])
             hashed_password = util.hash_password(password)
-            data_manager_sql.registration(username, hashed_password)
+            data_manager_sql.registration(username, hashed_password, request.files['image'].filename)
             return redirect('/')
         else:
             information = 'Passwords does not match!'
