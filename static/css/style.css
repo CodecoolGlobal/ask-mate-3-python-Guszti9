@@ -278,3 +278,8 @@ input {
     border: 1px solid black;
     border-radius: 20px;
 }
+
+
+.avatar{
+    max-width: 50px;
+}

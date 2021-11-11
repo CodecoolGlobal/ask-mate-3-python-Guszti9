@@ -252,6 +252,10 @@ def login():
             if util.verify_password(password, data_manager_sql.get_user_password(username)):
                 session['username'] = username
                 session['id'] = data_manager_sql.get_user_id_by_user_name(username)['user_id']
+                if data_manager_sql.get_avatar(data_manager_sql.get_user_id_by_user_name(username)['user_id']) != '':
+                    session['image'] = data_manager_sql.get_avatar(data_manager_sql.get_user_id_by_user_name(username)['user_id'])
+                else:
+                    session['image'] = 'default.jpg'
                 return redirect("/")
             else:
                 logininfo = 'Invalid login attempt!'
@@ -262,6 +266,7 @@ def login():
 def logout():
     session.pop('username', None)
     session.pop('id', None)
+    session.pop('image', None)
     return redirect("/")
 
 

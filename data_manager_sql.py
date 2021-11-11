@@ -57,7 +57,7 @@ def search_question(cursor, search_word):
 @connection_sql.connection_handler
 def get_question_by_id(cursor, question_id):
     query = """
-        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id
+        SELECT question.id, to_char(submission_time, 'YYYY-MM-DD HH24:MI') AS submission_time, view_number, vote_number, title, message, image, users.username AS username, user_id, users.avatar AS avatar
         FROM question, users
         WHERE question.id = %(question_id)s
         AND users.id = question.user_id;"""
@@ -185,7 +185,7 @@ def get_answer_by_id(cursor, answer_id):
 @connection_sql.connection_handler
 def get_answers(cursor, question_id):
     query = """
-        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted
+        SELECT answer.id, submission_time, vote_number, question_id, message, image, user_id, users.username AS username, accepted, users.avatar AS avatar
         FROM answer, users
         WHERE question_id = %(question_id)s
         AND user_id = users.id
@@ -539,3 +539,15 @@ def get_acceptance_value(cursor, answer_id):
     """
     cursor.execute(query, {'answer_id': answer_id})
     return cursor.fetchone()
+
+
+@connection_sql.connection_handler
+def get_avatar(cursor, user_id):
+    query = """
+    SELECT avatar
+    FROM users
+    WHERE id = %(user_id)s;
+    """
+    cursor.execute(query, {'user_id': user_id})
+    avatar = [row["avatar"] for row in cursor.fetchall()]
+    return avatar[0]
