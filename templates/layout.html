@@ -28,8 +28,12 @@
             </nav>
             <div class="welcome">
                 {% if session %}
-                    <form><button  formaction="{{ url_for('display_user', user_id=session['id']) }}">Welcome {{ session['username'] }}</button></form>
-                    <img class="avatar" src="{{ url_for('static', filename='images/'+session['image']) }}" alt="image broke">
+                    <form>
+                        <button  formaction="{{ url_for('display_user', user_id=session['id']) }}">
+                            <strong>{{ session['username'] }}</strong>
+                            <img class="avatar" src="{{ url_for('static', filename='images/'+session['image']) }}" alt="image broke">
+                        </button>
+                    </form>
                 {% endif %}
             </div>
         </div>
