@@ -498,3 +498,8 @@ input {
     text-align: center;
 }
 
+.user_data{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
