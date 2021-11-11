@@ -74,8 +74,11 @@ def edit_question(question_id):
 
 @app.route("/question/<question_id>/delete")
 def delete_question(question_id):
-    user_id = data_manager_sql.get_question_by_id(question_id)['user_id']
+    question_to_delete = data_manager_sql.get_question_by_id(question_id)
+    user_id = question_to_delete['user_id']
     if session['id'] == user_id:
+        if question_to_delete['image']:
+            util.delete_image(question_to_delete['image'])
         data_manager_sql.delete_question(question_id)
         data_manager_sql.delete_tag_if_not_in_question_tag()
     return redirect('/list')
