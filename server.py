@@ -269,6 +269,8 @@ def list_users():
     if session and 'username' in session:
         users = data_manager_sql.get_users()
         return render_template("users-list.html", users=users)
+    else:
+        return render_template("powerpuff_warning.html")
 
 
 @app.route("/user/<user_id>")
