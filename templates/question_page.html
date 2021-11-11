@@ -78,7 +78,7 @@
                 <div class="comments">
                     <button type="button" class="collapsible">Comments</button>
                     <div class="comment">
-                        {% for comment in comments[answers['id']] %}
+                        {% for comment in comments[answer['id']] %}
                             <p> {{ comment['submission_time'] }}</p>
                             <p>{{ comment['message'] }}</p>
                             <p><small>Edited {{ comment['edited_count'] }} times</small></p>

@@ -46,7 +46,8 @@ def display_question(question_id):
     tags = data_manager_sql.get_tags(question_id)
     for answer in answers_data:
         comment_data[answer['id']] = data_manager_sql.get_comments_by_answer_id(answer['id'])
-    return render_template("question_page.html", question_data=question_data, answers=answers_data, comments=comment_data, tags=tags)
+    return render_template("question_page.html", question_data=question_data, answers=answers_data,
+                           comments=comment_data, tags=tags)
 
 
 @app.route("/add-question", methods=['GET', 'POST'])
@@ -166,23 +167,23 @@ def accept_refuse_answer(answer_id, acceptance_value):
 
 @app.route("/question/<question_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_question(question_id):
-    if request.method == 'POST':
-        if 'username' in session:
-            user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
-            data_manager_sql.add_comments_to_question(question_id, request.form['message'], user_id)
+    if 'id' in session:
+        if request.method == 'POST':
+            data_manager_sql.add_comments_to_question(question_id, request.form['message'], session['id'])
             return redirect(url_for('display_question', question_id=question_id))
-    return render_template("add-edit-comment.html")
+        return render_template("add-edit-comment.html")
+    return redirect("powerpuff_warning")
 
 
 @app.route("/answer/<answer_id>/new-comment", methods=['GET', 'POST'])
 def add_comment_to_answer(answer_id):
-    if request.method == 'POST':
-        if 'username' in session:
-            user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
-            data_manager_sql.add_comments_to_answer(answer_id, request.form['message'], user_id)
+    if 'id' in session:
+        if request.method == 'POST':
+            data_manager_sql.add_comments_to_answer(answer_id, request.form['message'], session['id'])
             question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
             return redirect(url_for('display_question', question_id=question_id))
-    return render_template("add-edit-comment.html")
+        return render_template("add-edit-comment.html")
+    return redirect("powerpuff_warning")
 
 
 @app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
