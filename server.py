@@ -309,13 +309,21 @@ def display_user(user_id):
         questions = data_manager_sql.get_questions_by_user_id(user_id)
         answers = data_manager_sql.get_answers_by_user_id(user_id)
         comments = data_manager_sql.get_comments_by_user_id(user_id)
-        return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
+        return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments, id=user_id)
     return redirect("/powerpuff_warning")
 
 
 @app.route("/powerpuff_warning")
 def display_warning():
     return render_template("powerpuff_warning.html")
+
+
+@app.route("/user/<user_id>/update", methods=['GET', 'POST'])
+def edit_avatar(user_id):
+    if request.method == 'POST':
+        util.upload_image(request.files['image'])
+        data_manager_sql.update_avatar(user_id, request.files['image'].filename)
+    return render_template("edit_avatar.html", id=user_id)
 
 
 if __name__ == "__main__":

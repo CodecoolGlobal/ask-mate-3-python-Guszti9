@@ -7,7 +7,6 @@
 {% block content %}
     <div class="user_data">
         <ul>
-            <li><strong>Id:</strong> {{ user['id'] }}</li>
             <li><strong>Username:</strong> {{ user['username'] }}</li>
             <li><strong>Registration date:</strong> {{ user['registration_date'] }}</li>
             <li><strong>Number of asked questions:</strong> {{ user['number_of_asked_questions'] }}</li>
@@ -17,7 +16,7 @@
         </ul>
         <img src="{{ url_for('static', filename='images/'+user['avatar']) }}" alt="profile pic">
         {% if session and 'id' in session and user['id'] == session['id'] %}
-            <form><button formaction="{{ url_for('display_user', user_id=user['id'])}}">Edit Picture</button></form>
+            <form><button formaction="{{ url_for('edit_avatar', user_id=id)}}">Edit Picture</button></form>
         {% endif %}
     </div>
 
