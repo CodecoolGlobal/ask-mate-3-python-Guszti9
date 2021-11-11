@@ -35,3 +35,6 @@ ALTER TABLE ONLY comment
 ALTER TABLE answer
 ADD accepted integer DEFAULT 0;
 
+ALTER TABLE users
+ADD avatar text DEFAULT 'default.jpg';
+

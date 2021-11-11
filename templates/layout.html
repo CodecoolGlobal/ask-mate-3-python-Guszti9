@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script type="text/javascript" src="{{ url_for('static', filename='js/bonusQuestions.js') }}" defer></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/doNotModifyThisFile.js') }}" defer></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/commentButton.js') }}" defer></script>
 </head>
 <body>
         <div class="navbar">
@@ -27,7 +28,8 @@
             </nav>
             <div class="welcome">
                 {% if session %}
-                    <h3><a href="{{ url_for('display_user', user_id=session['id']) }}"> Welcome {{ session['username'] }}</a></h3>
+                    <h3><a href="{{ url_for('display_user', user_id=session['id']) }}"> Welcome {{ session['username'] }}
+                    <img class="avatar" src="{{ url_for('static', filename='images/'+session['image']) }}" alt="image broke"></a></h3>
                 {% endif %}
             </div>
         </div>
