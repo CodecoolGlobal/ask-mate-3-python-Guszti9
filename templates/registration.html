@@ -13,10 +13,13 @@
         <input id="password" name="password" type="password" required><br>
         <label for="check_password">Password again:</label><br>
         <input id="check_password" name="check_password" type="password" required ><br>
-        <label for="image">Upload avatar:</label><br>
-        <input type="file" id="image" name="image" accept="image/*"> <br>
+        <div class="drop-zone">
+            <span class="drop-zone__prompt">Drop file here or click to upload</span>
+            <input type="file" name="image" class="drop-zone__input">
+        </div>
         <button type="submit">Register</button>
     </form>
     <p>{{ info if info }}</p>
 </div>
+    <script src="/static/js/dragAndDrop.js.js"></script>
 {% endblock %}

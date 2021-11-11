@@ -17,8 +17,10 @@
         <h4><label for="post-answer">Your Answer:</label></h4>
         <textarea id="post-answer" name="message" required rows="6" cols="50">{{answer["message"] if answer}}</textarea> <br>
         <br>
-        <label for="image">{{ "Change image:" if answer else "Upload image:" }}</label>
-        <input type="file" id="image" name="image" accept="image/*"> <br>
+        <div class="drop-zone">
+            <span class="drop-zone__prompt">Drop file here or click to upload</span>
+            <input type="file" name="image" class="drop-zone__input">
+        </div>
         <br>
         {% if answer['image'] %}
             <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke" width="200"> <br>
@@ -27,5 +29,5 @@
     </form>
     <br>
     <form><button  formaction="{{ url_for('display_question', question_id=question['id']) }}">Go back</button></form>
-
+<script src="/static/js/dragAndDrop.js.js"></script>
 {% endblock %}
