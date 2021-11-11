@@ -51,73 +51,68 @@
         <div class="answers">
             <h2>Answers:</h2>
             {% if session  %}
-            <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
+                    <form><button  formaction="{{ url_for('post_answer', question_id=question_data['id']) }}">Add new answer</button></form>
             {% endif %}
             {% for answer in answers %}
-                <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}
-                <img class="avatar" src="{{ url_for('static', filename='images/'+answer['avatar']) }}" alt="image broke"></strong></p>
-                {% if answer['image'] %}
-                        <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
-                {% endif %}
-                {% if session and 'id' in session and question_data['user_id'] == session['id'] %}
-                        {% if answer['accepted'] == 0 or answer['accepted'] == -1 %}
-                    <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="accept") }}">Accept answer</a>
-                        {% elif answer['accepted'] == 0 or answer['accepted'] == 1 %}
-                    <a href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="refuse")}}">Refuse answer</a>
-                        {% endif %}
-                {% endif %}
-                <p>Votes: {{ answer['vote_number'] }}</p>
-            {% if session  %}
-                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
-                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
-            {% endif %}
-            {% if session and 'id' in session and answer['user_id'] == session['id'] %}
-                <div class="buttons-next-to-each-other">
-                    <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
-                    <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
-                </div>
-            {% endif %}
-                <div class="comments">
-                    <button type="button" class="collapsible">Comments</button>
-                    <div class="comment">
-                        {% for comment in comments[answer['id']] %}
-                            <p> {{ comment['submission_time'] }}</p>
-                            <p>{{ comment['message'] }}</p>
-                            <p><small>Edited {{ comment['edited_count'] }} times</small></p>
-                            {% if session and 'id' in session and comment['user_id'] == session['id'] %}
-                            <div class="buttons-next-to-each-other">
-                                <form><button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button></form>
-                                <form><button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button></form>
-                            </div>>
-                            {% endif %}
-                            <br>
-                        {% endfor %}
 
-                        {% if session %}
-                        <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+                <div class="single-answer {{'accepted' if answer['accepted']== 1 }}">
+                    <div class="top">
+                        {% if session and 'id' in session and answer['user_id'] == session['id'] %}
+                        <form>
+                            <button formaction="{{ url_for('delete_answer', answer_id=answer['id'])}}">Delete</button>
+                            <button formaction="{{ url_for('edit_answer', answer_id=answer['id'])}}">Edit</button>
+                        </form>
                         {% endif %}
                     </div>
-                </div>
+                    <div class="center">
+                        <p><strong>{{ answer['message'] }} -- by {{ answer['username'] }}
+                        <img class="avatar" src="{{ url_for('static', filename='images/'+answer['avatar']) }}" alt="image broke">
+                        </strong></p>
+                        {% if answer['image'] %}
+                                <img src="{{ url_for('static', filename='images/'+answer['image']) }}" alt="image broke">
+                        {% endif %}
+                        {% if session and 'id' in session and question_data['user_id'] == session['id'] %}
+                                {% if answer['accepted'] == 0 or answer['accepted'] == -1 %}
+                            <a class="btn" href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="accept") }}">Accept answer ✅</a>
+                                {% elif answer['accepted'] == 0 or answer['accepted'] == 1 %}
+                            <a class="btn" href="{{ url_for('accept_refuse_answer', answer_id=answer['id'], acceptance_value="refuse")}}">Refuse answer ❌</a>
+                                {% endif %}
+                        {% endif %}
+                        <div class="votes">
+                            {% if session  %}
+                                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_up')}}"><img class="vote_image" alt="Vote Up" src="{{ url_for('static', filename='images/vote_up.png') }}"></a>
+                                <a href="{{ url_for('vote_answer', answer_id=answer['id'], vote='vote_down')}}"><img class="vote_image" alt="Vote Down" src="{{ url_for('static', filename='images/vote_down.png') }}"></a>
+                            {% endif %}
+                            <p>Votes: {{ answer['vote_number'] }}</p>
+                        </div>
+                    </div>
+                    <div class="comments">
+                        <button type="button" class="collapsible">Comments</button>
+                        <div class="comment">
+                            {% for comment in comments[answer['id']] %}
+                                <p> {{ comment['submission_time'] }}</p>
+                                <p>{{ comment['message'] }}</p>
+                                <p><small>Edited {{ comment['edited_count'] }} times</small></p>
+                                {% if session and 'id' in session and comment['user_id'] == session['id'] %}
+                                    <div class="comment-buttons"
+                                        <form>
+                                            <button  formaction="{{ url_for('edit_comment', comment_id=comment['id']) }}">Edit comment</button>
+                                            <button  formaction="{{ url_for('delete_comment', comment_id=comment['id']) }}">Delete comment</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                                <br>
+                            {% endfor %}
 
+                            {% if session %}
+                            <form><button  formaction="{{ url_for('add_comment_to_answer', answer_id=answer['id']) }}">Add new comment</button></form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     <form><button  formaction="{{ url_for('list_questions', question_id=question_data['id']) }}">Go back</button></form>
-
-    <script>
-    let coll = document.getElementsByClassName("collapsible");
-    let i;
-
-    for (i = 0; i < coll.length; i++) {
-      coll[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        let content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });}
-    </script>
 
 
 {% endblock %}
