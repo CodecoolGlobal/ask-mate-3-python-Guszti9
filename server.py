@@ -172,7 +172,7 @@ def add_comment_to_question(question_id):
             data_manager_sql.add_comments_to_question(question_id, request.form['message'], session['id'])
             return redirect(url_for('display_question', question_id=question_id))
         return render_template("add-edit-comment.html")
-    return redirect("powerpuff_warning")
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/answer/<answer_id>/new-comment", methods=['GET', 'POST'])
@@ -183,37 +183,37 @@ def add_comment_to_answer(answer_id):
             question_id = data_manager_sql.get_answer_by_id(answer_id)['question_id']
             return redirect(url_for('display_question', question_id=question_id))
         return render_template("add-edit-comment.html")
-    return redirect("powerpuff_warning")
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/comment/<comment_id>/edit", methods=['GET', 'POST'])
 def edit_comment(comment_id):
-    if 'username' in session:
-        user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
-        comment = data_manager_sql.get_comment(comment_id)
+    comment = data_manager_sql.get_comment(comment_id)
+    user_id = comment['user_id']
+    if 'id' in session and session['id'] == user_id:
         if request.method == 'POST':
-            if user_id == comment['user_id']:
-                data_manager_sql.edit_comments(comment_id, request.form['message'])
-                if comment['question_id']:
-                    question_id = comment['question_id']
-                else:
-                    question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
-                return redirect(url_for('display_question', question_id=question_id))
-    return render_template("add-edit-comment.html", comment_data=comment)
-
-
-@app.route("/comments/<comment_id>/delete")
-def delete_comment(comment_id):
-    if 'username' in session:
-        user_id = data_manager_sql.get_user_id_by_user_name(session['username'])['user_id']
-        comment = data_manager_sql.get_comment(comment_id)
-        if user_id == comment['user_id']:
+            data_manager_sql.edit_comments(comment_id, request.form['message'])
             if comment['question_id']:
                 question_id = comment['question_id']
             else:
                 question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
-            data_manager_sql.delete_comments(comment_id)
-    return redirect(url_for('display_question', question_id=question_id))
+            return redirect(url_for('display_question', question_id=question_id))
+        return render_template("add-edit-comment.html", comment_data=comment)
+    return redirect("/powerpuff_warning")
+
+
+@app.route("/comments/<comment_id>/delete")
+def delete_comment(comment_id):
+    comment = data_manager_sql.get_comment(comment_id)
+    user_id = comment['user_id']
+    if 'id' in session and session['id'] == user_id:
+        if comment['question_id']:
+            question_id = comment['question_id']
+        else:
+            question_id = data_manager_sql.get_answer_by_id(comment['answer_id'])['question_id']
+        data_manager_sql.delete_comments(comment_id)
+        return redirect(url_for('display_question', question_id=question_id))
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/tag_page")
@@ -289,7 +289,7 @@ def logout():
 
 @app.route("/users")
 def list_users():
-    if session and 'username' in session:
+    if 'username' in session:
         users = data_manager_sql.get_users()
         return render_template("users-list.html", users=users)
     else:
@@ -298,11 +298,13 @@ def list_users():
 
 @app.route("/user/<user_id>")
 def display_user(user_id):
-    user = data_manager_sql.get_user(user_id)
-    questions = data_manager_sql.get_questions_by_user_id(user_id)
-    answers = data_manager_sql.get_answers_by_user_id(user_id)
-    comments = data_manager_sql.get_comments_by_user_id(user_id)
-    return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
+    if 'username' in session:
+        user = data_manager_sql.get_user(user_id)
+        questions = data_manager_sql.get_questions_by_user_id(user_id)
+        answers = data_manager_sql.get_answers_by_user_id(user_id)
+        comments = data_manager_sql.get_comments_by_user_id(user_id)
+        return render_template("user.html", user=user, questions=questions, answers=answers, comments=comments)
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/powerpuff_warning")

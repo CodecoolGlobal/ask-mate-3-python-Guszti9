@@ -115,24 +115,39 @@ td:nth-child(5), td:nth-child(6) {
     white-space: nowrap;
 }
 
-button {
-    background-color: #5a5a89;
-    border-radius: 20px;
-    display: inline-block;
+.welcome button {
     padding: 10px 20px;
     margin: 10px;
-    color: white;
-    font-weight: bold;
+    color: black;
     text-align: center;
     text-decoration: none;
     cursor: pointer;
     white-space: nowrap;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 
 button:hover {
     background-color: black;
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
 }
 
+
+.buttons-next-to-each-other{
+    display: flex;
+}
+
+
+button .buttons-next-to-each-other{
+    flex: 1;
+}
 
 mark {
     color: black;
@@ -148,10 +163,10 @@ img {
 .comment {
     padding-top: 10px;
     padding-left: 30px;
-    border-left: solid black;
-    border-bottom: solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
     border-radius: 10px;
-    background-color: lightgray;
+    background-color: #e9eff1;
     display: none;
 }
 
@@ -177,20 +192,20 @@ img {
 }
 
 .vote_image{
-    margin: 10px;
+    margin: 5px;
     border: none;
-    max-width: 60px;
+    max-width: 50px;
     padding: 5px;
 }
 
 .vote_image:hover{
-    max-width: 65px;
+    max-width: 55px;
     padding: 0;
 }
 
 strong {
     font-size: 20px;
-    padding: 5px;
+    padding-right: 10px;
     border-radius: 10px;
 }
 
@@ -200,15 +215,12 @@ h3 {
 
 p {
     font-size: 18px;
+    text-align: justify;
 }
 
 
 button {
-    background-image: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%)
-}
-
-
-button {
+    background-image: linear-gradient(to right, #2b5876 0%, #4e4376  51%, #2b5876  100%);
     margin: 10px;
     padding: 15px 25px;
     text-align: center;
@@ -232,10 +244,6 @@ button:hover {
 
 button .buttons-next-to-each-other{
     flex: 1;
-}
-
-.welcome{
-    padding-right: 50px;
 }
 
 #login-form {
@@ -275,11 +283,133 @@ input {
     border-radius: 20px;
 }
 
+.single-answer{
+    border: 1px solid #5a5a89;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 0 20px 20px 20px;
+}
+
+.single-answer.accepted{
+    background-color: #bfd4f5;
+}
+
+.single-answer p{
+    margin-top: 0;
+}
+
+.single-answer .top{
+    display: inline-block;
+    box-sizing: border-box;
+    float: top;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.single-answer .top button{
+    padding: 5px 10px;
+    float: right;
+    margin-bottom: 0;
+}
+
+.single-answer .center{
+    float: top;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.single-answer .center .btn{
+    text-decoration: none;
+    padding: 5px;
+    color: #040407;
+    font-style: italic;
+}
+
+.single-answer .center .btn:hover{
+    font-weight: bold;
+    font-style: italic;
+}
+
+.single-answer .center .votes{
+    width: 100%;
+    display: inline-block;
+}
+
+.single-answer .center .votes .vote_image{
+    float: right;
+}
+
+.single-answer .center .votes p{
+    padding-top: 35px;
+    float: right;
+    text-align: right;
+}
+
+.single-answer .center .votes p{
+    width: 40%;
+    margin-left: 0;
+}
+
+
+.single-answer .comments{
+    float: top;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.single-answer .comments button{
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.single-answer .comments .comment-buttons{
+    width: 100%;
+    float: right;
+    display: inline-block;
+}
+
+
+.single-answer .comments .comment-buttons button{
+    float: right;
+}
+
+.single-answer .comments .comment-buttons:after{
+    visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+
+.single-answer .center:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
+
+.single-answer:after {
+     visibility: hidden;
+     display: block;
+     font-size: 0;
+     content: " ";
+     clear: both;
+     height: 0;
+}
 
 .avatar{
     max-width: 50px;
 }
 
+.welcome{
+    padding-right: 30px;
+}
 .drop-zone {
     max-width: 200px;
     height: 200px;
