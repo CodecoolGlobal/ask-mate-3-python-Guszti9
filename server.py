@@ -223,23 +223,29 @@ def tag_page():
 
 @app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
 def add_tag(question_id):
-    if request.method == 'POST':
-        if request.form["postId"] == "2":
-            data_manager_sql.add_tag(question_id, request.form['new-tag'])
-        else:
-            data_manager_sql.add_question_tag(int(question_id), int(request.form.get('select-tag')))
-    tags = data_manager_sql.get_tags(question_id)
-    non_added_tags = data_manager_sql.get_non_added_tags_for_question(tags, question_id)
-    question_data = data_manager_sql.get_question_by_id(question_id)
-    return render_template("add-tag.html", tags=tags, question_data=question_data, non_added_tags=non_added_tags)
+    user_id = data_manager_sql.get_question_by_id(question_id)['user_id']
+    if 'id' in session and session['id'] == user_id:
+        if request.method == 'POST':
+            if request.form["postId"] == "2":
+                data_manager_sql.add_tag(question_id, request.form['new-tag'])
+            else:
+                data_manager_sql.add_question_tag(int(question_id), int(request.form.get('select-tag')))
+        tags = data_manager_sql.get_tags(question_id)
+        non_added_tags = data_manager_sql.get_non_added_tags_for_question(tags, question_id)
+        question_data = data_manager_sql.get_question_by_id(question_id)
+        return render_template("add-tag.html", tags=tags, question_data=question_data, non_added_tags=non_added_tags)
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/question/<question_id>/tag/<tag_id>/delete")
 def delete_tag(question_id, tag_id):
-    data_manager_sql.delete_question_tag(tag_id)
-    data_manager_sql.delete_tag_if_not_in_question_tag()
-    question_data = data_manager_sql.get_question_by_id(question_id)
-    return redirect(url_for('display_question', question_id=question_data['id']))
+    user_id = data_manager_sql.get_question_by_id(question_id)['user_id']
+    if 'id' in session and session['id'] == user_id:
+        data_manager_sql.delete_question_tag(tag_id)
+        data_manager_sql.delete_tag_if_not_in_question_tag()
+        question_data = data_manager_sql.get_question_by_id(question_id)
+        return redirect(url_for('display_question', question_id=question_data['id']))
+    return redirect("/powerpuff_warning")
 
 
 @app.route("/registration", methods=['GET', 'POST'])
