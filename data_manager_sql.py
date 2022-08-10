@@ -551,3 +551,13 @@ def get_avatar(cursor, user_id):
     cursor.execute(query, {'user_id': user_id})
     avatar = [row["avatar"] for row in cursor.fetchall()]
     return avatar[0]
+
+
+@connection_sql.connection_handler
+def update_avatar(cursor, user_id, image):
+    query = """
+    UPDATE users
+    SET avatar = %(image)s
+    WHERE id = %(user_id)s;
+    """
+    cursor.execute(query, {'image': image, 'user_id': user_id})
